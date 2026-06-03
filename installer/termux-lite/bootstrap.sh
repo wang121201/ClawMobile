@@ -176,7 +176,7 @@ info "Installed command wrapper: $PREFIX/bin/clawmobile"
 
 if [ "$RUN_SETUP" = "1" ]; then
   info "Running ClawMobile setup..."
-  if [ -r /dev/tty ]; then
+  if ( : </dev/tty ) 2>/dev/null; then
     exec "$TARGET_DIR/installer/termux-lite/clawmobile" setup "$@" </dev/tty
   fi
   exec "$TARGET_DIR/installer/termux-lite/clawmobile" setup "$@"
