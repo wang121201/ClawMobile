@@ -25,7 +25,14 @@ else
   echo "[lite] Install later with: CLAWMOBILE_TERMUX_INSTALL_OCR=1 clawmobile install"
 fi
 
-if ! command -v openclaw >/dev/null 2>&1 && [ "${CLAWMOBILE_TERMUX_INSTALL_OPENCLAW:-0}" = "1" ]; then
+needs_openclaw_install=0
+if ! command -v openclaw >/dev/null 2>&1; then
+  needs_openclaw_install=1
+elif ! command -v npm >/dev/null 2>&1; then
+  needs_openclaw_install=1
+fi
+
+if [ "$needs_openclaw_install" = "1" ] && [ "${CLAWMOBILE_TERMUX_INSTALL_OPENCLAW:-0}" = "1" ]; then
   "$SCRIPT_DIR/install-openclaw.sh"
   clawmobile_lite_env
 fi
