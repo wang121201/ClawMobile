@@ -66,6 +66,7 @@ Common commands after the wrapper is installed:
 ```sh
 clawmobile doctor
 clawmobile run
+clawmobile server
 clawmobile repair
 clawmobile reset --level plugin
 clawmobile reset --level workspace
@@ -128,6 +129,52 @@ Inside OpenClaw, call `android_health` first. It returns the current `stage`,
 backend states, and booleans such as `local_shell`, `termux_api`, `ui_input`,
 `ui_observe`, `screenshot`, `android_shell`, `local_ocr`, `ocr`, and
 `screen_ocr`.
+
+## Android Companion Server
+
+The native Android companion app talks to a small local HTTP facade running in
+Termux:
+
+```sh
+clawmobile server
+```
+
+By default it listens on the local loopback host at `127.0.0.1:8765`, so the
+Android companion app can call it on the same device without exposing a shell
+endpoint to the local network. It checks the existing OpenClaw gateway at
+`127.0.0.1:18789`.
+
+Current MVP endpoints:
+
+```text
+GET  /health
+POST /intent
+POST /runtime/start
+POST /runtime/stop
+GET  /runtime/log
+POST /terminal/command
+GET  /terminal/session
+POST /terminal/session/input
+POST /terminal/session/reset
+GET  /skills
+GET  /runs
+```
+
+`/health` returns ClawMobile capability health plus OpenClaw gateway reachability.
+`/runtime/start` starts the existing Termux gateway through `run.sh` if it is not
+already reachable. `/runtime/log` returns the current gateway log tail for the
+Android cockpit terminal. Terminal endpoints execute commands inside Termux and
+are restricted to loopback requests by default. `/intent` currently returns a
+structured accepted response and ClawCanvas placeholder; wiring intent execution
+into OpenClaw is the next layer.
+
+Useful overrides:
+
+```sh
+CLAWMOBILE_COMPANION_PORT=8765 clawmobile server
+CLAWMOBILE_COMPANION_HOST=127.0.0.1 clawmobile server
+CLAWMOBILE_GATEWAY_PORT=18789 clawmobile server
+```
 
 When ADB is not ready, UI-control tools return a structured
 `capability_unavailable` result instead of breaking the runtime. If ADB is
@@ -275,6 +322,7 @@ Default settings applied by `clawmobile setup --quick` and
 
 - `tools.profile=full`
 - web search enabled with provider left unset for OpenClaw auto-detection
+- bundled Codex plugin disabled for the Android/Termux gateway path
 - `skills.install.nodeManager="npm"`
 - `skills.install.preferBrew=false`
 - hooks/session-memory left off by default
