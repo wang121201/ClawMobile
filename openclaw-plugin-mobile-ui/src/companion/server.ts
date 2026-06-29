@@ -166,7 +166,7 @@ async function route(req: http.IncomingMessage, res: http.ServerResponse) {
   }
 
   if (method === "GET" && routePath === "/health") {
-    writeJson(res, 200, await health());
+    writeJson(res, 200, await health({ trusted: isLoopback }));
     return;
   }
 
@@ -590,7 +590,11 @@ function normalizeProtocolPath(pathname: string): string | null {
   return path;
 }
 
-async function health(): Promise<CompanionHealth> {
+async function health(options: { trusted?: boolean } = { trusted: true }): Promise<CompanionHealth> {
+  if (options.trusted === false) {
+    return bootstrapHealth();
+  }
+
   const [runtime, gateway] = await Promise.all([
     android_health().catch((error: any) => ({
       ok: false,
@@ -638,6 +642,29 @@ async function health(): Promise<CompanionHealth> {
     gateway,
     runtime,
     model,
+  };
+}
+
+function bootstrapHealth(): CompanionHealth {
+  return {
+    status: "unknown",
+    message: "ClawMobile companion server is reachable. Pairing or loopback access is required for runtime health.",
+    version: VERSION,
+    checks: [
+      {
+        id: "companion",
+        label: "Companion",
+        state: "online",
+        detail: "Companion HTTP server is reachable.",
+      },
+    ],
+    gateway: {
+      host: "",
+      port: 0,
+      reachable: false,
+      message: "Runtime gateway status requires pairing or loopback access.",
+    },
+    runtime: {},
   };
 }
 
