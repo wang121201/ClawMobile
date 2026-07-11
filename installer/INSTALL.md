@@ -1,14 +1,13 @@
 # ClawMobile Installation Guide
 
-This is the recommended public installation path for **ClawMobile**. It runs
+This guide covers the optional **Shell Runtime** path for **ClawMobile**. It runs
 OpenClaw directly in Termux and includes the mobile tool runtime, optional OCR,
-optional ADB control, and the public-preview
-generated-skill workflow.
+optional ADB control, and the public-preview generated-skill workflow.
 
-Most users should start with the native Android app when possible. The app keeps
-Termux as the runtime, but provides guided setup, status, tasks, skills, logs,
-and trusted contacts from a phone-native UI. Use the Termux CLI path below for
-advanced installs, remote debugging, or automation.
+Most users should start with the native Android app when possible. The app now
+includes an app-local runtime for everyday tasks and can optionally connect to
+this Termux/OpenClaw runtime for advanced installs, remote debugging, shell
+tools, or automation.
 
 Android app guide: [../docs/android-companion-app.md](../docs/android-companion-app.md)
 

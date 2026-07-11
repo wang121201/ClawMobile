@@ -1,16 +1,17 @@
 # Known Issues & FAQ
 
-The recommended public runtime is **ClawMobile** on the default Termux runtime.
-This FAQ starts with that path and includes only a short pointer to the archived
-legacy full backend.
+The recommended public entry point is the **ClawMobile Android app**. It includes
+an app-local runtime for everyday use and can optionally connect to the
+Termux/OpenClaw Shell Runtime. This FAQ covers both the Android app and the
+Termux path, with only a short pointer to the archived legacy full backend.
 
-If something feels randomly broken, first check:
+For Shell Runtime or Termux setup issues, first check:
 
 ```sh
 clawmobile doctor
 ```
 
-If the `clawmobile` command is not installed yet, run the same checks from the
+If the `clawmobile` command is not installed yet, run the same check from the
 repository checkout:
 
 ```sh
@@ -19,15 +20,16 @@ repository checkout:
 
 ## Should I use the Android app or the Termux CLI?
 
-Most testers should use the Android companion app first. It guides Termux SSH
-pairing, runs setup, starts ClawMobile, shows runtime status, and provides the
-Tasks, Skills, Social, Settings, logs, and shell UI.
+Most testers should use the Android app first. It can run with the app-local
+runtime, shows runtime status, and provides Tasks, Skills, Social, Settings,
+logs, and optional Shell Runtime setup.
 
 Use the Termux CLI when you are developing the runtime, debugging installer
 issues, running from a remote shell, or automating repeatable test setups.
 
-Both paths use the same Termux runtime. The Android app is the phone-native
-control surface; Termux remains where ClawMobile and OpenClaw actually run.
+Use the Shell Runtime when you need Termux/OpenClaw parity, shell tools, remote
+debugging, or repeatable CLI setup. The app-local runtime is the quicker starting
+point for normal phone-agent testing.
 
 ## Which Termux should I install?
 

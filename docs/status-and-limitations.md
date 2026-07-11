@@ -1,12 +1,17 @@
 # Project Status And Limitations
 
-ClawMobile is in public preview for real Android devices. The default Termux
-runtime includes the installer, OpenClaw mobile plugin, optional OCR support,
-ADB-backed UI tools, and the trace-to-skill workflow.
+ClawMobile is in public preview for real Android devices. The Android app now
+includes an app-local runtime for everyday tasks, skills, shared content, token
+visibility, trusted-agent messaging, and optional phone-control capabilities.
 
-The Android companion app is the recommended first control surface for setup,
-runtime status, tasks, skills, logs, and trusted-agent messaging. Termux remains
-the local runtime where ClawMobile and OpenClaw actually run.
+The Termux/OpenClaw Shell Runtime remains available for advanced users who need
+OpenClaw parity, shell-backed tools, remote debugging, or repeatable CLI setup.
+
+An iOS app is also available on the
+[App Store](https://apps.apple.com/app/id6787042935). The iOS
+version focuses on the app-local mobile-agent and shared-content experience; it
+does not expose the Android-specific Accessibility, ADB, app-control, or
+demo-recording capabilities.
 
 ## Generated Skills
 
@@ -20,8 +25,12 @@ not stable enough.
 
 - ADB-backed UI control requires Android developer options, USB or wireless ADB,
   and an authorized device connection.
-- Termux package mirrors can occasionally be stale or unreachable; the
-  installer includes mirror fallback logic, but network conditions still matter.
+- The iOS app is more limited than the Android app for phone-control research:
+  normal App Store apps cannot globally inspect or control other apps in the same
+  way Android Accessibility/ADB can.
+- Shell Runtime setup depends on Termux package mirrors, which can occasionally
+  be stale or unreachable; the installer includes mirror fallback logic, but
+  network conditions still matter.
 - Generated skills start from recorded evidence and are useful immediately for
   repeatable workflows, but become more robust after additional demonstrations
   and execution feedback.
