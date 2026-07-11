@@ -1,17 +1,19 @@
 {
-  "name": "ClawMobile Companion",
+  "name": "ClawMobile Android App",
   "packageName": "ai.clawmobile.companion",
-  "version": "0.1.2",
-  "versionCode": 3,
+  "version": "0.2.0",
+  "versionCode": null,
   "releaseUrl": "https://github.com/ClawMobile/ClawMobile/releases/latest",
-  "apkUrl": "https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.1.2.apk",
-  "sha256": "772f6967ea9e489ae58963abffdea01991d3678ff578f5ef24230519d9783547",
+  "apkUrl": "https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.2.0.apk",
+  "sha256": "8e19579a9a3786c18dd0bcaa3579fd4b424e2aaa9844c48b8d41abca30764494",
   "signed": "release",
   "notes": [
-    "Install this APK to use the native Android companion shell for ClawMobile.",
+    "Install the latest ClawMobile-v*.apk asset from the release page.",
+    "The Android app includes an app-local runtime for everyday tasks, skills, shared content, and trusted-agent messaging.",
+    "The Termux/OpenClaw Shell Runtime remains available as an optional advanced backend.",
     "Use the Social tab to create an Agent ID, add trusted contacts, exchange messages, and share compact skill knowledge.",
     "Messages from unknown senders are filtered from the app UI by default.",
     "Keep the Recovery Key private; it restores the same Agent ID on another device.",
-    "If an earlier debug-signed test APK is installed, uninstall it before installing this release-signed APK."
+    "If an earlier debug-signed test APK is installed, uninstall it before installing the release-signed APK."
   ]
 }

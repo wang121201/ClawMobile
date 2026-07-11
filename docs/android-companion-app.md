@@ -1,30 +1,37 @@
-# Android Companion App
+# Android App
 
-ClawMobile Companion is an Android app for running ClawMobile from a phone-native UI.
-It does not replace Termux. Instead, it uses SSH to install and maintain the
-ClawMobile runtime inside Termux, then talks to the local companion server over
-HTTP for daily use.
+The ClawMobile Android app is the recommended phone-native interface for
+ClawMobile. It includes an app-local runtime for everyday tasks, skills, shared
+content, token visibility, and trusted-agent messaging. Termux/OpenClaw remains
+available as an optional Shell Runtime for users who want shell-backed tools and
+full OpenClaw workflows.
 
 Download the latest APK from the public ClawMobile release page:
 
 - [Latest ClawMobile release](https://github.com/ClawMobile/ClawMobile/releases/latest)
-- APK: [`ClawMobile-v0.1.2.apk`](https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.1.2.apk)
-- SHA-256: `772f6967ea9e489ae58963abffdea01991d3678ff578f5ef24230519d9783547`
+- APK: [`ClawMobile-v0.2.0.apk`](https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.2.0.apk)
+- SHA-256: `8e19579a9a3786c18dd0bcaa3579fd4b424e2aaa9844c48b8d41abca30764494`
 
 If you installed an earlier debug-signed test APK, uninstall it before installing
 this release-signed APK.
 
 ## What It Adds
 
-- Guided Termux setup from a native Android screen.
-- Runtime status for SSH, companion server, OpenClaw runtime, ADB, model key,
-  and workspace skills.
-- A task chat UI for sending requests to the phone runtime.
+- App-local task execution without requiring Termux setup.
+- Optional Shell Runtime setup for Termux/OpenClaw users.
+- Runtime status for model access, local tools, Accessibility, ADB, skills,
+  and optional shell services.
+- A task chat UI for sending requests to the active phone runtime.
 - Task completion notifications when long-running work finishes after you leave
   the app.
-- A skills browser for generated skills, built-in guidance, and shared skills.
+- Share-sheet intake for text, URLs, images, and files from other apps.
+- A skills browser for built-in skills, generated skills, draft imports, and
+  shared skills.
 - A social/contact UI for trusted agent messaging and skill sharing.
-- A terminal/debug surface for setup logs, runtime logs, and shell commands.
+- Accessibility-based demo recording and optional UI control, enabled only after
+  Android system consent.
+- A terminal/debug surface for setup logs, runtime logs, and shell commands when
+  Shell Runtime is used.
 
 ## Social And Trusted Contacts
 
@@ -39,25 +46,27 @@ contacts:
 - Keep the Recovery Key private. It is shown when a new Agent ID is generated
   or explicitly revealed, and restores the same Agent ID on another device.
 
-## How It Works
+## Runtime Modes
 
-The app uses two local channels:
+The app supports two runtime modes:
 
-1. SSH to Termux for setup, maintenance, and runtime start commands.
-2. Local HTTP to `http://127.0.0.1:8765` for tasks, skills, status, logs, and
-   trusted-agent messaging once the companion server is running.
+1. **App-local runtime:** built into the Android app. It can run tasks, use
+   app-local tools, manage skills, process shared content, record demos, and
+   communicate with trusted agents.
+2. **Shell Runtime:** an optional Termux/OpenClaw backend connected through SSH
+   setup and the local runtime protocol.
 
-The Termux runtime remains the source of truth. The Android app is a companion
-shell for installation, control, monitoring, and user interaction.
+The app-local runtime is the recommended starting point. The Shell Runtime is
+useful for users who need full OpenClaw compatibility, terminal access, or
+shell-backed skills.
 
-The local HTTP interface is an implementation detail between the Android app
-and the Termux companion server. It is not a stable public API; prefer the
-Android app or the `clawmobile` CLI unless you are working on the runtime
-itself.
+The local HTTP interface used by the Shell Runtime is an implementation detail.
+It is not a stable public API; prefer the Android app or the `clawmobile` CLI
+unless you are working on the runtime itself.
 
 ## What Still Runs In Termux
 
-The app is not a replacement for Termux. Termux still hosts:
+Termux is only required for Shell Runtime mode. In that mode, Termux hosts:
 
 - the OpenClaw gateway and ClawMobile runtime
 - the local companion HTTP server
@@ -65,15 +74,17 @@ The app is not a replacement for Termux. Termux still hosts:
 - the OpenClaw workspace and installed skills
 - generated-skill artifacts, logs, and runtime state
 
-The Android app controls and observes that local service through SSH and HTTP.
+The Android app controls and observes that optional local service through SSH
+and HTTP.
 
 ## Recommended Setup Flow
 
-1. Install Termux from F-Droid or the official Termux GitHub releases.
-2. Run the SSH setup commands shown in the app.
-3. Pair the app with Termux using the local SSH host, port, and username.
-4. Run setup from the app.
-5. Start the runtime and use the Tasks, Skills, and Social tabs.
+1. Install the APK from the latest ClawMobile release.
+2. Open the app and configure a model provider.
+3. Use the app-local runtime from the Tasks, Skills, Social, and Settings tabs.
+4. Optionally enable Accessibility or ADB for richer phone-control capabilities.
+5. Optionally configure Shell Runtime if you need Termux/OpenClaw workflows.
 
-ADB is optional, but enables richer phone-control capabilities. Follow the main
-ClawMobile setup guide for the current ADB authorization flow.
+ADB is optional, but enables richer phone-control capabilities. Accessibility is
+also optional and requires explicit Android system consent before ClawMobile can
+inspect or control visible UI.

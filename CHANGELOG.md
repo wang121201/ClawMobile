@@ -7,31 +7,38 @@ useful snapshots rather than long-term API stability.
 
 ## Unreleased
 
-- Prepare the default ClawMobile Termux runtime as the recommended public path.
+- Prepare v0.5.0 public documentation for the Android app-local runtime and the
+  optional Termux/OpenClaw Shell Runtime.
+- Update the public README and Android app guide to describe the app as the
+  recommended phone-native entry point for tasks, skills, shared content, token
+  visibility, and trusted-agent messaging.
+- Mention iOS App Store availability while clarifying that Android remains the
+  platform for full phone-control and demo-to-skill capabilities.
+- Clarify that the Termux/OpenClaw install path is now the advanced Shell Runtime
+  path for users who need OpenClaw parity, shell-backed tools, remote debugging,
+  or repeatable CLI setup.
+- Update the public citation from the arXiv preprint to the EuroMLSys 2026 ACM
+  publication.
+
+## 0.4.x public preview
+
+- Prepare the ClawMobile Termux runtime as the recommended public path before
+  the Android app-local runtime became the default entry point.
 - Add Termux-first `clawmobile` command wrapper and one-command bootstrap path.
 - Document `--quick --start` as the shortest install-and-run path.
 - Document supported Termux download sources and same-source Termux companion
   app guidance for F-Droid/GitHub installs.
 - Simplify the Termux runtime reference and remove user-facing Lite naming.
-- Align the first generated-skill demo prompt with trace-inferred task
-  induction.
 - Clarify Google Play Termux override commands and update contribution guidance
   after archiving the legacy full backend.
-- Document remote-assisted wireless ADB setup through the Termux shell, so a
-  user can send pairing commands from another device after the gateway starts.
-- Add Termux runtime installer hardening for non-interactive package installs
-  and Termux mirror fallback.
-- Add Termux install-source preflight and doctor diagnostics for Termux source,
-  version, package sources, and key package availability. Google Play Termux is
-  blocked by default unless explicitly allowed for best-effort debugging.
-- Add OpenClaw-on-Android compatibility bootstrap for glibc Node/OpenClaw.
+- Add Termux runtime installer hardening, install-source preflight, doctor
+  diagnostics, package mirror fallback, and OpenClaw-on-Android compatibility
+  bootstrap for glibc Node/OpenClaw.
 - Add capability-aware mobile tools for Termux, Termux:API, ADB shell, OCR,
   screenshots, UIAutomator XML, app/window state, and Android shell commands.
-- Add OCR as a default capability.
 - Add public-preview trace recording, parsing, skill candidate generation,
-  promotion, generalization, skill update, and execution feedback.
-- Add experimental generated-skill fast paths for deterministic low-risk
-  actions, including app launch handling and local UI XML query support.
+  promotion, generalization, skill update, execution feedback, and experimental
+  generated-skill fast paths.
 - Add default workspace seed files for mobile policy, tool guidance, and
   trace-induction workflow.
 - Archive the legacy DroidRun/MobileRun full backend on the

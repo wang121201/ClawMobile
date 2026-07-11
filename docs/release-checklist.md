@@ -19,7 +19,8 @@ repository or creating a release tag.
 - [ ] Public docs point to the public repository URL, not private dev-only URLs.
 - [ ] Internal companion contracts and implementation notes are not included in
       public docs.
-- [ ] The default install path is ClawMobile on the Termux runtime.
+- [ ] The default entry point is the Android app-local runtime, with
+      Termux/OpenClaw documented as the optional Shell Runtime.
 - [ ] Archived DroidRun/MobileRun backend files are not presented as the active
       install path.
 
@@ -32,25 +33,28 @@ repository or creating a release tag.
 - [ ] `SECURITY.md` and `CONTRIBUTING.md` are present.
 - [ ] `CHANGELOG.md` includes the release summary.
 
-## Android Companion App Release
+## Android App Release
 
 - [ ] Bump Android `versionName` and `versionCode`.
 - [ ] Build the signed release APK.
 - [ ] Verify the APK file name and SHA-256. Do not publish or rename an
       unsigned APK as the public release asset.
 - [ ] Upload the APK to the public `ClawMobile/ClawMobile` release assets.
-- [ ] Update `docs/releases/android-companion.json`.
+- [ ] Update `docs/releases/android-companion.json` after the APK release exists.
 - [ ] Update `README.md` and `docs/android-companion-app.md` with the latest
-      main ClawMobile release APK link.
+      main ClawMobile release APK link when the release asset is available.
 - [ ] Confirm the public release page and direct APK download link both resolve.
 - [ ] Update GitHub release notes, including Social / Trusted Contacts changes
       when relevant.
-- [ ] Smoke test setup, Start ClawMobile, Tasks, Skills, Social, and task
-      completion notifications on a real Android device.
+- [ ] Smoke test app-local Tasks, Skills, Social, Share, Settings, optional
+      Accessibility/ADB capabilities, and task completion notifications on a
+      real Android device.
+- [ ] Smoke test Shell Runtime setup only when the release changes Termux/OpenClaw
+      behavior.
 
 ## Release
 
-- [ ] Create a tag, for example `v0.1.0-preview`.
+- [ ] Create a tag, for example `v0.5.0`.
 - [ ] Include release notes that describe:
       - recommended install path
       - generated-skill preview status
