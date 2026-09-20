@@ -1,0 +1,77 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-capability-suppression-full-dsv4-comparator-v1",
+  "design_status": "fresh_live_candidate",
+  "design_semantics": "Fresh eight-Cell Full DSV4 comparator for the completed Capability Suppression Tiny study. It uses the same Phone A, shared transparent Proxy, exact task/case panel, two repetitions, Tool schemas, ClawBench lifecycle, verifier, and evidence contract. There is no Router Helper or Local Agent; every logical request is handled by the DSV4 Cloud Agent.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "condition_order": ["Full-DSV4"],
+    "within_study_order": "round-major_fixed_task_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "cloud_agent": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    }
+  },
+  "task_panel": [
+    {"ordinal": 1, "task_id": "L3-01", "case_index": 1},
+    {"ordinal": 2, "task_id": "L3-05", "case_index": 1},
+    {"ordinal": 3, "task_id": "L5-04", "case_index": 1},
+    {"ordinal": 4, "task_id": "L4-02", "case_index": 1}
+  ],
+  "groups": [
+    {
+      "group_id": "Full-DSV4",
+      "arm_id": "full-dsv4",
+      "cell_count": 8,
+      "schedule_first": 1,
+      "schedule_last": 8,
+      "data_source": "fresh_full_dsv4_capability_suppression_comparator"
+    }
+  ],
+  "smoke": {
+    "matrix_cell_count": 1,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "Full-DSV4", "task_case": "L3-01:1", "repetition": 1}
+    ],
+    "pass_semantics": "The Canary must have a unique result.run_id, one or more DSV4 Cloud Agent calls, healthy durable capture, complete setup/verify/teardown, and no infrastructure failure."
+  },
+  "formal": {
+    "matrix_cell_count": 8,
+    "task_count": 4,
+    "repetitions_per_task": 2,
+    "groups": ["Full-DSV4"]
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-capability-suppression-full-dsv4-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-capability-suppression-full-dsv4-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "full_dsv4_transparent_proxy": true
+  }
+}

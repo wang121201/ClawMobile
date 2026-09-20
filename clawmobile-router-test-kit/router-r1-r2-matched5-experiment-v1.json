@@ -1,0 +1,146 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-r1-r2-matched5-v1",
+  "design_status": "live_candidate",
+  "design_semantics": "Single Phone A, one Gateway, one shared Proxy, one controller and one active cell. G4-R1 runs first; G4-R2 is enabled only after R1 review. Both use the historical matched five-task panel with ten round-major repetitions.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "adb_serial": "127.0.0.1:5555"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "group_order": ["G4-R1", "G4-R2"],
+    "within_group_order": "round-major_fixed_task_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group"
+  },
+  "historical_reference": {
+    "display_label": "G4-R0",
+    "raw_group_id": "G4",
+    "semantics": "Historical args_class Router reference only; raw evidence and identifiers remain unchanged.",
+    "success_count": 25,
+    "cell_count": 50,
+    "primary_evidence_root": "D:\\codexdataspace\\outputs\\clawmobile-five-group-v4\\v4-formal-cont8-20260811T121152Z\\formal\\G4"
+  },
+  "models": {
+    "router": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "cloud_agent": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "logical_local_agent": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud",
+      "logical_role_only": true
+    }
+  },
+  "route_policies": {
+    "G4-R1": {
+      "version": "g4-r1-evidence-v1",
+      "router_output": ["EVIDENCE_LOCAL", "CLOUD"],
+      "local_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+      "local_argument_contract": "exactly_one_tool_call_with_empty_object_arguments",
+      "excluded_responsibilities": ["interpret", "mutate", "persist", "authoritative_verify", "recover", "complete"]
+    },
+    "G4-R2": {
+      "version": "g4-r2-grounded-query-v1",
+      "router_output": ["EVIDENCE_LOCAL", "GROUNDED_QUERY_LOCAL", "CLOUD"],
+      "inherits": "G4-R1",
+      "added_local_tools": ["android_ui_query"],
+      "dependency_contract": "android_ui_query.dumpId must equal the latest fresh same-cell dump artifact and include a finite selector",
+      "excluded_responsibilities": ["tap", "type", "mutate", "persist", "authoritative_verify", "recover", "complete"]
+    }
+  },
+  "task_panel": [
+    {"ordinal": 1, "task_id": "L1-03", "case_index": 1},
+    {"ordinal": 2, "task_id": "L2-01", "case_index": 1},
+    {"ordinal": 3, "task_id": "L3-01", "case_index": 1},
+    {"ordinal": 4, "task_id": "L4-02", "case_index": 1},
+    {"ordinal": 5, "task_id": "L5-01", "case_index": 1}
+  ],
+  "groups": [
+    {
+      "group_id": "G4-R1",
+      "priority": 1,
+      "arm_id": "router-r1-dsv4-agent-dsv4-qwen36-logical-local",
+      "router_model": "deepseek-v4-flash",
+      "cloud_agent_model": "deepseek-v4-flash",
+      "logical_local_agent_model": "qwen3.6-35b",
+      "cell_count": 50,
+      "schedule_first": 1,
+      "schedule_last": 50,
+      "data_source": "new_router_matched5_collection"
+    },
+    {
+      "group_id": "G4-R2",
+      "priority": 2,
+      "arm_id": "router-r2-dsv4-agent-dsv4-qwen36-logical-local",
+      "router_model": "deepseek-v4-flash",
+      "cloud_agent_model": "deepseek-v4-flash",
+      "logical_local_agent_model": "qwen3.6-35b",
+      "cell_count": 50,
+      "schedule_first": 51,
+      "schedule_last": 100,
+      "data_source": "new_router_matched5_collection"
+    }
+  ],
+  "smoke": {
+    "cell_count_per_group": 5,
+    "matrix_cell_count": 10,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "G4-R1", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "G4-R1", "task_case": "L2-01:1", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "G4-R1", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "G4-R1", "task_case": "L4-02:1", "repetition": 1},
+      {"smoke_schedule": 5, "group_id": "G4-R1", "task_case": "L5-01:1", "repetition": 1},
+      {"smoke_schedule": 6, "group_id": "G4-R2", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 7, "group_id": "G4-R2", "task_case": "L2-01:1", "repetition": 1},
+      {"smoke_schedule": 8, "group_id": "G4-R2", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 9, "group_id": "G4-R2", "task_case": "L4-02:1", "repetition": 1},
+      {"smoke_schedule": 10, "group_id": "G4-R2", "task_case": "L5-01:1", "repetition": 1}
+    ],
+    "pass_semantics": "SUCCESS and structurally healthy scored FAILURE both pass; the first infrastructure failure, incomplete route evidence, incomplete capture, or teardown failure is preserved and stops the group."
+  },
+  "formal": {
+    "group_cell_count": 50,
+    "matrix_cell_count": 100,
+    "groups": ["G4-R1", "G4-R2"],
+    "repetitions_per_task": 10,
+    "task_count_per_group": 5
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-r1-r2-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-r1-r2-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "required_raw_evidence": [
+      "cell-status.json",
+      "result JSON",
+      "model-calls.jsonl",
+      "proxy-events.jsonl",
+      "route decision and route-state projection",
+      "raw request",
+      "raw response or SSE",
+      "latency",
+      "task verification"
+    ]
+  }
+}

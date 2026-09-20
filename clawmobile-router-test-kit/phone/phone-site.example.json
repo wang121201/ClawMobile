@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "platform": "termux-android-phone-native-v1",
+  "site_id": "replace-with-stable-phone-id",
+  "adb": {
+    "executable": "adb",
+    "serial": "127.0.0.1:5555",
+    "server_socket": ""
+  },
+  "executables": {
+    "python": "python",
+    "node": "~/.openclaw-android/bin/node",
+    "openclaw": "openclaw"
+  },
+  "endpoints": {
+    "channel": "http://127.0.0.1:8765",
+    "gateway": "http://127.0.0.1:18789",
+    "proxy": "http://127.0.0.1:18081"
+  },
+  "paths": {
+    "openclaw_config": "~/.openclaw/openclaw.json",
+    "output_root": "~/clawmobile-experiments/router-campaigns",
+    "capture_root": "~/clawmobile-experiments/router-test-kit/active/captures",
+    "state_root": "~/clawmobile-experiments/router-test-kit/state"
+  },
+  "timeouts": {
+    "service_start_seconds": 180,
+    "capture_flush_seconds": 30,
+    "physical_request_milliseconds": 600000,
+    "adb_command_seconds": 30
+  }
+}

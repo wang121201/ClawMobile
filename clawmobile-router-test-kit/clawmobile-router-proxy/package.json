@@ -1,0 +1,14 @@
+{
+  "name": "clawmobile-router-proxy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency OpenAI-compatible routing proxy for ClawMobile experiments",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,47 @@
+# Python bytecode and local virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node dependencies and local package-manager state
+node_modules/
+npm-debug.log*
+
+# Historical aggregate points at a private local corpus; regenerate locally
+clawmobile-router-proxy/parameter-schema-corpus-manifest.json
+
+# Credentials and machine-local settings
+.env
+.env.*
+!.env.example
+phone/phone-site.json
+phone/phone.env
+*.pem
+*.key
+*.p12
+*.pfx
+openclaw.json
+auth-profiles.json
+
+# Live experiment evidence belongs in D:\codexdataspace, not in Git
+captures/
+results/
+outputs/
+reports/
+archives/
+*.jsonl
+*.log
+campaign-plan.*.json
+invocation.*.json
+smoke-gate.json
+coverage/
+.test-output/
+.artifact-build/
+.*-current.txt
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

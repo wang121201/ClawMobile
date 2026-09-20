@@ -1,0 +1,107 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-route-flex-tiny-preliminary-v1",
+  "design_status": "fresh_tiny_preliminary_live_candidate",
+  "design_semantics": "Fresh 12-cell task-matched comparison of C0 current predicted-RouteClass enforcement, C1 post-generation FSM-admissible RouteClass reclassification with unchanged Local-visible Tools, and C2 prediction-time expansion to the union of exact Tools from all currently FSM-admissible Local RouteClasses. All three conditions freeze the same Phone, models, FSM, RouteClass ontology, Standard Moderate Repair, Tool schemas, validators, task lifecycle, and fail-fast infrastructure policy.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "condition_order": ["C0", "C1", "C2"],
+    "within_study_order": "task_case_then_c0_c1_c2",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "router": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud"},
+    "cloud_agent": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud"},
+    "logical_local_agent": {"provider_id": "freeinference", "model_id": "qwen3.6-35b", "physical_platform": "freeinference-cloud", "logical_role_only": true}
+  },
+  "route_policy": {
+    "router_output": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED", "RETRIEVE_WEB_BOUNDED", "PERSIST_OR_SYSTEM_MUTATION", "OPEN_EXEC_OR_COMPOSITE", "VERIFY_COMPLETE_RECOVER", "NO_TOOL_OR_AMBIGUOUS"],
+    "local_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+    "always_cloud_route_classes": ["RETRIEVE_WEB_BOUNDED", "PERSIST_OR_SYSTEM_MUTATION", "OPEN_EXEC_OR_COMPOSITE", "VERIFY_COMPLETE_RECOVER", "NO_TOOL_OR_AMBIGUOUS"],
+    "observe_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+    "query_tools": ["android_ui_query"],
+    "interaction_tools": ["android_tap", "adb_tap"],
+    "always_cloud_tools": ["android_shell", "adb_shell", "exec", "web_search"],
+    "scoped_context_version": "scoped-local-static-affordance-v1",
+    "fsm_policy_version": "g4-fsm-scoped-context-v1",
+    "repair_policy_version": "g4-fsm-scoped-context-standard-moderate-repair-v1",
+    "repair_contract": {
+      "name": "standard_moderate_repair",
+      "eligible_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+      "eligible_tools": ["android_ui_dump", "adb_ui_dump_xml", "android_ui_query", "android_tap", "adb_tap"],
+      "requires_exactly_one_tool_call": true,
+      "full_revalidation_before_execution": true,
+      "route_class_change_allowed": false,
+      "tool_substitution_allowed": false,
+      "semantic_target_selection_allowed": false,
+      "wrong_tool_repair_allowed": false,
+      "shell_or_exec_repair_allowed": false,
+      "multi_tool_repair_allowed": false,
+      "ambiguous_selector_repair_allowed": false,
+      "missing_fresh_artifact_repair_allowed": false
+    },
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud"
+  },
+  "task_panel": [
+    {"ordinal": 1, "task_id": "L3-01", "case_index": 1},
+    {"ordinal": 2, "task_id": "L3-02", "case_index": 2},
+    {"ordinal": 3, "task_id": "L4-01", "case_index": 1},
+    {"ordinal": 4, "task_id": "L4-03", "case_index": 2}
+  ],
+  "groups": [
+    {"group_id": "C0", "arm_id": "router-fsm-scoped-repair-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 4},
+    {"group_id": "C1", "arm_id": "router-fsm-scoped-repair-c1-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 4},
+    {"group_id": "C2", "arm_id": "router-fsm-scoped-repair-c2-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 4}
+  ],
+  "smoke": {
+    "matrix_cell_count": 12,
+    "cell_count_per_condition": 4,
+    "minimum_c1_intervention_tasks": 2,
+    "minimum_c2_intervention_tasks": 2,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "C0", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "C1", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "C2", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "C0", "task_case": "L3-02:2", "repetition": 1},
+      {"smoke_schedule": 5, "group_id": "C1", "task_case": "L3-02:2", "repetition": 1},
+      {"smoke_schedule": 6, "group_id": "C2", "task_case": "L3-02:2", "repetition": 1},
+      {"smoke_schedule": 7, "group_id": "C0", "task_case": "L4-01:1", "repetition": 1},
+      {"smoke_schedule": 8, "group_id": "C1", "task_case": "L4-01:1", "repetition": 1},
+      {"smoke_schedule": 9, "group_id": "C2", "task_case": "L4-01:1", "repetition": 1},
+      {"smoke_schedule": 10, "group_id": "C0", "task_case": "L4-03:2", "repetition": 1},
+      {"smoke_schedule": 11, "group_id": "C1", "task_case": "L4-03:2", "repetition": 1},
+      {"smoke_schedule": 12, "group_id": "C2", "task_case": "L4-03:2", "repetition": 1}
+    ]
+  },
+  "formal": {"matrix_cell_count": 0},
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-route-flex-tiny-preliminary-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-route-flex-tiny-preliminary-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "fsm_pending_transition_is_scoped_to_result_run_id": true
+  }
+}

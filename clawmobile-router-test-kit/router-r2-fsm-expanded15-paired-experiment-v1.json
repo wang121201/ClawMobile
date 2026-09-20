@@ -1,0 +1,186 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-r2-fsm-expanded15-paired-v1",
+  "design_status": "five_level_paired_canary_candidate",
+  "design_semantics": "Fresh paired Expanded15 generalization of the frozen G4-RM-scoped-context and G4-FSM-scoped-context mechanisms. Both arms keep the same DSV4 Router, DSV4 Cloud Agent, qwen3.6-35b logical-local Agent, eight RouteClasses, exact Tool schemas, Validator, and scoped-local-static-affordance-v1 context. The sole treatment remains prediction-time FSM admissibility plus exact result.run_id and tool_call_id transition handoff.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "condition_order": ["G4-RM-SC", "G4-FSM-SC"],
+    "within_study_order": "task_case_repetition_paired_ab_ba",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "router": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "cloud_agent": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "logical_local_agent": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud",
+      "logical_role_only": true
+    }
+  },
+  "route_policy": {
+    "router_output": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED",
+      "RETRIEVE_WEB_BOUNDED",
+      "PERSIST_OR_SYSTEM_MUTATION",
+      "OPEN_EXEC_OR_COMPOSITE",
+      "VERIFY_COMPLETE_RECOVER",
+      "NO_TOOL_OR_AMBIGUOUS"
+    ],
+    "local_route_classes": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED"
+    ],
+    "always_cloud_route_classes": [
+      "RETRIEVE_WEB_BOUNDED",
+      "PERSIST_OR_SYSTEM_MUTATION",
+      "OPEN_EXEC_OR_COMPOSITE",
+      "VERIFY_COMPLETE_RECOVER",
+      "NO_TOOL_OR_AMBIGUOUS"
+    ],
+    "observe_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+    "query_tools": ["android_ui_query"],
+    "interaction_tools": ["android_tap", "adb_tap"],
+    "always_cloud_tools": ["android_shell", "adb_shell", "exec", "web_search"],
+    "scoped_context_version": "scoped-local-static-affordance-v1",
+    "rm_policy_version": "g4-rm-scoped-context-v1",
+    "fsm_policy_version": "g4-fsm-scoped-context-v1",
+    "fsm_treatment": "prediction-time admissible RouteClass schema plus exact Tool-Result-bound transition handoff; a failed, missing, mismatched, or untyped transition forces the next request to Cloud",
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud"
+  },
+  "task_panel": [
+    {"ordinal": 1, "level": "L1", "task_id": "L1-02", "case_index_by_repetition": [1, 4, 2, 3]},
+    {"ordinal": 2, "level": "L1", "task_id": "L1-03", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 3, "level": "L1", "task_id": "L1-08", "case_index_by_repetition": [1, 3, 2, 4]},
+    {"ordinal": 4, "level": "L2", "task_id": "L2-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 5, "level": "L2", "task_id": "L2-05", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 6, "level": "L2", "task_id": "L2-09", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 7, "level": "L3", "task_id": "L3-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 8, "level": "L3", "task_id": "L3-02", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 9, "level": "L3", "task_id": "L3-05", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 10, "level": "L4", "task_id": "L4-01", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 11, "level": "L4", "task_id": "L4-02", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 12, "level": "L4", "task_id": "L4-03", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 13, "level": "L5", "task_id": "L5-01", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 14, "level": "L5", "task_id": "L5-02", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 15, "level": "L5", "task_id": "L5-04", "case_index_by_repetition": [1, 1, 1, 1]}
+  ],
+  "round_level_order": {
+    "1": ["L1", "L2", "L3", "L4", "L5"],
+    "2": ["L2", "L3", "L4", "L5", "L1"],
+    "3": ["L3", "L4", "L5", "L1", "L2"],
+    "4": ["L4", "L5", "L1", "L2", "L3"]
+  },
+  "groups": [
+    {
+      "group_id": "G4-RM-SC",
+      "arm_id": "router-rm-scoped-dsv4-agent-dsv4-qwen36-logical-local",
+      "condition": "scoped context with the existing prediction-after artifact guard",
+      "cell_count": 60,
+      "data_source": "new_paired_expanded15_collection"
+    },
+    {
+      "group_id": "G4-FSM-SC",
+      "arm_id": "router-fsm-scoped-dsv4-agent-dsv4-qwen36-logical-local",
+      "condition": "the same scoped context plus active FSM admissibility and result-bound handoff",
+      "cell_count": 60,
+      "data_source": "new_paired_expanded15_collection"
+    }
+  ],
+  "smoke": {
+    "cell_count_per_group": 5,
+    "matrix_cell_count": 10,
+    "mechanism_exposure_required": true,
+    "minimum_local_backend_selections_per_group": 1,
+    "minimum_accepted_local_calls_per_group": 1,
+    "minimum_fsm_admissibility_restrictions": 1,
+    "minimum_fsm_transition_matches": 1,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "G4-RM-SC", "task_case": "L1-03:1", "repetition": 1, "pair_id": "canary-L1-L1-03-case-1"},
+      {"smoke_schedule": 2, "group_id": "G4-FSM-SC", "task_case": "L1-03:1", "repetition": 1, "pair_id": "canary-L1-L1-03-case-1"},
+      {"smoke_schedule": 3, "group_id": "G4-FSM-SC", "task_case": "L2-09:2", "repetition": 1, "pair_id": "canary-L2-L2-09-case-2"},
+      {"smoke_schedule": 4, "group_id": "G4-RM-SC", "task_case": "L2-09:2", "repetition": 1, "pair_id": "canary-L2-L2-09-case-2"},
+      {"smoke_schedule": 5, "group_id": "G4-RM-SC", "task_case": "L3-02:2", "repetition": 1, "pair_id": "canary-L3-L3-02-case-2"},
+      {"smoke_schedule": 6, "group_id": "G4-FSM-SC", "task_case": "L3-02:2", "repetition": 1, "pair_id": "canary-L3-L3-02-case-2"},
+      {"smoke_schedule": 7, "group_id": "G4-FSM-SC", "task_case": "L4-01:1", "repetition": 1, "pair_id": "canary-L4-L4-01-case-1"},
+      {"smoke_schedule": 8, "group_id": "G4-RM-SC", "task_case": "L4-01:1", "repetition": 1, "pair_id": "canary-L4-L4-01-case-1"},
+      {"smoke_schedule": 9, "group_id": "G4-RM-SC", "task_case": "L5-04:1", "repetition": 1, "pair_id": "canary-L5-L5-04-case-1"},
+      {"smoke_schedule": 10, "group_id": "G4-FSM-SC", "task_case": "L5-04:1", "repetition": 1, "pair_id": "canary-L5-L5-04-case-1"}
+    ],
+    "pass_semantics": "All ten paired Cells must be structurally healthy with unique result.run_id values and no infrastructure failure. Each arm must execute at least one Validator-accepted Local Tool Call. Across the FSM arm, active admissibility and at least one matched result-bound transition must occur. L1 is an intentional no-historical-opportunity negative control and is not required to trigger a transition by chance."
+  },
+  "formal": {
+    "matrix_cell_count": 120,
+    "cell_count_per_group": 60,
+    "groups": ["G4-RM-SC", "G4-FSM-SC"],
+    "repetitions_per_task": 4,
+    "task_count_per_group": 15,
+    "pairing_key": ["task_id", "case_index", "repetition"],
+    "arm_order": "balanced_ab_ba_within_each_task_case_repetition_pair",
+    "interpretation": "Fresh paired Expanded15 generalization. Primary results are paired Task Success, validated actual Local offload coverage, and Cloud Agent usage; request-level state counters are mechanism diagnostics only."
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-r2-fsm-expanded15-paired-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-r2-fsm-expanded15-paired-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "fsm_pending_transition_is_scoped_to_result_run_id": true,
+    "required_raw_evidence": [
+      "cell-status.json",
+      "result JSON",
+      "model-calls.jsonl",
+      "proxy-events.jsonl",
+      "route decision, scoped-context version, and route-state projection",
+      "FSM admissible RouteClasses and transition pending/resolved records",
+      "raw request",
+      "raw response or SSE",
+      "latency",
+      "task verification"
+    ]
+  },
+  "historical_support": {
+    "tier_a_frozen_cell_count": 56,
+    "tier_a_pair_count": 28,
+    "tier_a_rm_success_count": 20,
+    "tier_a_fsm_success_count": 23,
+    "tier_a_rm_local_coverage": 0.34179357021996615,
+    "tier_a_fsm_local_coverage": 0.4155844155844156,
+    "tier_a_report": "D:\\codexdataspace\\reports\\clawmobile-router-r2-fsm-paired-v1\\tier-a-56cells-20260818T180500Z\\tier-a-summary.json",
+    "five_level_canary_cases": ["L1-03:1", "L2-09:2", "L3-02:2", "L4-01:1", "L5-04:1"]
+  }
+}

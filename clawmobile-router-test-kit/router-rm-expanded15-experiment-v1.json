@@ -1,0 +1,158 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-rm-expanded15-v1",
+  "design_status": "live_candidate",
+  "design_semantics": "Single Phone A G4-RM expansion over the exact completed G1/G5 Expanded15 task-case-repetition panel. The g4-rm-moderate-action-v1 Router policy, models, shared Proxy, capture contract and fail-fast semantics remain unchanged.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "adb_serial": "127.0.0.1:5555"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "group_order": ["G4-RM"],
+    "within_group_order": "round-major_with_rotating_level_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group"
+  },
+  "paired_panel_reference": {
+    "design_id": "phone-a-four-group-expanded15-v4",
+    "completed_groups": ["G1", "G5"],
+    "cell_index": "D:\\codexdataspace\\reports\\clawmobile-expanded15-v4\\expanded15-v4-final-20260814T050046Z\\cell-index.csv",
+    "pairing_key": ["task_id", "case_index", "repetition"],
+    "verified_pair_count_per_group": 60,
+    "g1_g5_pair_mismatch_count": 0
+  },
+  "models": {
+    "router": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "cloud_agent": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "logical_local_agent": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud",
+      "logical_role_only": true
+    }
+  },
+  "route_policy": {
+    "group_id": "G4-RM",
+    "version": "g4-rm-moderate-action-v1",
+    "router_output": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED",
+      "RETRIEVE_WEB_BOUNDED",
+      "PERSIST_OR_SYSTEM_MUTATION",
+      "OPEN_EXEC_OR_COMPOSITE",
+      "VERIFY_COMPLETE_RECOVER",
+      "NO_TOOL_OR_AMBIGUOUS"
+    ],
+    "local_route_classes": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED",
+      "RETRIEVE_WEB_BOUNDED"
+    ],
+    "always_cloud_tools": ["android_shell", "adb_shell", "exec"],
+    "observe_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+    "query_tools": ["android_ui_query"],
+    "interaction_tools": ["android_tap", "adb_tap"],
+    "retrieval_tools": ["web_search"],
+    "tap_dependency_contract": "x and y must equal the latest fresh same-cell successful android_ui_query selected center, and selected must be clickable and enabled",
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud"
+  },
+  "task_panel": [
+    {"level": "L1", "task_id": "L1-02", "case_index_by_repetition": [1, 4, 2, 3]},
+    {"level": "L1", "task_id": "L1-03", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L1", "task_id": "L1-08", "case_index_by_repetition": [1, 3, 2, 4]},
+    {"level": "L2", "task_id": "L2-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L2", "task_id": "L2-05", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L2", "task_id": "L2-09", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L3", "task_id": "L3-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L3", "task_id": "L3-02", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L3", "task_id": "L3-05", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L4", "task_id": "L4-01", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L4", "task_id": "L4-02", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L4", "task_id": "L4-03", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L5", "task_id": "L5-01", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L5", "task_id": "L5-02", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L5", "task_id": "L5-04", "case_index_by_repetition": [1, 1, 1, 1]}
+  ],
+  "round_level_order": {
+    "1": ["L1", "L2", "L3", "L4", "L5"],
+    "2": ["L2", "L3", "L4", "L5", "L1"],
+    "3": ["L3", "L4", "L5", "L1", "L2"],
+    "4": ["L4", "L5", "L1", "L2", "L3"]
+  },
+  "groups": [
+    {
+      "group_id": "G4-RM",
+      "priority": 1,
+      "arm_id": "router-rm-dsv4-agent-dsv4-qwen36-logical-local",
+      "router_model": "deepseek-v4-flash",
+      "cloud_agent_model": "deepseek-v4-flash",
+      "logical_local_agent_model": "qwen3.6-35b",
+      "cell_count": 60,
+      "schedule_first": 1,
+      "schedule_last": 60,
+      "data_source": "new_router_expanded15_collection"
+    }
+  ],
+  "smoke": {
+    "cell_count_per_group": 5,
+    "matrix_cell_count": 5,
+    "mechanism_exposure_required": true,
+    "minimum_local_backend_selections": 1,
+    "minimum_accepted_local_calls": 1,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "G4-RM", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "G4-RM", "task_case": "L2-01:1", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "G4-RM", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "G4-RM", "task_case": "L4-02:1", "repetition": 1},
+      {"smoke_schedule": 5, "group_id": "G4-RM", "task_case": "L5-01:1", "repetition": 1}
+    ],
+    "pass_semantics": "SUCCESS and structurally healthy scored FAILURE both pass only when capture is complete, Router failures are zero, and the matrix contains at least one Local backend selection plus one Validator-accepted Local Tool Call. The first infrastructure failure is preserved and stops the group."
+  },
+  "formal": {
+    "group_cell_count": 60,
+    "matrix_cell_count": 60,
+    "groups": ["G4-RM"],
+    "repetitions_per_task": 4,
+    "task_count_per_group": 15
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-rm-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-rm-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "required_raw_evidence": [
+      "cell-status.json",
+      "result JSON",
+      "model-calls.jsonl",
+      "proxy-events.jsonl",
+      "route decision and route-state projection",
+      "raw request",
+      "raw response or SSE",
+      "latency",
+      "task verification"
+    ]
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-fsm-scoped-repair-qwen-router-expanded15-v1",
+  "design_status": "offline_shadow_then_live_candidate",
+  "design_semantics": "Single-arm Expanded15 decision-source experiment. Relative to the completed G4-FSM-SC-Repair baseline, the only experimental variable is the Router model: FreeInference deepseek-v4-flash is replaced by FreeInference qwen3.6-35b. The complete pre-Agent Router context, Router prompt, strict eight-class output schema, deterministic FSM, scoped Local context, qwen3.6-35b Local Agent, deepseek-v4-flash Cloud Agent, Standard Moderate Repair, Tool Schema, Validator, task panel, setup, verify, and teardown remain unchanged.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "group_order": ["G4-FSM-SC-Repair-QwenRouter"],
+    "within_group_order": "round-major_with_rotating_level_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "router": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud"
+    },
+    "cloud_agent": {
+      "provider_id": "freeinference",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "freeinference-cloud"
+    },
+    "logical_local_agent": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud",
+      "logical_role_only": true
+    }
+  },
+  "route_policy": {
+    "router_prompt_version": "g4-rm-moderate-action-router-prompt-v1",
+    "router_output": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED",
+      "RETRIEVE_WEB_BOUNDED",
+      "PERSIST_OR_SYSTEM_MUTATION",
+      "OPEN_EXEC_OR_COMPOSITE",
+      "VERIFY_COMPLETE_RECOVER",
+      "NO_TOOL_OR_AMBIGUOUS"
+    ],
+    "local_route_classes": [
+      "OBSERVE_UI_RAW",
+      "QUERY_UI_GROUNDED",
+      "INTERACT_UI_GROUNDED"
+    ],
+    "always_cloud_route_classes": [
+      "RETRIEVE_WEB_BOUNDED",
+      "PERSIST_OR_SYSTEM_MUTATION",
+      "OPEN_EXEC_OR_COMPOSITE",
+      "VERIFY_COMPLETE_RECOVER",
+      "NO_TOOL_OR_AMBIGUOUS"
+    ],
+    "observe_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+    "query_tools": ["android_ui_query"],
+    "interaction_tools": ["android_tap", "adb_tap"],
+    "always_cloud_tools": ["android_shell", "adb_shell", "exec", "web_search"],
+    "scoped_context_version": "scoped-local-static-affordance-v1",
+    "fsm_policy_version": "g4-fsm-scoped-context-v1",
+    "repair_policy_version": "g4-fsm-scoped-context-standard-moderate-repair-v1",
+    "repair_contract": {
+      "name": "standard_moderate_repair",
+      "eligible_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+      "eligible_tools": ["android_ui_dump", "adb_ui_dump_xml", "android_ui_query", "android_tap", "adb_tap"],
+      "deterministic_processing": "Normalize only equivalent schema representations, then bind a single query to the unique latest fresh same-state dump, then compile x/y from the unique latest fresh same-state selected center when clickable and enabled.",
+      "requires_exactly_one_tool_call": true,
+      "full_revalidation_before_execution": true,
+      "route_class_change_allowed": false,
+      "tool_substitution_allowed": false,
+      "semantic_target_selection_allowed": false,
+      "wrong_tool_repair_allowed": false,
+      "shell_or_exec_repair_allowed": false,
+      "multi_tool_repair_allowed": false,
+      "ambiguous_selector_repair_allowed": false,
+      "missing_fresh_artifact_repair_allowed": false
+    },
+    "fsm_treatment": "prediction-time admissible RouteClass schema plus exact Tool-Result-bound transition handoff; a failed, missing, mismatched, or untyped transition forces the next request to Cloud",
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud"
+  },
+  "task_panel": [
+    {"ordinal": 1, "level": "L1", "task_id": "L1-02", "case_index_by_repetition": [1, 4, 2, 3]},
+    {"ordinal": 2, "level": "L1", "task_id": "L1-03", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 3, "level": "L1", "task_id": "L1-08", "case_index_by_repetition": [1, 3, 2, 4]},
+    {"ordinal": 4, "level": "L2", "task_id": "L2-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 5, "level": "L2", "task_id": "L2-05", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 6, "level": "L2", "task_id": "L2-09", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 7, "level": "L3", "task_id": "L3-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 8, "level": "L3", "task_id": "L3-02", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 9, "level": "L3", "task_id": "L3-05", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 10, "level": "L4", "task_id": "L4-01", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 11, "level": "L4", "task_id": "L4-02", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"ordinal": 12, "level": "L4", "task_id": "L4-03", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"ordinal": 13, "level": "L5", "task_id": "L5-01", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 14, "level": "L5", "task_id": "L5-02", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"ordinal": 15, "level": "L5", "task_id": "L5-04", "case_index_by_repetition": [1, 1, 1, 1]}
+  ],
+  "round_level_order": {
+    "1": ["L1", "L2", "L3", "L4", "L5"],
+    "2": ["L2", "L3", "L4", "L5", "L1"],
+    "3": ["L3", "L4", "L5", "L1", "L2"],
+    "4": ["L4", "L5", "L1", "L2", "L3"]
+  },
+  "groups": [
+    {
+      "group_id": "G4-FSM-SC-Repair-QwenRouter",
+      "priority": 1,
+      "arm_id": "router-fsm-scoped-repair-qwen36-agent-dsv4-qwen36-logical-local",
+      "router_model": "qwen3.6-35b",
+      "cloud_agent_model": "deepseek-v4-flash",
+      "logical_local_agent_model": "qwen3.6-35b",
+      "cell_count": 60,
+      "schedule_first": 1,
+      "schedule_last": 60,
+      "data_source": "new_qwen_router_only_expanded15_collection"
+    }
+  ],
+  "offline_shadow": {
+    "source_design_id": "phone-a-router-fsm-scoped-repair-expanded15-v1",
+    "source_group_id": "G4-FSM-SC-Repair",
+    "source_router_model": "deepseek-v4-flash",
+    "target_router_model": "qwen3.6-35b",
+    "expected_cell_count": 60,
+    "expected_request_count": 1017,
+    "only_mutated_request_field": "model",
+    "canonical_segments": [
+      {
+        "schedule_first": 1,
+        "schedule_last": 30,
+        "cell_root": "D:\\codexdataspace\\outputs\\clawmobile-router-fsm-scoped-repair-expanded15-v1\\formal-20260820T142016Z\\formal\\G4-FSM-SC-Repair"
+      },
+      {
+        "schedule_first": 31,
+        "schedule_last": 60,
+        "cell_root": "D:\\codexdataspace\\outputs\\clawmobile-router-fsm-scoped-repair-expanded15-v1\\formal-recovery-20260821T0020Z\\formal\\G4-FSM-SC-Repair"
+      }
+    ],
+    "excluded_evidence": "Original Formal Schedule 31 is an HTTP 429 infrastructure failure and is preserved but excluded; its canonical scored replacement is Schedule 31 in the recovery root."
+  },
+  "smoke": {
+    "cell_count_per_group": 5,
+    "matrix_cell_count": 5,
+    "mechanism_exposure_required": true,
+    "minimum_local_backend_selections": 1,
+    "minimum_accepted_local_calls": 1,
+    "minimum_fsm_admissibility_restrictions": 1,
+    "minimum_fsm_transition_matches": 1,
+    "minimum_repair_attempts": 1,
+    "minimum_repair_applied": 1,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "G4-FSM-SC-Repair-QwenRouter", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "G4-FSM-SC-Repair-QwenRouter", "task_case": "L2-09:2", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "G4-FSM-SC-Repair-QwenRouter", "task_case": "L3-01:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "G4-FSM-SC-Repair-QwenRouter", "task_case": "L4-01:1", "repetition": 1},
+      {"smoke_schedule": 5, "group_id": "G4-FSM-SC-Repair-QwenRouter", "task_case": "L5-02:1", "repetition": 1}
+    ],
+    "pass_semantics": "All five Qwen-Router Cells must be structurally healthy with unique result.run_id values and no infrastructure failure. The arm must exercise FSM admissibility, a matched result-bound transition, and at least one Local Tool Call that passes complete validation; the unchanged Repair path must remain auditable."
+  },
+  "formal": {
+    "group_cell_count": 60,
+    "matrix_cell_count": 60,
+    "groups": ["G4-FSM-SC-Repair-QwenRouter"],
+    "repetitions_per_task": 4,
+    "task_count_per_group": 15,
+    "interpretation": "Single-arm decision-source follow-up. Compare descriptively to the already completed historical G4-FSM-SC-Repair 60-cell arm using the identical task-case-repetition panel; temporal drift remains a stated limitation."
+  },
+  "historical_baseline": {
+    "design_id": "phone-a-router-fsm-scoped-repair-expanded15-v1",
+    "group_id": "G4-FSM-SC-Repair",
+    "router_model": "deepseek-v4-flash",
+    "canonical_cell_count": 60,
+    "task_success_count": 45,
+    "router_request_count": 1017,
+    "evidence_root": "D:\\codexdataspace\\outputs\\clawmobile-router-fsm-scoped-repair-expanded15-v1"
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-fsm-scoped-repair-qwen-router-expanded15-v1",
+    "report_root": "D:\\codexdataspace\\reports\\clawmobile-router-fsm-scoped-repair-qwen-router-expanded15-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-fsm-scoped-repair-qwen-router-expanded15-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "fsm_pending_transition_is_scoped_to_result_run_id": true,
+    "required_raw_evidence": [
+      "cell-status.json",
+      "result JSON",
+      "model-calls.jsonl",
+      "proxy-events.jsonl",
+      "route decision, scoped-context version, and route-state projection",
+      "FSM admissible RouteClasses and transition pending/resolved records",
+      "repair original candidate, repaired candidate, deterministic transformation facts and basis, and complete revalidation outcome",
+      "raw request",
+      "raw response or SSE",
+      "latency",
+      "task verification"
+    ]
+  }
+}

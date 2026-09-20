@@ -1,0 +1,59 @@
+{
+  "id": "clawbench",
+  "activation": {
+    "onStartup": false
+  },
+  "channels": ["clawbench"],
+  "channelConfigs": {
+    "clawbench": {
+      "label": "ClawBench",
+      "description": "Local HTTP channel used by the ClawBench benchmark harness.",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$defs": {
+          "account": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "enabled": { "type": "boolean" },
+              "host": { "type": "string" },
+              "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+              "token": { "type": "string" },
+              "allowFrom": {
+                "type": "array",
+                "items": { "anyOf": [{ "type": "string" }, { "type": "number" }] }
+              },
+              "defaultTo": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "host": { "type": "string" },
+          "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+          "token": { "type": "string" },
+          "allowFrom": {
+            "type": "array",
+            "items": { "anyOf": [{ "type": "string" }, { "type": "number" }] }
+          },
+          "defaultTo": { "type": "string" },
+          "accounts": {
+            "type": "object",
+            "propertyNames": { "type": "string" },
+            "additionalProperties": { "$ref": "#/$defs/account" }
+          },
+          "defaultAccount": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

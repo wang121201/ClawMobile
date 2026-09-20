@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "purpose": "Byte-identity allowlist for phone-native Router campaign designs",
+  "configs": [
+    {"file":"router-binary-efficiency-tiny-experiment-v1.json","design_id":"phone-a-router-binary-efficiency-tiny-v1","sha256":"56701a1ea6a72062e996cad33e0dfc32050af5c495a5afa40a92b07e90b5a696","expected_cells":{"smoke":4,"formal":18}},
+    {"file":"router-binary-tool-expanded15-experiment-v1.json","design_id":"phone-a-router-binary-tool-expanded15-v1","sha256":"23bf3fb7a89fcd06c2a44b9ab5926f85cd8822587b790f597f5dfa786c097da0","expected_cells":{"smoke":5,"formal":60}},
+    {"file":"router-capability-suppression-experiment-v1.json","design_id":"phone-a-router-capability-suppression-v1","sha256":"4e746216f331731d308408edd86e097468ea5c3f0e534de651aaec3131a3cadb","expected_cells":{"smoke":1,"formal":16}},
+    {"file":"router-capability-suppression-full-dsv4-comparator-v1.json","design_id":"phone-a-router-capability-suppression-full-dsv4-comparator-v1","sha256":"ebde4c157a9b63105f66a17e1dc1011ade617fe3657422ef95efb1a8b91e7b90","expected_cells":{"smoke":1,"formal":8}},
+    {"file":"router-explicit-binary-tool-expanded15-experiment-v1.json","design_id":"phone-a-router-explicit-binary-tool-expanded15-v1","sha256":"74db33d2d62ebd6359d9d04d6e68ede8bda5372964f088887ed447780fd37696","expected_cells":{"smoke":5,"formal":60}},
+    {"file":"router-fsm-scoped-repair-expanded15-experiment-v1.json","design_id":"phone-a-router-fsm-scoped-repair-expanded15-v1","sha256":"414170344e76d524f57d09a789e9418a9bc1dc25bb5e020795e27a10f39d24f2","expected_cells":{"smoke":5,"formal":60}},
+    {"file":"router-fsm-scoped-repair-qwen-router-expanded15-experiment-v1.json","design_id":"phone-a-router-fsm-scoped-repair-qwen-router-expanded15-v1","sha256":"fa03dc16af2bd4bb51cdf427e726c1e4a6e887bcee3bedc36140d3e87d91d4e8","expected_cells":{"smoke":5,"formal":60}},
+    {"file":"router-r1-r2-matched5-experiment-v1.json","design_id":"phone-a-router-r1-r2-matched5-v1","sha256":"726740e0ff12b50428d826cdce201abefeaad5afd36e582aae99abec10233495","expected_cells":{"smoke":10,"formal":100}},
+    {"file":"router-r2-fsm-expanded15-paired-experiment-v1.json","design_id":"phone-a-router-r2-fsm-expanded15-paired-v1","sha256":"451685106c627dc85770cb1ad23a359ea2f75350c4b316165887f159e168137b","expected_cells":{"smoke":10,"formal":120}},
+    {"file":"router-r2-fsm-paired-experiment-v1.json","design_id":"phone-a-router-r2-fsm-paired-v1","sha256":"e578524cdc811fc884a78b85d9f4fcf6516f3e7e4571c92d9547245d3394ff33","expected_cells":{"smoke":8,"formal":80}},
+    {"file":"router-rm-expanded15-experiment-v1.json","design_id":"phone-a-router-rm-expanded15-v1","sha256":"fc900e18b4b2c9e763624970ac5650b3a0ad190c10f747ff0f93fd965b0324d9","expected_cells":{"smoke":5,"formal":60}},
+    {"file":"router-rm-matched5-experiment-v1.json","design_id":"phone-a-router-rm-matched5-v1","sha256":"4e2afc9ddc31083c6cf34706ba07beffb1eb77d60743d9d73dfd6c210b3839bb","expected_cells":{"smoke":5,"formal":50}},
+    {"file":"router-route-flex-tiny-preliminary-v1.json","design_id":"phone-a-router-route-flex-tiny-preliminary-v1","sha256":"773e09511fd11b2a14e747e9d807e363966aad0a4e03ab28463de575bd117d07","expected_cells":{"smoke":12,"formal":0}}
+  ]
+}

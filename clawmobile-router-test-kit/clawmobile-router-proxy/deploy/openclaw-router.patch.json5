@@ -1,0 +1,45 @@
+{
+  models: {
+    providers: {
+      "custom-freeinference-org": {
+        models: [
+          { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash", contextWindow: 128000, maxTokens: 4096 },
+          { id: "qwen3.6-35b", name: "Qwen3.6 35B", contextWindow: 262144, maxTokens: 8192 },
+        ],
+      },
+      "custom-127-0-0-1-18080": {
+        baseUrl: "http://127.0.0.1:18080/v1",
+        api: "openai-completions",
+        models: [
+          { id: "qwen3-8b", name: "XMU Qwen3 8B", contextWindow: 65536, maxTokens: 4096 },
+          { id: "qwen2.5-1.5b-instruct", name: "XMU Qwen2.5 1.5B Instruct Q8_0", contextWindow: 32768, maxTokens: 4096 },
+          { id: "qwen3.8-27b", name: "XMU Qwen3.8 27B BF16", contextWindow: 65536, maxTokens: 4096 },
+        ],
+      },
+      "clawmobile-router": {
+        baseUrl: "http://127.0.0.1:18081/v1",
+        api: "openai-completions",
+        models: [
+          { id: "cloud-full", name: "ClawMobile Cloud Full", contextWindow: 65536, maxTokens: 4096 },
+          { id: "local-full", name: "ClawMobile Local Full", contextWindow: 65536, maxTokens: 4096 },
+          { id: "filter", name: "ClawMobile API Filter", contextWindow: 65536, maxTokens: 4096 },
+          { id: "router", name: "ClawMobile Request Router", contextWindow: 65536, maxTokens: 4096 },
+          { id: "experiment", name: "ClawMobile Fixed Experiment Arm", contextWindow: 65536, maxTokens: 4096 },
+        ],
+      },
+    },
+  },
+  agents: {
+    defaults: {
+      models: {
+        "clawmobile-router/local-filter-cloud": null,
+        "clawmobile-router/routed": null,
+        "clawmobile-router/cloud-full": { alias: "clawmobile-cloud-full" },
+        "clawmobile-router/local-full": { alias: "clawmobile-local-full" },
+        "clawmobile-router/filter": { alias: "clawmobile-filter" },
+        "clawmobile-router/router": { alias: "clawmobile-router" },
+        "clawmobile-router/experiment": { alias: "clawmobile-experiment" },
+      },
+    },
+  },
+}

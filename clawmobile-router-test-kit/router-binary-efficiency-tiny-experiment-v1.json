@@ -1,0 +1,103 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-binary-efficiency-tiny-v1",
+  "design_status": "tiny_live_candidate_after_mechanism_smoke",
+  "design_semantics": "Fresh 18-cell falsification-first study. Binary-Control freezes G4-Binary-Tool. Binary-Effect-Aware changes only deterministic UI-effect state maintenance. Binary-Effect-Aware-StrongPathCheck keeps the same effect-aware state and adds a bounded Cloud strong-path assessment before the first successful UI action. The study does not assume a direct path exists or is superior.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "condition_order": ["Binary-Control", "Binary-Effect-Aware", "Binary-Effect-Aware-StrongPathCheck"],
+    "within_study_order": "arm-major_then_round-major_fixed_task_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "router": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud", "output_contract": ["LOCAL_UI_CANDIDATE", "CLOUD_REQUIRED"]},
+    "cloud_agent": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud"},
+    "logical_local_agent": {"provider_id": "freeinference", "model_id": "qwen3.6-35b", "physical_platform": "freeinference-cloud", "logical_role_only": true}
+  },
+  "route_policy": {
+    "binary_router_output": ["LOCAL_UI_CANDIDATE", "CLOUD_REQUIRED"],
+    "local_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+    "always_cloud_responsibilities": ["persistence", "system_mutation", "open_shell_or_exec", "authoritative_verification", "completion", "recovery", "ambiguity"],
+    "fsm_policy_version": "g4-fsm-scoped-context-v1",
+    "effect_aware_policy_version": "g4-binary-ui-effect-aware-v1",
+    "scoped_context_version": "coarse-local-tool-union-v1",
+    "repair_policy_version": "g4-fsm-scoped-context-standard-moderate-repair-v1",
+    "effect_aware_boundary": {
+      "ui_neutral_exact_tools": ["android_health", "adb_health", "android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml", "android_ui_query", "web_search", "web_fetch", "read", "android_ocr_dump", "memory_search"],
+      "non_ui_step_exact_tools": ["write", "android_signal_complete"],
+      "unknown_shell_or_exec_policy": "legacy_fail_closed_ui_invalidation",
+      "ui_mutation_policy": "invalidate_dump_query_and_require_fresh_ui_evidence"
+    },
+    "strong_path_check": {
+      "version": "g4-binary-strong-path-check-v1",
+      "trigger": "before_first_successful_ui_action_on_cloud_or_validated_local_ui_entrance",
+      "semantics": "Cloud assesses but is not forced to use a safe Task-compatible provider, web, file, shell, intent, or authoritative path before fine UI navigation.",
+      "hidden_verifier_information_allowed": false,
+      "direct_path_forced": false
+    },
+    "invalid_router_policy": "fallback_cloud_with_original_request",
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud_with_original_request"
+  },
+  "task_panel": [
+    {"ordinal": 1, "task_id": "L3-02", "case_index_by_repetition": [2, 1]},
+    {"ordinal": 2, "task_id": "L5-02", "case_index_by_repetition": [1, 1]},
+    {"ordinal": 3, "task_id": "L4-02", "case_index_by_repetition": [1, 2]}
+  ],
+  "groups": [
+    {"group_id": "Binary-Control", "arm_id": "router-binary-tool-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 6, "schedule_first": 1, "schedule_last": 6},
+    {"group_id": "Binary-Effect-Aware", "arm_id": "router-binary-tool-effect-aware-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 6, "schedule_first": 7, "schedule_last": 12},
+    {"group_id": "Binary-Effect-Aware-StrongPathCheck", "arm_id": "router-binary-tool-effect-aware-strong-path-check-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 6, "schedule_first": 13, "schedule_last": 18}
+  ],
+  "smoke": {
+    "matrix_cell_count": 4,
+    "mechanism_exposure_required": true,
+    "minimum_effect_aware_transitions": 1,
+    "minimum_strong_path_check_exposures": 1,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "Binary-Control", "task_case": "L5-02:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "Binary-Effect-Aware", "task_case": "L5-02:1", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "Binary-Effect-Aware-StrongPathCheck", "task_case": "L5-02:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "Binary-Effect-Aware-StrongPathCheck", "task_case": "L3-02:2", "repetition": 1}
+    ],
+    "pass_semantics": "All four Cells require unique result.run_id values, healthy durable capture and complete teardown. At least one effect-aware transition and one real Strong-Path Check must be captured. Task FAILURE is valid; infrastructure failure stops the run."
+  },
+  "formal": {
+    "matrix_cell_count": 18,
+    "cell_count_per_group": 6,
+    "task_count_per_group": 3,
+    "repetitions_per_task": 2,
+    "groups": ["Binary-Control", "Binary-Effect-Aware", "Binary-Effect-Aware-StrongPathCheck"]
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-binary-efficiency-tiny-v1",
+    "report_root": "D:\\codexdataspace\\reports\\clawmobile-router-binary-efficiency-tiny-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-binary-efficiency-tiny-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "fsm_pending_transition_is_scoped_to_result_run_id": true,
+    "required_mechanism_evidence": ["ui_effect_policy_version", "strong_path_check_applied", "first substantive Tool family", "validated Local execution", "Cloud Agent call", "Task outcome"]
+  }
+}

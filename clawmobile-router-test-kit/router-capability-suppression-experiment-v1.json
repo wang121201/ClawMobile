@@ -1,0 +1,108 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-router-capability-suppression-v1",
+  "design_status": "fresh_live_candidate",
+  "design_semantics": "Fresh 16-cell arm-major capability-suppression study. Baseline is the frozen G4-FSM-SC-Repair mechanism. Cloud-first differs only by suppressing the first locally proposed UI mutation in each Cell and sending the original full request and full Tool schema to the Cloud Agent. All Router, FSM, RouteClass, scoped context, Repair, models, Tool schemas, validators, verifier, setup, and teardown semantics remain frozen.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "ssh_user": "u0_a299",
+    "adb_serial": "127.0.0.1:5555",
+    "adb_server_socket": "tcp:127.0.0.1:15038",
+    "clawbench_agent_base_url": "http://127.0.0.1:18766",
+    "gateway_base_url": "http://127.0.0.1:18789",
+    "router_proxy_base_url": "http://127.0.0.1:18081"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "condition_order": ["Baseline", "Cloud-first"],
+    "within_study_order": "arm-major_then_round-major_fixed_task_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group",
+    "same_phone_same_proxy_required": true
+  },
+  "models": {
+    "router": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud"},
+    "cloud_agent": {"provider_id": "freeinference", "model_id": "deepseek-v4-flash", "physical_platform": "freeinference-cloud"},
+    "logical_local_agent": {"provider_id": "freeinference", "model_id": "qwen3.6-35b", "physical_platform": "freeinference-cloud", "logical_role_only": true}
+  },
+  "route_policy": {
+    "router_output": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED", "RETRIEVE_WEB_BOUNDED", "PERSIST_OR_SYSTEM_MUTATION", "OPEN_EXEC_OR_COMPOSITE", "VERIFY_COMPLETE_RECOVER", "NO_TOOL_OR_AMBIGUOUS"],
+    "local_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+    "always_cloud_route_classes": ["RETRIEVE_WEB_BOUNDED", "PERSIST_OR_SYSTEM_MUTATION", "OPEN_EXEC_OR_COMPOSITE", "VERIFY_COMPLETE_RECOVER", "NO_TOOL_OR_AMBIGUOUS"],
+    "observe_tools": ["android_screenshot", "adb_screenshot", "android_ui_dump", "adb_ui_dump_xml"],
+    "query_tools": ["android_ui_query"],
+    "interaction_tools": ["android_tap", "adb_tap"],
+    "always_cloud_tools": ["android_shell", "adb_shell", "exec", "web_search"],
+    "scoped_context_version": "scoped-local-static-affordance-v1",
+    "fsm_policy_version": "g4-fsm-scoped-context-v1",
+    "repair_policy_version": "g4-fsm-scoped-context-standard-moderate-repair-v1",
+    "repair_contract": {
+      "name": "standard_moderate_repair",
+      "eligible_route_classes": ["OBSERVE_UI_RAW", "QUERY_UI_GROUNDED", "INTERACT_UI_GROUNDED"],
+      "eligible_tools": ["android_ui_dump", "adb_ui_dump_xml", "android_ui_query", "android_tap", "adb_tap"],
+      "requires_exactly_one_tool_call": true,
+      "full_revalidation_before_execution": true,
+      "route_class_change_allowed": false,
+      "tool_substitution_allowed": false,
+      "semantic_target_selection_allowed": false,
+      "wrong_tool_repair_allowed": false,
+      "shell_or_exec_repair_allowed": false,
+      "multi_tool_repair_allowed": false,
+      "ambiguous_selector_repair_allowed": false,
+      "missing_fresh_artifact_repair_allowed": false
+    },
+    "capability_suppression": {
+      "baseline": "no additional suppression",
+      "cloud_first": "Before the Cell has a successful resolved tap, type, swipe, or keyevent, a completely validated Local candidate for one of those UI mutations is not executed and the original full request and full Tool schema are sent to Cloud.",
+      "successful_ui_mutation_semantics": "a same-Cell assistant Tool Call joined to a Tool Result whose JSON object has ok=true",
+      "gate_tools": ["android_tap", "adb_tap", "android_type", "adb_type", "android_swipe", "adb_swipe", "android_keyevent", "adb_keyevent"],
+      "all_other_mechanisms_frozen": true
+    },
+    "invalid_local_policy": "discard_before_tool_execution_and_fallback_cloud"
+  },
+  "task_panel": [
+    {"ordinal": 1, "task_id": "L3-01", "case_index": 1},
+    {"ordinal": 2, "task_id": "L3-05", "case_index": 1},
+    {"ordinal": 3, "task_id": "L5-04", "case_index": 1},
+    {"ordinal": 4, "task_id": "L4-02", "case_index": 1}
+  ],
+  "groups": [
+    {"group_id": "Baseline", "arm_id": "router-fsm-scoped-repair-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 8, "schedule_first": 1, "schedule_last": 8, "data_source": "fresh_capability_suppression_baseline"},
+    {"group_id": "Cloud-first", "arm_id": "router-fsm-scoped-repair-cloud-first-dsv4-agent-dsv4-qwen36-logical-local", "cell_count": 8, "schedule_first": 9, "schedule_last": 16, "data_source": "fresh_capability_suppression_treatment"}
+  ],
+  "smoke": {
+    "matrix_cell_count": 1,
+    "mechanism_exposure_required": false,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "Baseline", "task_case": "L3-01:1", "repetition": 1}
+    ],
+    "pass_semantics": "The independent recovery Canary must have a unique result.run_id, healthy durable capture, complete setup/verify/teardown, and no infrastructure failure. It does not claim treatment exposure."
+  },
+  "formal": {
+    "matrix_cell_count": 16,
+    "cell_count_per_group": 8,
+    "task_count_per_group": 4,
+    "repetitions_per_task": 2,
+    "groups": ["Baseline", "Cloud-first"]
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-router-capability-suppression-v1",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "remote_capture_root": "/data/data/com.termux/files/home/clawmobile-experiments/router-capability-suppression-v1/active/captures",
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "route_state_is_deterministic_projection": true,
+    "fsm_pending_transition_is_scoped_to_result_run_id": true,
+    "cloud_first_gate_and_followup_classification_required": true
+  }
+}
