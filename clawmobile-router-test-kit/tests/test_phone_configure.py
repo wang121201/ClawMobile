@@ -4,9 +4,13 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from phone_controller.common import ContractError
-from phone_controller.configure_phone import _canonicalize_clawbench_paths
+from phone_controller.configure_phone import (
+    _canonicalize_clawbench_paths,
+    _link_clawbench_plugin,
+)
 
 
 class PhoneConfigureTests(unittest.TestCase):
@@ -36,6 +40,26 @@ class PhoneConfigureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             with self.assertRaisesRegex(ContractError, "must be strings"):
                 _canonicalize_clawbench_paths([42], Path(temporary))
+
+    def test_links_canonical_channel_through_supported_openclaw_cli(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            channel = Path(temporary) / "channel"
+            channel.mkdir()
+            with patch(
+                "phone_controller.configure_phone.run_checked"
+            ) as run_checked:
+                _link_clawbench_plugin("/termux/bin/openclaw", channel)
+
+            run_checked.assert_called_once_with(
+                [
+                    "/termux/bin/openclaw",
+                    "plugins",
+                    "install",
+                    "--link",
+                    str(channel.resolve()),
+                ],
+                timeout=60,
+            )
 
 
 if __name__ == "__main__":

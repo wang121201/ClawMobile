@@ -9,7 +9,14 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from .common import ContractError, sha256_file, utc_stamp, write_bytes_exclusive, write_json_exclusive
+from .common import (
+    ContractError,
+    run_checked,
+    sha256_file,
+    utc_stamp,
+    write_bytes_exclusive,
+    write_json_exclusive,
+)
 from .config_plan import PACKAGE_ROOT
 from .environment import load_site
 
@@ -53,6 +60,20 @@ def _canonicalize_clawbench_paths(
         if raw not in kept:
             kept.append(raw)
     return kept, removed
+
+
+def _link_clawbench_plugin(openclaw_executable: str, channel_root: Path) -> None:
+    """Reconcile OpenClaw's install registry with the canonical Channel path."""
+    run_checked(
+        [
+            openclaw_executable,
+            "plugins",
+            "install",
+            "--link",
+            str(channel_root.expanduser().resolve()),
+        ],
+        timeout=60,
+    )
 
 
 def _models() -> list[dict[str, Any]]:
@@ -198,6 +219,11 @@ def configure(site_path: Path) -> dict[str, Any]:
     except Exception:
         # The exclusive temporary is intentionally retained when validation fails.
         raise
+
+    # OpenClaw also keeps an install registry outside plugins.load.paths.  Use its
+    # supported CLI so a replacement phone cannot silently keep loading a stale
+    # ClawBench Channel from an older absolute path.
+    _link_clawbench_plugin(site.openclaw_executable, channel_root)
 
     receipt = {
         "schema_version": 1,

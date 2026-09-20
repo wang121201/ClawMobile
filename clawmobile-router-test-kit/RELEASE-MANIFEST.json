@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-20T19:46:04.3025266+00:00",
+  "generated_at": "2026-09-20T20:03:02.7178761+00:00",
   "file_count": 206,
-  "total_bytes": 1313506,
+  "total_bytes": 1315002,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -861,8 +861,8 @@
     },
     {
       "path": "phone_controller/configure_phone.py",
-      "bytes": 8872,
-      "sha256": "5bb7d6f776a6f77e0631d9fce689c173e9beae3331a39957f6f87e647aa02189"
+      "bytes": 9582,
+      "sha256": "f0224c7a4cdbf134ceda38101c32404f5f12e796194a10e73672396f93478e86"
     },
     {
       "path": "phone_controller/environment.py",
@@ -1006,8 +1006,8 @@
     },
     {
       "path": "tests/test_phone_configure.py",
-      "bytes": 1557,
-      "sha256": "eaf14fa5b54ba46db89c00ed7676e0d818b5160901eb6ac55c7b4c2338b3b647"
+      "bytes": 2343,
+      "sha256": "839dec49ec1ff6c3352b0e12e524f6bb57e12dea0b6d0cadf45a4d642b081f7b"
     },
     {
       "path": "tests/test_phone_evidence.py",
@@ -1042,7 +1042,7 @@
     {
       "path": "VERIFICATION.md",
       "bytes": 5982,
-      "sha256": "879dbee5fb92f4e6eed929e8a6e41b2f49af44bbee43776f126ce3eac3a9b681"
+      "sha256": "027b927b8f055acfdd244cc596a677d608be8e33b4942806384bde051eecee8f"
     }
   ]
 }

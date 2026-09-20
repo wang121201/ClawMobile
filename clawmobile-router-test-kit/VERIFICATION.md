@@ -10,7 +10,7 @@ Scope: offline release validation plus one complete phone-native live Smoke on P
 - 13 frozen Router configurations passed schema validation and exact Smoke/Formal plan generation.
 - Phone-native plan rows matched the legacy production PowerShell plans row-for-row for all frozen configurations and stages.
 - 5 PowerShell entry/module files parsed with 0 errors.
-- 72 Python files parsed with `ast.parse`; 15 phone-controller unit tests passed.
+- 72 Python files parsed with `ast.parse`; 16 phone-controller unit tests passed.
 - 130 Node Router Proxy tests passed on Windows and again natively on Phone 62; 0 failed, skipped, or cancelled.
 - Release inventory contains 0 JSONL files, 0 log files, and 0 output/report/capture/result directories.
 - The final release contains 206 manifest payload files plus `RELEASE-MANIFEST.json` and `SHA256SUMS.txt`, for 208 staged files total; `git diff --cached --check` passed and no symlink is staged.
