@@ -47,7 +47,7 @@ chmod +x phone/*.sh
 ./phone/install.sh
 ```
 
-On a replacement phone, also reproduce the selected panel's application and verifier prerequisites before live Smoke: Maps, YouTube, Amazon, Contacts, Calendar, shared-storage access, account/login state, permissions, locale, and compatible app versions. Repository installation alone does not establish UI equivalence across physical phones.
+Before live Smoke, establish the selected panel's application and verifier prerequisites: Maps, YouTube, Amazon, Contacts, Calendar, shared-storage access, account/login state, permissions, locale, and compatible app versions. Repository installation alone does not establish the required device state.
 
 The installer creates two ignored private files if absent:
 
@@ -78,7 +78,7 @@ The included helper performs those checks and atomically updates the ignored sit
 ./phone/setup-self-adb.sh <pairing-port> <six-digit-code> <debug-port>
 ```
 
-Set the exact connected loopback serial in `phone/phone-site.json`, for example `127.0.0.1:40853`. Do not assume port 5555 on a replacement phone. The same serial is used by ClawBench, Gateway Android tools and deterministic verifiers.
+Set the exact connected loopback serial in `phone/phone-site.json`, for example `127.0.0.1:40853`. Do not assume port 5555. The same serial is used by ClawBench, Gateway Android tools and deterministic verifiers.
 
 ## Configure OpenClaw and Channel
 
@@ -115,7 +115,7 @@ The controller signals only a PID whose `/proc/<pid>/cmdline` still matches its 
 
 ## Validate a plan without model requests
 
-The frozen research JSON remains byte-identical; the private site file supplies the replacement phone identity and local paths.
+The frozen research JSON remains byte-identical; the private site file supplies the active phone identity and local paths.
 
 ```bash
 ./phone/run.sh run \
@@ -188,8 +188,8 @@ proxy-events.jsonl
 cell-status.json
 ```
 
-## Moving to another phone
+## Device-specific configuration
 
-Copy or clone the same repository revision, then repeat preparation, self-ADB, site configuration, OpenClaw configuration, doctor and Smoke. Do not copy `phone/phone.env`, `phone/phone-site.json`, live OpenClaw credentials or Android account data between phones without an explicit security decision. A replacement phone creates a new `site_id`; frozen research configs do not change.
+For every physical device, complete preparation, self-ADB, site configuration, OpenClaw configuration, doctor, and Smoke. Do not reuse `phone/phone.env`, `phone/phone-site.json`, live OpenClaw credentials, or Android account data across devices without an explicit security decision. Each device uses its own `site_id`; frozen research configs do not change.
 
-Cross-phone equivalence still requires recording Android version, app versions, locale, permissions, account/login state and initial task fixtures. The repository makes the controller and protocol portable; it cannot make two physical phone UIs pixel-identical.
+Record Android version, application versions, locale, permissions, account/login state, and initial task fixtures for each device. These values are part of the experiment environment and must be controlled or reported.

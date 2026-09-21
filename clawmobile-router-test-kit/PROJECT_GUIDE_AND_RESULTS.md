@@ -15,12 +15,11 @@ ClawMobile is an Android Agent runtime built on OpenClaw. The Router project eva
 
 For the current API-backed Router experiments, both models are physically served by FreeInference. “Logical-local” is an experimental role and routing target; it does not mean that Qwen3.6-35B is running on the phone or on XMU. The separate G6 experiment is the physical-local XMU result.
 
-The project asks four distinct questions:
+The project asks three distinct questions:
 
 1. Can a Router expose a useful subset of Android Tool work to the Logical-local Agent without losing end-to-end task correctness?
 2. Can deterministic state, scoped Tool context, validation, and bounded repair keep Local Tool Calls structurally safe?
 3. What accuracy, request-count, latency, and failure trade-offs appear relative to Full DSV4 and Full Qwen baselines?
-4. Can the complete experiment be cloned and executed on another phone while preserving the same execution and evidence contracts?
 
 ## 2. Terms and measurement boundaries
 
@@ -48,7 +47,7 @@ An accepted Local Tool Call is evidence that a candidate satisfied the current c
 
 ## 3. Current recommended configuration
 
-The current migration-tested reference is:
+The current reference is:
 
 | Field | Value |
 |---|---|
@@ -182,7 +181,7 @@ The deployment uses one shared Proxy. It is not necessary to deploy a different 
 | `router-*.json` | Frozen experiment definitions and Task/Case/Repetition mappings. |
 | `unified-five-group-experiment-v4.json` | Frozen G1/G2/G3/G5 Full/Filter baseline plan used by the core table. |
 | `tools/summarize_core_ablation.py` | Fail-closed regeneration of the core success/request table from sealed fresh Formal evidence. |
-| `PHONE_NATIVE_RUNBOOK.md` | Detailed replacement-phone installation and recovery procedure. |
+| `PHONE_NATIVE_RUNBOOK.md` | Detailed phone-native installation and recovery procedure. |
 | `VERIFICATION.md` | Dated release, phone, Smoke, capture, and security validation record. |
 | `RELEASE-MANIFEST.json` and `SHA256SUMS.txt` | Publishable package inventory and file hashes. |
 
@@ -210,144 +209,11 @@ For every Cell:
 
 Formal execution stops on the first infrastructure failure. A scored model FAILURE is preserved and the next scheduled Cell continues. Existing scored results are never silently rerun, relabeled, or overwritten.
 
-## 7. Replacement-phone installation and use
-
-### 7.1 Prerequisites
-
-The replacement phone needs:
-
-- Android with Termux, OpenSSH, Python, Node.js, Android platform tools, and OpenClaw;
-- Wireless Debugging paired once, followed by stable phone-local self-ADB at `127.0.0.1:5555`;
-- the Android applications and permissions required by Expanded15, including Contacts, Calendar, Maps, YouTube, Amazon, shared storage, and accessibility/UI automation;
-- consistent locale, account/login state, application versions, and permission state;
-- a private `freeinference_api` credential exported outside Git;
-- no other active experiment controller or conflicting Gateway/Proxy process.
-
-Clone the tested branch:
-
-```bash
-git clone --branch codex/phone-native-router-kit --single-branch \
-  https://github.com/wang121201/ClawMobile.git "$HOME/ClawMobile"
-
-cd "$HOME/ClawMobile/clawmobile-router-test-kit"
-chmod +x phone/*.sh
-./phone/install.sh
-```
-
-Create ignored private files from the supplied templates and set the real phone topology and provider environment:
-
-```bash
-cp phone/phone-site.example.json phone/phone-site.json
-cp phone/phone.env.example phone/phone.env
-```
-
-Do not commit either private file. Configure and validate the phone:
-
-```bash
-./phone/run.sh configure
-./phone/run.sh services start
-./phone/run.sh doctor
-```
-
-Validate the exact plans without sending a model request:
-
-```bash
-./phone/run.sh run \
-  --stage Smoke \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
-  --group-id G4-FSM-SC-Repair \
-  --validate-only
-
-./phone/run.sh run \
-  --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
-  --group-id G4-FSM-SC-Repair \
-  --validate-only
-```
-
-Run the canonical live Smoke with a new identity:
-
-```bash
-smoke_id="router-smoke-$(date -u +%Y%m%dT%H%M%SZ)"
-
-./phone/run.sh run \
-  --stage Smoke \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
-  --group-id G4-FSM-SC-Repair \
-  --group-run-id "$smoke_id"
-```
-
-Only after `smoke_gate.json` reports `passed: true`, run Formal with a different new identity:
-
-```bash
-formal_id="router-formal-$(date -u +%Y%m%dT%H%M%SZ)"
-
-./phone/run.sh run \
-  --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
-  --group-id G4-FSM-SC-Repair \
-  --group-run-id "$formal_id" \
-  --smoke-gate "$HOME/clawmobile-experiments/router-campaigns/$smoke_id/smoke-gate.json"
-```
-
-When no experiment owns the shared Proxy, stop only the package-managed Proxy:
-
-```bash
-./phone/run.sh services stop-proxy
-```
-
-Do not stop unrelated Termux or Android processes. Use `PHONE_NATIVE_RUNBOOK.md` for recovery and exact process-identity rules.
-
-## 8. Current clean-phone migration acceptance
-
-On 2026-09-20/21, the published branch was cloned on replacement Phone 132. The phone used a fresh private site profile and stable self-ADB. The tracked Git worktree was clean at the validated code commit.
-
-Canonical five-Cell Smoke:
-
-| Schedule | Task Case | Result | Elapsed | Run ID |
-|---:|---|---|---:|---|
-| 1 | `L1-03:1` | SUCCESS | 227.932 s | `a377037afebb4670b3609e752d0e8434` |
-| 2 | `L2-09:2` | SUCCESS | 96.292 s | `598a0a3fb13a4761a7fcb694c4573cff` |
-| 3 | `L3-01:1` | SUCCESS | 517.967 s | `2410cba3a6dd469eb806927965216417` |
-| 4 | `L4-01:1` | SUCCESS | 201.170 s | `64ce61bfe8424e96bd68ce7f260e3464` |
-| 5 | `L5-02:1` | SUCCESS | 128.813 s | `a54561b3db354c6a8c174cca8f4740a5` |
-
-Gate and mechanism summary:
-
-| Metric | Result |
-|---|---:|
-| Planned / structurally healthy Cells | 5 / 5 |
-| Scored SUCCESS | 5 / 5 |
-| Infrastructure failures | 0 |
-| Logical Proxy Requests / Router decisions | 132 / 132 |
-| Router-helper + Agent Physical Requests | 286 |
-| Logical-local Agent calls | 80 |
-| Cloud Agent calls | 74 |
-| Accepted Local calls | 58 |
-| Raw-valid / repair-assisted Local calls | 49 / 9 |
-| Repair attempts / applied / rejected | 31 / 9 / 22 |
-| FSM transitions resolved / matched | 58 / 49 |
-| Forced Cloud handoffs | 9 |
-| Durable capture records / model calls | 476 / 286 |
-| Capture pending / errors at completion | 0 / 0 |
-| Maximum observed FreeInference concurrency | 1 |
-| Smoke gate | PASS |
-
-Phone evidence root:
-
-```text
-$HOME/clawmobile-experiments/router-campaigns/migration-smoke-20260920T201600Z
-```
-
-The phone evidence was copied to a host-independent external archive. The phone root and archive each contain 53 files and 75,012,302 bytes. An independent relative-path, byte-count, and SHA-256 comparison found zero missing files and zero mismatches. The archive storage location is intentionally not part of the public repository contract.
-
-The post-run doctor passed self-ADB, Channel, Gateway, Proxy, Provider-concurrency, and capture checks. The package-managed Proxy was then stopped exactly; Channel and Gateway remained healthy. This establishes reproducible deployment, end-to-end functionality, and evidence integrity on the replacement phone. Five successful Cells do not establish a 100% expected Formal success rate.
-
-## 9. Existing Expanded15 results
+## 7. Existing Expanded15 results
 
 The only cumulative “all configurations” registry remains `work/expanded15-configuration-results-ledger.md`. That ledger contains every completed 60-Cell configuration, exact request accounting, mechanism diagnostics, immutable evidence roots, and revision history. The table below is a **frozen core ablation snapshot** reproduced here so that this repository can explain and reproduce the eight configurations requested for the main comparison. It is not a second cumulative registry and must not be extended independently of the ledger.
 
-### 9.1 Frozen core ablation snapshot
+### 7.1 Frozen core ablation snapshot
 
 | Group | Configuration | SUCCESS | Logical Requests | Filter | Router | Local Agent | Server Agent | Physical Requests |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
@@ -368,7 +234,7 @@ Physical Requests = Filter + Router + Local Agent + Server Agent
 
 A rejected Local candidate is counted as a Local Agent call and its fallback as a Server Agent call. Therefore `Local Agent + Server Agent` can exceed Logical Requests. For Full arms, one Logical Request maps to one selected Agent call. For Filter arms, each Logical Request produces one Filter call and one DSV4 Agent call. `Local Agent` and `Server Agent` are **experiment-model roles**, not literal `call_role` strings from older captures: historical G5 records used the transport label `cloud_agent`, but the frozen Full-Qwen arm is attributed to the Local Agent column by its `group_id=G5` and `arm_id=full-qwen36` identity.
 
-### 9.2 Performance of the concepts
+### 7.2 Performance of the concepts
 
 | Step | SUCCESS change | Physical-request change | What the observation supports |
 |---|---:|---:|---|
@@ -393,7 +259,7 @@ The Router mechanism diagnostics make that distinction visible:
 
 For G4-FSM-SC, 356 accepted Local transitions closed as 336 matches plus 20 safe Cloud handoffs, with no pending transition leakage. For the Repair arm, 427 calls were raw-valid, 148 repair opportunities were observed, 35 became repair-assisted valid calls, and 113 remained rejected. These are contract/mechanism measurements; they do not turn an accepted Local call into a claim of semantic usefulness.
 
-### 9.3 Exact reproduction map
+### 7.3 Exact reproduction map
 
 | Rows reproduced | Frozen config in this repository | Smoke / Formal | Selection rule |
 |---|---|---:|---|
@@ -444,7 +310,7 @@ python tools/summarize_core_ablation.py \
 
 Use one or more `--config <frozen-config.json>` options when summarizing only a subset; with no `--config`, the tool requires all four core configs and all 480 planned Cells. It derives role counts from raw `model-calls.jsonl`, not from the published table.
 
-The repository deliberately excludes the large historical raw captures. A clean clone reproduces the frozen protocol and can regenerate the table from a fresh run. Independent regeneration of the already published historical rows additionally requires the canonical external evidence roots (and, where recovery occurred, the exact segments) listed below and in the cumulative ledger.
+The repository deliberately excludes the large historical raw captures. Fresh runs use the frozen protocol and result summarizer. Independent regeneration of already published historical rows additionally requires the canonical external evidence roots and, where recovery occurred, the exact segments listed below and in the cumulative ledger.
 
 Canonical evidence for the displayed values remains outside Git in the private research archive. The stable archive identifiers are:
 
@@ -474,29 +340,28 @@ The main historical points needed to understand the current project are:
 
 These measurements were collected in different collection periods unless explicitly identified as the aligned September retest. They must not be treated as a randomized concurrent causal ranking.
 
-### 9.4 Later-window aligned retest
+### 7.4 Later-period aligned retest
 
 The September 2026 aligned retest used the same 60-Cell Expanded15 mapping for three configurations:
 
 | Configuration | SUCCESS | Logical | Physical | Interpretation |
 |---|---:|---:|---:|---|
 | Full DSV4 direct | 48/60, 80.0% | 771 | 771 | Pure path; no Filter or Router. |
-| DSV4 Router + FSM + Scoped Context + Repair | 47/60, 78.3% | 1,035 | 2,208 | Same mechanism family as the current migration-tested configuration. |
+| DSV4 Router + FSM + Scoped Context + Repair | 47/60, 78.3% | 1,035 | 2,208 | Same mechanism family as the current reference configuration. |
 | Full Qwen3.6-35B direct | 24/60, 40.0% | 4,047 | 4,047 | Pure path; substantially longer trajectories. |
 
 The Router retest contains 1,036 Router-helper attempts, 603 Logical-local Agent calls, 569 Cloud Agent calls, 466 accepted Local calls, 35 applied Repairs out of 172 attempts, and 400 matched FSM transitions. All three datasets completed their 60 scored Cells with unique run/session identities and verified referenced evidence hashes. Two Qwen pre-Cell infrastructure interruptions were preserved outside the scored denominator.
 
-## 10. What the results currently support
+## 8. What the results currently support
 
-1. **The Router framework is operational and portable.** The same Git branch passed offline tests, Phone 62 execution, and clean replacement-phone execution with the phone owning every Cell lifecycle stage.
-2. **Hybrid execution can outperform unrestricted Full Qwen3.6.** Every complete Router configuration in the table is above the historical G5 result of 19/60; the later-window Router result is 47/60 versus the later Full-Qwen result of 24/60. This is a system comparison, not a model-only causal estimate.
-3. **FSM and validation matter.** FSM + Scoped Context reached 48/60, and the Qwen-Router substitution reached 49/60 while exposing a larger Local workload.
-4. **Repair improves contract acceptance but does not guarantee Task improvement.** A repaired Tool Call may be structurally valid yet unnecessary or semantically unhelpful.
-5. **The deterministic Explicit Binary Tool policy is the current highest point estimate.** It reached 52/60 with zero Router-model calls and only eight rejected Local candidates. Against Binary Tool, the paired two-sided exact McNemar result was `p = 0.3876953125`; this does not prove universal superiority.
-6. **Router quality cannot be judged by task accuracy alone.** The Router arms usually use about two physical calls per Logical Request, so task success, Local acceptance, Cloud demand, trajectory length, latency, and cost must be reported together.
-7. **Physical-local and logical-local results must remain separate.** G6 used Qwen3.8-27B on XMU and a different phone/runtime window. It is evidence for local serving feasibility, not a controlled replacement for G5 or the Logical-local role in G4.
+1. **Hybrid execution can outperform unrestricted Full Qwen3.6.** Every complete Router configuration in the table is above the historical G5 result of 19/60; the later-period Router result is 47/60 versus the later Full-Qwen result of 24/60. This is a system comparison, not a model-only causal estimate.
+2. **FSM and validation matter.** FSM + Scoped Context reached 48/60, and the Qwen-Router substitution reached 49/60 while exposing a larger Local workload.
+3. **Repair improves contract acceptance but does not guarantee Task improvement.** A repaired Tool Call may be structurally valid yet unnecessary or semantically unhelpful.
+4. **The deterministic Explicit Binary Tool policy is the current highest point estimate.** It reached 52/60 with zero Router-model calls and only eight rejected Local candidates. Against Binary Tool, the paired two-sided exact McNemar result was `p = 0.3876953125`; this does not prove universal superiority.
+5. **Router quality cannot be judged by task accuracy alone.** The Router arms usually use about two physical calls per Logical Request, so task success, Local acceptance, Cloud demand, trajectory length, latency, and cost must be reported together.
+6. **Physical-local and logical-local results must remain separate.** G6 used Qwen3.8-27B on XMU and a different phone/runtime period. It is evidence for local serving feasibility, not a controlled replacement for G5 or the Logical-local role in G4.
 
-## 11. Persistent failure themes
+## 9. Persistent failure themes
 
 Across configurations, failures concentrate in several end-state boundaries rather than provider transport:
 
@@ -509,7 +374,7 @@ Across configurations, failures concentrate in several end-state boundaries rath
 
 The canonical 60-Cell datasets mostly contain scored model failures rather than missing HTTP responses. A valid Tool Call, a visible UI action, or a final natural-language claim of completion is not enough; the deterministic verifier’s target state is authoritative.
 
-## 12. Evidence and provenance
+## 10. Evidence and provenance
 
 Canonical references outside the publishable repository:
 
@@ -517,35 +382,31 @@ Canonical references outside the publishable repository:
 - current handoff and experiment registry: `main-session-current-data-analysis-handoff.md` in the private research archive;
 - latest unified G-series report: archive ID `g-series-20260920T114000Z`;
 - latest three-group aligned report: archive ID `three-group-20260920T112229Z`;
-- replacement-phone Smoke archive: archive ID `migration-smoke-20260920T201600Z` (53 files, 75,012,302 bytes, zero SHA-256 mismatch);
 - raw campaign roots and their exact canonical segments are registered in the cumulative ledger rather than duplicated in this repository.
 
 The Git repository intentionally excludes API keys, private site files, raw model captures, SSE, Android state, campaign outputs, and large reports. A result is considered authoritative only when its Cell plan, unique run/session identity, verifier result, capture, and evidence hashes can be joined without ambiguity.
 
-## 13. Current readiness and next steps
+## 11. Current readiness and next steps
 
 Current status:
 
 - release and source-provenance checks: PASS;
 - phone-native offline tests: PASS;
-- replacement-phone migration: PASS;
-- canonical five-Cell live Smoke: PASS, 5/5;
-- current managed Proxy after acceptance: intentionally stopped;
-- current 60-Cell Formal on the replacement phone: not started.
+- no live experiment is currently implied by this documentation state.
 
 Reasonable next steps are deliberately separate decisions:
 
 1. Merge or continue reviewing the published branch.
 2. If a new performance measurement is required, restart the shared Proxy, rerun `doctor`, create a new five-Cell Smoke identity, and then run a new 60-Cell Formal identity against the unchanged configuration.
-3. If the research goal is Router efficiency rather than migration, analyze accepted Local calls for semantic usefulness before broadening the capability policy.
+3. For Router-efficiency research, analyze accepted Local calls for semantic usefulness before broadening the capability policy.
 4. Do not interpret a new five-Cell Smoke as a replacement for any historical 60-Cell result.
 
-## 14. Revision and comment log
+## 12. Revision and comment log
 
 | Date | Comment or change | Resolution and evidence | Status |
 |---|---|---|---|
-| 2026-09-21 | Make public documentation English-only and describe only the phone-native experiment environment. | Replaced local storage paths with stable archive identifiers or portable placeholders, removed external-host comparison language, and translated the Proxy reference into English without changing runtime code or frozen experiment data. | Resolved |
+| 2026-09-21 | Make public documentation English-only and describe only the phone-native experiment environment. | Replaced local storage paths with stable archive identifiers or generic placeholders, removed external-host comparison language, and translated the Proxy reference into English without changing runtime code or frozen experiment data. | Resolved |
 | 2026-09-21 | Make the eight-row core comparison reproducible and define Tool classification, Scoped Context, FSM, and Repair. | Added the exact four-group baseline config, frozen-plan parity coverage, source-truth mechanism definitions, the core result/reproduction map, and a fail-closed evidence summarizer; preserved the cumulative ledger as the sole all-configuration registry. | Resolved |
-| 2026-09-21 | Create one maintained Router project description and results overview. | Consolidated architecture, phone-native reproduction, selected Expanded15 results, interpretation boundaries, and the clean Phone 132 migration Smoke; retained the cumulative ledger as the only all-configuration table. | Resolved |
+| 2026-09-21 | Create one maintained Router project description and results overview. | Consolidated architecture, phone-native execution, selected Expanded15 results, and interpretation boundaries; retained the cumulative ledger as the only all-configuration table. | Resolved |
 
 Future comments should identify the section and requested correction. Resolved changes will be applied to this file and recorded in this revision log.

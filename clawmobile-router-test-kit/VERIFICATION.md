@@ -2,7 +2,7 @@
 
 Date: 2026-09-21
 
-Scope: offline release validation, one complete phone-native live Smoke on Phone 62, and one clean-clone migration acceptance on replacement Phone 132. Campaign planning, self-ADB, ClawBench execution, Gateway, Channel, Proxy, provider calls, verification, teardown, capture sealing, and the Smoke gate all ran inside Android Termux.
+Scope: offline release validation and complete phone-native live Smoke checks on Phone 62 and Phone 132. Campaign planning, self-ADB, ClawBench execution, Gateway, Channel, Proxy, provider calls, verification, teardown, capture sealing, and the Smoke gate all ran inside Android Termux.
 
 ## Offline checks
 
@@ -56,9 +56,9 @@ Final integrity state:
 
 After canonicalizing the Channel source path, a no-inference live acceptance repeated the native unit tests, started the repository Channel/Gateway and shared Proxy, passed the complete phone-native `doctor` check, observed zero queued or active provider calls and zero capture errors, and stopped the two managed service groups cleanly. This acceptance did not create a benchmark Cell or send a model request.
 
-## Replacement Phone 132 migration acceptance
+## Phone 132 live Smoke verification
 
-The published branch `codex/phone-native-router-kit` was cloned into a clean repository on replacement Phone 132 at code-validation commit `f6b66cdb3ae2d6dfb5dea9c0e2f9ab39be5f1480`. The phone-specific site and credential files remained ignored. The repository-owned ClawBench Channel was installed through the supported OpenClaw plugin link path, and `openclaw plugins doctor` reported no issue.
+Phone 132 ran code-validation commit `f6b66cdb3ae2d6dfb5dea9c0e2f9ab39be5f1480`. The phone-specific site and credential files remained ignored. The repository-owned ClawBench Channel was installed through the supported OpenClaw plugin link path, and `openclaw plugins doctor` reported no issue.
 
 - Device: Pixel 9, Android serial `46010DLAQ002H0`.
 - Stable self-ADB: `127.0.0.1:5555`, state `device`.
@@ -76,7 +76,7 @@ The published branch `codex/phone-native-router-kit` was cloned into a clean rep
 | 4 | L4-01:1 | `primary_scored_success` | 201.170 s |
 | 5 | L5-02:1 | `primary_scored_success` | 128.813 s |
 
-Final migration integrity state:
+Final integrity state:
 
 - 5/5 planned Cells were structurally healthy and scored SUCCESS; infrastructure failures were zero.
 - All five Cells used distinct authoritative `result.run_id` values.
@@ -89,12 +89,10 @@ Final migration integrity state:
 - The exact package-managed Proxy PID was then stopped. Proxy port 18081 closed as expected while Channel and Gateway remained HTTP 200 and self-ADB remained healthy.
 - The complete 53-file campaign evidence was mirrored copy-only to an external archive identified as `migration-smoke-20260920T201600Z`. Phone and archive copies both contain 75,012,302 bytes; an independent per-file relative-path, size, and SHA-256 comparison found zero missing files and zero mismatches. Its host-specific storage path is intentionally omitted from public documentation.
 
-This migration acceptance proves clean-clone portability and complete live Router execution on the replacement phone. Its five Cells are a functional Smoke and do not replace or extend the 60-Cell Formal accuracy denominator.
-
-This run proves clean-clone phone portability. Replacement-phone prerequisites still include Termux packages, OpenClaw, Android applications and permissions, self-ADB pairing, and a private provider credential as described in `PHONE_NATIVE_RUNBOOK.md`.
+The five Cells verify complete live Router execution and evidence integrity on Phone 132. They are a functional Smoke and do not replace or extend the 60-Cell Formal accuracy denominator. Required environment components remain those listed in `PHONE_NATIVE_RUNBOOK.md`.
 
 ## Security review boundary
 
 A Git-index-aware scan read all 212 tracked release blobs and found no unapproved private-key block, common-prefix provider key, literal bearer credential, or real `freeinference_api` assignment. Reviewed matches were deliberate placeholders in example files and synthetic Bearer values used by Proxy tests, including the capture-redaction sentinel; none is a live credential. `phone/phone.env`, `phone/phone-site.json`, captures, logs, outputs, and results are not tracked. No `gitleaks` executable was available, so this is a targeted tracked-content scan rather than a full entropy/history scanner.
 
-Frozen private-network/device paths remain only as research provenance inside immutable experiment JSON. Replacement-phone execution obtains live topology from the ignored private site file. The repository root MIT license covers ClawMobile-owned code; the adapted OpenClaw Channel retains its upstream MIT notice separately.
+Frozen private-network/device paths remain only as research provenance inside immutable experiment JSON. Live topology comes from the ignored private site file. The repository root MIT license covers ClawMobile-owned code; the adapted OpenClaw Channel retains its upstream MIT notice separately.

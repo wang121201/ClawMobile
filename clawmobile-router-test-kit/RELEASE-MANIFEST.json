@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-21T14:45:39.0211611+00:00",
+  "generated_at": "2026-09-21T14:50:04.8000020+00:00",
   "file_count": 210,
-  "total_bytes": 1389978,
+  "total_bytes": 1383663,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -806,8 +806,8 @@
     },
     {
       "path": "DEPENDENCIES.md",
-      "bytes": 2444,
-      "sha256": "2dfd7cd7e11abbdefa073abcad62dffe7461ea66cf2e31529ffb94eb17b26025"
+      "bytes": 2439,
+      "sha256": "e69492db683ab30b8bfcb4fb7d6ee9f41601c4adefaa63ceeda102c84e4ae03e"
     },
     {
       "path": "five-group-v4/Evidence.psm1",
@@ -881,8 +881,8 @@
     },
     {
       "path": "PHONE_NATIVE_RUNBOOK.md",
-      "bytes": 7980,
-      "sha256": "ee5db88c52905d8b6fbae2408cf72cc651ff9dcf5b7b1274dac4a0810bda90ab"
+      "bytes": 7849,
+      "sha256": "f064ad74fe97c1d92a9c9c51814c3400ffb47e204135a6f99efef198a039cd94"
     },
     {
       "path": "phone/frozen-configs.json",
@@ -916,13 +916,13 @@
     },
     {
       "path": "PROJECT_GUIDE_AND_RESULTS.md",
-      "bytes": 40530,
-      "sha256": "4e0ef987ba2096842d3ca65094962f0d99ad6e93a5480cee2135c378cec8a40e"
+      "bytes": 34769,
+      "sha256": "c8dc3e701a624bfb79d2dcadc77297a4e38c48991775817d397b46a95cf01032"
     },
     {
       "path": "README.md",
-      "bytes": 12338,
-      "sha256": "8be1c4c4445f0be9b4093f967129589e7775c9026382ddf8413168d0c224e772"
+      "bytes": 12333,
+      "sha256": "1d655471df25ab1c96e9f607e419ac1b967bafa95b558d8f05aad2ef6263eabf"
     },
     {
       "path": "RELEASE_CHECKLIST.md",
@@ -1001,8 +1001,8 @@
     },
     {
       "path": "SOURCE_MAP.md",
-      "bytes": 3229,
-      "sha256": "6ba7eb3b32eb04b77249de9d038abaeb4a67859cbafc0c463f4240f99751cc48"
+      "bytes": 3224,
+      "sha256": "d70a6f29afdbe23d7e36dcc2b0ece662b2bed34272b16e58e28274a4673dc2ec"
     },
     {
       "path": "test_router_release.ps1",
@@ -1061,8 +1061,8 @@
     },
     {
       "path": "VERIFICATION.md",
-      "bytes": 9366,
-      "sha256": "4a51eb080ca1c4380b8c9464935b41a5833e286c1a5c9a8a78b9c58cad9710f7"
+      "bytes": 8958,
+      "sha256": "080e5e17c211d93834a51e34f4ba1e1f684bdf1f1bcccd614c010d8e2da99418"
     }
   ]
 }

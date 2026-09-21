@@ -22,7 +22,7 @@ The Channel exposes the HTTP run interface used by `clawbench-runtime`:
 
 The current Phone A Channel source is included under `clawbench-channel/`. It derives from OpenClaw commit `10b4342c09de5b7fb22b07a0d7c6ebe797c52001`, path `extensions/clawbench/`, with narrow external-plugin compatibility adaptations recorded in `THIRD_PARTY_NOTICES.md`. The live deployment was exported copy-only, excluding `node_modules` and symlinks, and its remote/local inventory was verified as 68 files, 146,419 bytes and zero SHA-256 mismatches. It declares `@openclaw/clawbench-channel` version `2026.5.7` and peer dependency OpenClaw `>=2026.5.7`.
 
-The Channel package uses workspace development dependencies, so a replacement phone must provide its compatible OpenClaw runtime; this repository does not vendor OpenClaw or `node_modules`. The upstream Channel is MIT-licensed; its original notice is preserved in `clawbench-channel/LICENSE`.
+The Channel package uses workspace development dependencies, so the target phone must provide a compatible OpenClaw runtime; this repository does not vendor OpenClaw or `node_modules`. The upstream Channel is MIT-licensed; its original notice is preserved in `clawbench-channel/LICENSE`.
 
 ## Android phone tools
 

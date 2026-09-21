@@ -18,7 +18,7 @@ This package was assembled copy-only from the active ClawMobile workspace. Histo
 | root `router-*.json` | corresponding `work/router-*.json` files | Exact frozen config copies |
 | `unified-five-group-experiment-v4.json` | `work/unified-five-group-experiment-v4.json` | Exact frozen four-group Full/Filter baseline config copy |
 | `clawbench-channel/` | OpenClaw `10b4342c09de5b7fb22b07a0d7c6ebe797c52001`, `extensions/clawbench/`; live Phone A `~/clawbench-channel-10b4342`, excluding `node_modules` | 25 upstream source files byte-identical; narrow adaptations in `src/inbound.ts` and `openclaw.plugin.json`; local `tsconfig.external-build.json`; 40 derived `dist/` files; live export verified as 68 files, 146,419 bytes, zero SHA mismatch |
-| `phone_controller/`, `phone/`, `PHONE_NATIVE_RUNBOOK.md` | Packaging additions | Canonical Termux-native controller and replacement-phone workflow |
+| `phone_controller/`, `phone/`, `PHONE_NATIVE_RUNBOOK.md` | Packaging additions | Canonical Termux-native controller and phone-native workflow |
 | `Run-RouterCampaign.ps1` | Packaging addition | Compatibility plan-inspection wrapper; not part of phone-native Cell execution |
 | `test_router_release.ps1` | Packaging addition | Minimal offline release validation |
 | `README.md`, `PROJECT_GUIDE_AND_RESULTS.md`, `VERIFICATION.md`, `.gitignore`, `.env.example`, `THIRD_PARTY_NOTICES.md`, `tools/` | Packaging additions | Publication, maintained project/results overview, dated validation evidence, attribution, and reproducibility support |

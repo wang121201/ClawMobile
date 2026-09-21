@@ -41,7 +41,7 @@ The shared Proxy is reused across Router conditions. The experimental configurat
 | `phone/run.sh` | Canonical phone-native entry point: configure, services, doctor, plan, Smoke and Formal. |
 | `phone_controller/` | Python standard-library controller, site validation, local services, exact plans, evidence, gates and fail-fast lifecycle. |
 | `phone/phone-site.example.json` | Replaceable phone topology; copied to an ignored private `phone-site.json`. |
-| `PHONE_NATIVE_RUNBOOK.md` | End-to-end replacement-phone installation and execution procedure. |
+| `PHONE_NATIVE_RUNBOOK.md` | End-to-end phone-native installation and execution procedure. |
 | `PROJECT_GUIDE_AND_RESULTS.md` | Canonical living project overview, reproduction guide, current results, and interpretation boundaries. |
 | `clawbench-channel/` | MIT-licensed OpenClaw ClawBench Channel adapted from the pinned upstream commit recorded in `THIRD_PARTY_NOTICES.md`; `node_modules` is excluded. |
 | `Run-RouterCampaign.ps1` | Legacy host-reference entry point; no longer canonical and not required by phone execution. |
