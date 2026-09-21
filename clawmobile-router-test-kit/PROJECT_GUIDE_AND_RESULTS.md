@@ -20,7 +20,7 @@ The project asks four distinct questions:
 1. Can a Router expose a useful subset of Android Tool work to the Logical-local Agent without losing end-to-end task correctness?
 2. Can deterministic state, scoped Tool context, validation, and bounded repair keep Local Tool Calls structurally safe?
 3. What accuracy, request-count, latency, and failure trade-offs appear relative to Full DSV4 and Full Qwen baselines?
-4. Can the complete experiment be cloned and executed on another phone without Windows participating in the Cell execution path?
+4. Can the complete experiment be cloned and executed on another phone while preserving the same execution and evidence contracts?
 
 ## 2. Terms and measurement boundaries
 
@@ -163,7 +163,7 @@ phone/run.sh
     -> Cell status and Smoke/Formal gate
 ```
 
-Windows and Codex are not part of the Cell execution path. They may be used to review code, observe SSH output, or make a copy-only archive. Planning, service checks, model calls, Android execution, verification, teardown, capture sealing, and gate generation run inside Android Termux.
+Planning, service checks, model calls, Android execution, verification, teardown, capture sealing, and gate generation all run inside Android Termux on the target phone.
 
 The deployment uses one shared Proxy. It is not necessary to deploy a different Proxy for each arm. The Proxy selects the frozen strategy and provider roles from the Cell’s registered `result.run_id` and `arm_id`.
 
@@ -472,7 +472,7 @@ The main historical points needed to understand the current project are:
 - deterministic Explicit Binary Tool policy: 52/60 (86.7%), the highest current point estimate, but not a statistically proven universal winner;
 - physical-local XMU Qwen3.8-27B: 43/60 (71.7%), collected on a different phone/runtime boundary.
 
-These measurements were collected in different windows unless explicitly identified as the aligned September retest. They must not be treated as a randomized concurrent causal ranking.
+These measurements were collected in different collection periods unless explicitly identified as the aligned September retest. They must not be treated as a randomized concurrent causal ranking.
 
 ### 9.4 Later-window aligned retest
 
@@ -488,7 +488,7 @@ The Router retest contains 1,036 Router-helper attempts, 603 Logical-local Agent
 
 ## 10. What the results currently support
 
-1. **The Router framework is operational and portable.** The same Git branch passed offline tests, Phone 62 execution, and clean replacement-phone execution without Windows controlling Cells.
+1. **The Router framework is operational and portable.** The same Git branch passed offline tests, Phone 62 execution, and clean replacement-phone execution with the phone owning every Cell lifecycle stage.
 2. **Hybrid execution can outperform unrestricted Full Qwen3.6.** Every complete Router configuration in the table is above the historical G5 result of 19/60; the later-window Router result is 47/60 versus the later Full-Qwen result of 24/60. This is a system comparison, not a model-only causal estimate.
 3. **FSM and validation matter.** FSM + Scoped Context reached 48/60, and the Qwen-Router substitution reached 49/60 while exposing a larger Local workload.
 4. **Repair improves contract acceptance but does not guarantee Task improvement.** A repaired Tool Call may be structurally valid yet unnecessary or semantically unhelpful.
@@ -544,7 +544,7 @@ Reasonable next steps are deliberately separate decisions:
 
 | Date | Comment or change | Resolution and evidence | Status |
 |---|---|---|---|
-| 2026-09-21 | Make public documentation English-only and remove host-specific filesystem paths. | Replaced local storage paths with stable archive identifiers or portable placeholders, removed the replacement-phone mirror path, and translated the Proxy reference into English without changing runtime code or frozen experiment data. | Resolved |
+| 2026-09-21 | Make public documentation English-only and describe only the phone-native experiment environment. | Replaced local storage paths with stable archive identifiers or portable placeholders, removed external-host comparison language, and translated the Proxy reference into English without changing runtime code or frozen experiment data. | Resolved |
 | 2026-09-21 | Make the eight-row core comparison reproducible and define Tool classification, Scoped Context, FSM, and Repair. | Added the exact four-group baseline config, frozen-plan parity coverage, source-truth mechanism definitions, the core result/reproduction map, and a fail-closed evidence summarizer; preserved the cumulative ledger as the sole all-configuration registry. | Resolved |
 | 2026-09-21 | Create one maintained Router project description and results overview. | Consolidated architecture, phone-native reproduction, selected Expanded15 results, interpretation boundaries, and the clean Phone 132 migration Smoke; retained the cumulative ledger as the only all-configuration table. | Resolved |
 

@@ -2,7 +2,7 @@
 
 Date: 2026-09-21
 
-Scope: offline release validation, one complete phone-native live Smoke on Phone 62, and one clean-clone migration acceptance on replacement Phone 132. Windows/Codex was used only to publish/deploy the release and observe SSH output; campaign planning, self-ADB, ClawBench execution, Gateway, Channel, Proxy, provider calls, verification, teardown, capture sealing, and the Smoke gate all ran inside Android Termux.
+Scope: offline release validation, one complete phone-native live Smoke on Phone 62, and one clean-clone migration acceptance on replacement Phone 132. Campaign planning, self-ADB, ClawBench execution, Gateway, Channel, Proxy, provider calls, verification, teardown, capture sealing, and the Smoke gate all ran inside Android Termux.
 
 ## Offline checks
 
@@ -11,7 +11,7 @@ Scope: offline release validation, one complete phone-native live Smoke on Phone
 - Phone-native plan rows matched the legacy production PowerShell plans row-for-row for all frozen configurations and stages.
 - 5 PowerShell entry/module files parsed with 0 errors.
 - 74 Python files parsed with `ast.parse`; 20 phone-controller and result-summary unit tests passed.
-- 130 Node Router Proxy tests passed on Windows and again natively on Phone 62; 0 failed, skipped, or cancelled.
+- 130 Node Router Proxy tests passed in release validation and again natively on Phone 62; 0 failed, skipped, or cancelled.
 - The new evidence summarizer regenerated the historical G1/G2/G3/G5 rows from the 240 canonical indexed Cells, including G5's experiment-role attribution of 1,513 Local Agent calls and zero Server Agent calls. It regenerated G4-RM directly from 60 sealed Cells as 45/60 SUCCESS, 902 Logical Requests, and 2,030 Physical Requests, then selected the two immutable Repair segments around the preserved stop Cell and reproduced 45/60 SUCCESS, 1,017 Logical Requests, and 2,147 Physical Requests. Every regenerated value exactly matches the frozen core table.
 - Release inventory contains 0 JSONL files, 0 log files, and 0 output/report/capture/result directories.
 - The documented release contains 210 manifest payload files plus `RELEASE-MANIFEST.json` and `SHA256SUMS.txt`, for 212 tracked release files total; `git diff --cached --check` passed and no symlink is staged.
@@ -91,7 +91,7 @@ Final migration integrity state:
 
 This migration acceptance proves clean-clone portability and complete live Router execution on the replacement phone. Its five Cells are a functional Smoke and do not replace or extend the 60-Cell Formal accuracy denominator.
 
-This run proves that Windows is not in the Cell execution path. It does not remove replacement-phone prerequisites: Termux packages, OpenClaw, Android applications/permissions, self-ADB pairing, and a private provider credential must still be installed or configured as described in `PHONE_NATIVE_RUNBOOK.md`.
+This run proves clean-clone phone portability. Replacement-phone prerequisites still include Termux packages, OpenClaw, Android applications and permissions, self-ADB pairing, and a private provider credential as described in `PHONE_NATIVE_RUNBOOK.md`.
 
 ## Security review boundary
 

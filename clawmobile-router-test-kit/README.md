@@ -1,6 +1,6 @@
 # ClawMobile Router Test Kit
 
-This directory is the standalone source package for the ClawMobile Router experiments. The canonical controller now runs entirely inside Android Termux: the phone owns planning, ClawBench execution, local service health, evidence sealing and Smoke/Formal gates. Windows/Codex is optional for read-only observation or copy-only archival. The package intentionally contains no experiment outputs, raw requests/responses, credentials, phone state, or historical campaign evidence.
+This directory is the standalone source package for the ClawMobile Router experiments. The canonical controller runs entirely inside Android Termux: the phone owns planning, ClawBench execution, local service health, evidence sealing, and Smoke/Formal gates. The package intentionally contains no experiment outputs, raw requests/responses, credentials, phone state, or historical campaign evidence.
 
 Start with [`PROJECT_GUIDE_AND_RESULTS.md`](PROJECT_GUIDE_AND_RESULTS.md) for the self-contained project description, current recommended Router configuration, reproducible phone-native commands, existing Expanded15 results, and interpretation boundaries. Future review comments are consolidated into that living document. Use `PHONE_NATIVE_RUNBOOK.md` for detailed installation/recovery and `VERIFICATION.md` for dated evidence.
 

@@ -1,6 +1,6 @@
 # Phone-native ClawMobile Router runbook
 
-This runbook defines the standalone execution path. The **Android phone is the controller and evidence authority**. Windows, Codex, SSH, SCP, and port forwarding are optional observation or copy-only archival tools; none participates in a Cell execution.
+This runbook defines the standalone execution path. The **Android phone is the controller and evidence authority**. Planning, execution, service supervision, verification, and evidence sealing all run locally in Android Termux.
 
 ## Runtime topology
 
