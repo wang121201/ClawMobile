@@ -20,7 +20,7 @@ This package was assembled copy-only from the active ClawMobile workspace. Histo
 | `phone_controller/`, `phone/`, `PHONE_NATIVE_RUNBOOK.md` | Packaging additions | Canonical Termux-native controller and replacement-phone workflow |
 | `Run-RouterCampaign.ps1` | Packaging addition | Legacy Windows-host reference launcher |
 | `test_router_release.ps1` | Packaging addition | Minimal offline release validation |
-| `README.md`, `.gitignore`, `.env.example`, `THIRD_PARTY_NOTICES.md`, `tools/` | Packaging additions | Publication, attribution, and reproducibility support |
+| `README.md`, `PROJECT_GUIDE_AND_RESULTS.md`, `VERIFICATION.md`, `.gitignore`, `.env.example`, `THIRD_PARTY_NOTICES.md`, `tools/` | Packaging additions | Publication, maintained project/results overview, dated validation evidence, attribution, and reproducibility support |
 
 Excluded by design:
 

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-20T20:03:02.7178761+00:00",
-  "file_count": 206,
-  "total_bytes": 1315002,
+  "generated_at": "2026-09-21T07:02:43.8623648+00:00",
+  "file_count": 207,
+  "total_bytes": 1340911,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -915,9 +915,14 @@
       "sha256": "5802d4a43d60b6ca17aa7d6b7cae6a602308fc7e944ff110ec75ee2df2b95478"
     },
     {
+      "path": "PROJECT_GUIDE_AND_RESULTS.md",
+      "bytes": 22427,
+      "sha256": "0e52885e96bee44c22d199e3edbe60f06a3b4b68483eac1868d8c5228340b5c1"
+    },
+    {
       "path": "README.md",
-      "bytes": 9617,
-      "sha256": "27c0681ec8d74377c950eb6fbf62655a56df2478b0b702e85a28bfdbd7f8d555"
+      "bytes": 10188,
+      "sha256": "b19cb1a128597749f1f3b14607f7874a582cd7aa564591303e1adcf70f138149"
     },
     {
       "path": "RELEASE_CHECKLIST.md",
@@ -996,8 +1001,8 @@
     },
     {
       "path": "SOURCE_MAP.md",
-      "bytes": 2880,
-      "sha256": "140a08d448c12fc71d4854fecfa3ed3325d459e290010af2e69a05df18a4f404"
+      "bytes": 2995,
+      "sha256": "bd65737db09554ba0ef90b68db5cb3bf0f51a2c95a5bc0652ddb532088cab1ec"
     },
     {
       "path": "test_router_release.ps1",
@@ -1041,8 +1046,8 @@
     },
     {
       "path": "VERIFICATION.md",
-      "bytes": 5982,
-      "sha256": "027b927b8f055acfdd244cc596a677d608be8e33b4942806384bde051eecee8f"
+      "bytes": 8778,
+      "sha256": "a195dbd9bbd2f376675638df06772a6ecbb11bcb264b17b0be4a0f15d9aca708"
     }
   ]
 }

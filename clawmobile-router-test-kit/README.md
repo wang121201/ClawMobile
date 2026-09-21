@@ -2,6 +2,8 @@
 
 This directory is the standalone source package for the ClawMobile Router experiments. The canonical controller now runs entirely inside Android Termux: the phone owns planning, ClawBench execution, local service health, evidence sealing and Smoke/Formal gates. Windows/Codex is optional for read-only observation or copy-only archival. The package intentionally contains no experiment outputs, raw requests/responses, credentials, phone state, or historical campaign evidence.
 
+Start with [`PROJECT_GUIDE_AND_RESULTS.md`](PROJECT_GUIDE_AND_RESULTS.md) for the self-contained project description, current recommended Router configuration, reproducible phone-native commands, existing Expanded15 results, and interpretation boundaries. Future review comments are consolidated into that living document. Use `PHONE_NATIVE_RUNBOOK.md` for detailed installation/recovery and `VERIFICATION.md` for dated evidence.
+
 ## Terms and boundaries
 
 - **Cell（实验单元）**: one complete `task × case × repetition` run, including setup, model interaction, deterministic verification, teardown, and evidence flush.
@@ -40,6 +42,7 @@ The shared Proxy is reused across Router conditions. The experimental configurat
 | `phone_controller/` | Python standard-library controller, site validation, local services, exact plans, evidence, gates and fail-fast lifecycle. |
 | `phone/phone-site.example.json` | Replaceable phone topology; copied to an ignored private `phone-site.json`. |
 | `PHONE_NATIVE_RUNBOOK.md` | End-to-end replacement-phone installation and execution procedure. |
+| `PROJECT_GUIDE_AND_RESULTS.md` | Canonical living project overview, reproduction guide, current results, and interpretation boundaries. |
 | `clawbench-channel/` | MIT-licensed OpenClaw ClawBench Channel adapted from the pinned upstream commit recorded in `THIRD_PARTY_NOTICES.md`; `node_modules` is excluded. |
 | `Run-RouterCampaign.ps1` | Legacy host-reference entry point; no longer canonical and not required by phone execution. |
 | `five-group-v4/run_campaign.ps1` | Original production Smoke/Formal controller, serialized Cell scheduling, Smoke gate, fail-fast infrastructure policy. |
