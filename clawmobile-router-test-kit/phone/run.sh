@@ -38,7 +38,7 @@ case "${1:-}" in
     printf '  ./phone/run.sh configure\n' >&2
     printf '  ./phone/run.sh services start|stop-proxy|stop-gateway\n' >&2
     printf '  ./phone/run.sh doctor\n' >&2
-    printf '  ./phone/run.sh run --stage Smoke|Formal --config <frozen-config.json> ...\n' >&2
+    printf '  ./phone/run.sh run --stage Smoke|Formal --config configs/<frozen-config.json> ...\n' >&2
     exit 2
     ;;
 esac

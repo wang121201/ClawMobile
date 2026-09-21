@@ -45,7 +45,7 @@ The verifier, not the Agent’s completion statement, determines SUCCESS.
 | Shared Proxy | One OpenAI-compatible observation and routing layer reused by all arms. Full-Agent arms are transparent pass-through paths. | [Proxy control invariants](clawmobile-router-proxy/README.md#control-invariants) |
 | ClawBench | The Task setup, execution, deterministic verifier, and teardown framework. | [Phone runbook](PHONE_NATIVE_RUNBOOK.md) |
 
-The current reference configuration is `router-fsm-scoped-repair-expanded15-experiment-v1.json`, group `G4-FSM-SC-Repair`. It uses one phone-native controller, one active Cell, and at most one FreeInference request in flight.
+The current reference configuration is `configs/router-fsm-scoped-repair-expanded15-experiment-v1.json`, group `G4-FSM-SC-Repair`. It uses one phone-native controller, one active Cell, and at most one FreeInference request in flight.
 
 ## 4. Core Expanded15 comparison
 
@@ -109,26 +109,26 @@ These later measurements support the same broad system conclusion but do not rep
 
 | Rows | Frozen configuration | Smoke / Formal | Invocation rule |
 |---|---|---:|---|
-| G1, G2, G3, G5 | `unified-five-group-experiment-v4.json` | 4 / 240 | Do not pass `--group-id`; the four groups execute in frozen order. |
-| G4-RM | `router-rm-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-RM`. |
-| G4-RM-SC, G4-FSM-SC | `router-r2-fsm-expanded15-paired-experiment-v1.json` | 10 / 120 | Do not pass `--group-id`; this is a paired design. |
-| G4-FSM-SC-Rep | `router-fsm-scoped-repair-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-FSM-SC-Repair`. |
+| G1, G2, G3, G5 | `configs/unified-five-group-experiment-v4.json` | 4 / 240 | Do not pass `--group-id`; the four groups execute in frozen order. |
+| G4-RM | `configs/router-rm-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-RM`. |
+| G4-RM-SC, G4-FSM-SC | `configs/router-r2-fsm-expanded15-paired-experiment-v1.json` | 10 / 120 | Do not pass `--group-id`; this is a paired design. |
+| G4-FSM-SC-Rep | `configs/router-fsm-scoped-repair-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-FSM-SC-Repair`. |
 
 Validate the plans without model requests:
 
 ```bash
 ./phone/run.sh run --stage Formal \
-  --config unified-five-group-experiment-v4.json --validate-only
+  --config configs/unified-five-group-experiment-v4.json --validate-only
 
 ./phone/run.sh run --stage Formal \
-  --config router-rm-expanded15-experiment-v1.json \
+  --config configs/router-rm-expanded15-experiment-v1.json \
   --group-id G4-RM --validate-only
 
 ./phone/run.sh run --stage Formal \
-  --config router-r2-fsm-expanded15-paired-experiment-v1.json --validate-only
+  --config configs/router-r2-fsm-expanded15-paired-experiment-v1.json --validate-only
 
 ./phone/run.sh run --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair --validate-only
 ```
 

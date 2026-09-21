@@ -23,6 +23,7 @@ from .common import (
     write_json_exclusive,
 )
 from .config_plan import (
+    CONFIG_ROOT,
     MULTI_CONDITION_IDS,
     PAIRED_IDS,
     PACKAGE_ROOT,
@@ -512,7 +513,13 @@ def _validate_formal_gate(
 
 
 def _run(args: argparse.Namespace, site: Site) -> int:
-    config_path = (PACKAGE_ROOT / args.config).resolve() if not Path(args.config).is_absolute() else Path(args.config).resolve()
+    requested_config = Path(args.config).expanduser()
+    if requested_config.is_absolute():
+        config_path = requested_config.resolve()
+    elif requested_config.parent == Path("."):
+        config_path = (CONFIG_ROOT / requested_config.name).resolve()
+    else:
+        config_path = (PACKAGE_ROOT / requested_config).resolve()
     config, config_hash = load_frozen_config(config_path)
     plan = select_plan(
         config,

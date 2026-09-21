@@ -22,6 +22,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$configRoot = Join-Path $PSScriptRoot 'configs'
 $allowedConfigs = @(
     'unified-five-group-experiment-v4.json',
     'router-r1-r2-matched5-experiment-v1.json',
@@ -44,7 +45,7 @@ if ($leafName -cne $ConfigFile -or $leafName -cnotin $allowedConfigs) {
     throw "ConfigFile must be one of the frozen experiment config filenames: $($allowedConfigs -join ', ')"
 }
 
-$configPath = Join-Path $PSScriptRoot $leafName
+$configPath = Join-Path $configRoot $leafName
 if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
     throw "Frozen experiment config is missing: $configPath"
 }

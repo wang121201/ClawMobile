@@ -16,7 +16,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-if ([string]::IsNullOrWhiteSpace($ConfigPath)) { $ConfigPath = Join-Path $PSScriptRoot '..\unified-five-group-experiment-v4.json' }
+if ([string]::IsNullOrWhiteSpace($ConfigPath)) { $ConfigPath = Join-Path $PSScriptRoot '..\configs\unified-five-group-experiment-v4.json' }
 if ([string]::IsNullOrWhiteSpace($ClawBenchRoot)) { $ClawBenchRoot = Join-Path $PSScriptRoot '..\clawbench-runtime' }
 
 Import-Module (Join-Path $PSScriptRoot 'PhoneEnvironment.psm1') -Force
@@ -24,21 +24,21 @@ Import-Module (Join-Path $PSScriptRoot 'Evidence.psm1') -Force
 Import-Module (Join-Path $PSScriptRoot 'ExperimentCore.psm1') -Force
 
 $expectedConfigs = @(
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\unified-five-group-experiment-v4.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-r1-r2-matched5-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-rm-matched5-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-rm-expanded15-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-r2-fsm-paired-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-r2-fsm-expanded15-paired-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-fsm-scoped-repair-expanded15-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-fsm-scoped-repair-qwen-router-expanded15-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-binary-tool-expanded15-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-explicit-binary-tool-expanded15-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-route-flex-tiny-preliminary-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-capability-suppression-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-capability-suppression-full-dsv4-comparator-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\router-binary-efficiency-tiny-experiment-v1.json')),
-    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\g0-gpt55-expanded15-partial-experiment-v1.json'))
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\unified-five-group-experiment-v4.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-r1-r2-matched5-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-rm-matched5-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-rm-expanded15-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-r2-fsm-paired-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-r2-fsm-expanded15-paired-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-fsm-scoped-repair-expanded15-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-fsm-scoped-repair-qwen-router-expanded15-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-binary-tool-expanded15-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-explicit-binary-tool-expanded15-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-route-flex-tiny-preliminary-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-capability-suppression-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-capability-suppression-full-dsv4-comparator-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\router-binary-efficiency-tiny-experiment-v1.json')),
+    [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\configs\g0-gpt55-expanded15-partial-experiment-v1.json'))
 )
 $resolvedConfig = [IO.Path]::GetFullPath($ConfigPath)
 if (-not @($expectedConfigs | Where-Object { $_ -ceq $resolvedConfig })) {

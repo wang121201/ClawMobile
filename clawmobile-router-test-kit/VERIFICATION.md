@@ -30,7 +30,7 @@ Scope: offline release validation and complete phone-native live Smoke checks on
 
 ## Live phone-native Smoke
 
-- Configuration: `router-fsm-scoped-repair-expanded15-experiment-v1.json`
+- Configuration: `configs/router-fsm-scoped-repair-expanded15-experiment-v1.json`
 - Group: `G4-FSM-SC-Repair`
 - Campaign ID: `phone-native-migration-smoke-20260920T1750Z`
 - Phone output root: `$HOME/clawmobile-experiments/router-campaigns/phone-native-migration-smoke-20260920T1750Z`
@@ -63,7 +63,7 @@ Phone 132 ran code-validation commit `f6b66cdb3ae2d6dfb5dea9c0e2f9ab39be5f1480`.
 - Device: Pixel 9, Android serial `46010DLAQ002H0`.
 - Stable self-ADB: `127.0.0.1:5555`, state `device`.
 - Site ID: `phone-132-router-migration-20260920`.
-- Smoke configuration: `router-fsm-scoped-repair-expanded15-experiment-v1.json`.
+- Smoke configuration: `configs/router-fsm-scoped-repair-expanded15-experiment-v1.json`.
 - Group: `G4-FSM-SC-Repair`.
 - Campaign ID: `migration-smoke-20260920T201600Z`.
 - Phone evidence root: `$HOME/clawmobile-experiments/router-campaigns/migration-smoke-20260920T201600Z`.

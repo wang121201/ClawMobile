@@ -6,7 +6,12 @@ import subprocess
 import unittest
 from pathlib import Path
 
-from phone_controller.config_plan import PACKAGE_ROOT, build_plan, load_frozen_config
+from phone_controller.config_plan import (
+    CONFIG_ROOT,
+    PACKAGE_ROOT,
+    build_plan,
+    load_frozen_config,
+)
 
 
 class PhonePlanTests(unittest.TestCase):
@@ -14,7 +19,7 @@ class PhonePlanTests(unittest.TestCase):
         manifest = json.loads((PACKAGE_ROOT / "phone" / "frozen-configs.json").read_text())
         for entry in manifest["configs"]:
             with self.subTest(config=entry["file"]):
-                config, _ = load_frozen_config(PACKAGE_ROOT / entry["file"])
+                config, _ = load_frozen_config(CONFIG_ROOT / entry["file"])
                 self.assertEqual(
                     len(build_plan(config, "Smoke")), entry["expected_cells"]["smoke"]
                 )
@@ -29,7 +34,7 @@ class PhonePlanTests(unittest.TestCase):
         module = PACKAGE_ROOT / "five-group-v4" / "ExperimentCore.psm1"
         manifest = json.loads((PACKAGE_ROOT / "phone" / "frozen-configs.json").read_text())
         for entry in manifest["configs"]:
-            path = PACKAGE_ROOT / entry["file"]
+            path = CONFIG_ROOT / entry["file"]
             config, _ = load_frozen_config(path)
             stages = ["Smoke"]
             if config["formal"]["matrix_cell_count"]:

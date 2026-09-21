@@ -7,6 +7,7 @@ This directory adds reproducible Filter and Router experiments to ClawMobile. Th
 | Goal | Document |
 |---|---|
 | Understand the experiment and results | [`PROJECT_GUIDE_AND_RESULTS.md`](PROJECT_GUIDE_AND_RESULTS.md) |
+| Choose a frozen experiment configuration | [`configs/README.md`](configs/README.md) |
 | Install, run, or recover an experiment | [`PHONE_NATIVE_RUNBOOK.md`](PHONE_NATIVE_RUNBOOK.md) |
 | Understand Router, RouteClass, Scoped Context, finite-state control, and Repair | [`clawmobile-router-proxy/README.md`](clawmobile-router-proxy/README.md) |
 | Review tests and live validation | [`VERIFICATION.md`](VERIFICATION.md) |
@@ -27,7 +28,7 @@ One shared Proxy supports every configuration. Full-Agent arms are transparent p
 The recommended mechanism-rich configuration is:
 
 ```text
-router-fsm-scoped-repair-expanded15-experiment-v1.json
+configs/router-fsm-scoped-repair-expanded15-experiment-v1.json
 G4-FSM-SC-Repair
 ```
 
@@ -51,7 +52,7 @@ Validate the recommended plan without sending model requests:
 ```bash
 ./phone/run.sh run \
   --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --validate-only
 ```
@@ -61,13 +62,13 @@ Run a fresh Smoke, then use its healthy gate for Formal:
 ```bash
 ./phone/run.sh run \
   --stage Smoke \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --group-run-id '<new-smoke-id>'
 
 ./phone/run.sh run \
   --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --group-run-id '<new-formal-id>' \
   --smoke-gate "$HOME/clawmobile-experiments/router-campaigns/<new-smoke-id>/smoke-gate.json"
@@ -101,8 +102,7 @@ These are complete-system measurements, not model-only rankings. See [`PROJECT_G
 | `clawmobile-router-proxy/` | Shared Proxy, Filter/Router strategies, FSM, Scoped Context, Repair, and capture. |
 | `clawbench-runtime/` | Benchmark tasks, setup, verifier, teardown, and runner. |
 | `clawbench-channel/` | ClawBench/OpenClaw transport adapter. |
-| `router-*.json` | Frozen Router experiment definitions. |
-| `unified-five-group-experiment-v4.json` | Frozen Full/Filter baseline definition. |
+| `configs/` | Frozen Full, Filter, and Router experiment definitions. |
 | `tools/summarize_core_ablation.py` | Fail-closed result aggregation from sealed Cells. |
 
 ## Execution rules

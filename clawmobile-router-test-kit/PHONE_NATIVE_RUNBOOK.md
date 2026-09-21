@@ -120,7 +120,7 @@ The frozen research JSON remains byte-identical; the private site file supplies 
 ```bash
 ./phone/run.sh run \
   --stage Smoke \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --validate-only
 ```
@@ -132,7 +132,7 @@ The baseline core plan is also available without a group selector:
 ```bash
 ./phone/run.sh run \
   --stage Formal \
-  --config unified-five-group-experiment-v4.json \
+  --config configs/unified-five-group-experiment-v4.json \
   --validate-only
 ```
 
@@ -145,7 +145,7 @@ Always use a new campaign ID and output root. The default output is `<site.outpu
 ```bash
 ./phone/run.sh run \
   --stage Smoke \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --group-run-id repair-smoke-$(date -u +%Y%m%dT%H%M%SZ)
 ```
@@ -155,7 +155,7 @@ Only after `smoke-gate.json` reports `passed: true`:
 ```bash
 ./phone/run.sh run \
   --stage Formal \
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --config configs/router-fsm-scoped-repair-expanded15-experiment-v1.json \
   --group-id G4-FSM-SC-Repair \
   --group-run-id repair-formal-$(date -u +%Y%m%dT%H%M%SZ) \
   --smoke-gate "$HOME/clawmobile-experiments/router-campaigns/<smoke-id>/smoke-gate.json"

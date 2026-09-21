@@ -7,6 +7,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$configRoot = Join-Path $PSScriptRoot 'configs'
 $runnerRoot = Join-Path $PSScriptRoot 'five-group-v4'
 $powerShellFiles = @(
     (Join-Path $PSScriptRoot 'Run-RouterCampaign.ps1'),
@@ -43,7 +44,7 @@ $configFiles = @(
 )
 
 $observedRouterConfigFiles = @(
-    Get-ChildItem -LiteralPath $PSScriptRoot -File -Filter 'router-*.json' |
+    Get-ChildItem -LiteralPath $configRoot -File -Filter 'router-*.json' |
         Sort-Object Name |
         ForEach-Object Name
 )
@@ -51,13 +52,13 @@ $expectedRouterConfigFiles = @($configFiles | Where-Object { $_ -like 'router-*.
 if (($observedRouterConfigFiles -join "`n") -cne (($expectedRouterConfigFiles | Sort-Object) -join "`n")) {
     throw 'The release does not contain exactly the frozen Router config set.'
 }
-if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'unified-five-group-experiment-v4.json') -PathType Leaf)) {
+if (-not (Test-Path -LiteralPath (Join-Path $configRoot 'unified-five-group-experiment-v4.json') -PathType Leaf)) {
     throw 'The release is missing the frozen four-group Full/Filter baseline config.'
 }
 
 $planSummary = [Collections.Generic.List[object]]::new()
 foreach ($name in $configFiles) {
-    $path = Join-Path $PSScriptRoot $name
+    $path = Join-Path $configRoot $name
     $config = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
     $null = Assert-V4Config -Config $config
 

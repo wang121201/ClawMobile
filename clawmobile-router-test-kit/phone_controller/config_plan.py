@@ -8,6 +8,7 @@ from .common import ContractError, load_json, sha256_file
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+CONFIG_ROOT = PACKAGE_ROOT / "configs"
 FROZEN_MANIFEST = PACKAGE_ROOT / "phone" / "frozen-configs.json"
 
 PAIRED_IDS = {
@@ -62,6 +63,8 @@ def _split_task_case(raw: str) -> tuple[str, int]:
 
 def load_frozen_config(config_path: Path) -> tuple[dict[str, Any], str]:
     path = config_path.resolve()
+    if path.parent != CONFIG_ROOT.resolve():
+        raise ContractError(f"config must be stored under {CONFIG_ROOT}: {path}")
     manifest = load_json(FROZEN_MANIFEST)
     entries = manifest.get("configs")
     if not isinstance(entries, list):

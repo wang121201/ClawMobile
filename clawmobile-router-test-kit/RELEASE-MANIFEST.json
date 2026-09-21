@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-21T15:04:05.7305226+00:00",
-  "file_count": 210,
-  "total_bytes": 1352642,
+  "generated_at": "2026-09-21T15:26:51.5908242+00:00",
+  "file_count": 211,
+  "total_bytes": 1355817,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -805,6 +805,81 @@
       "sha256": "2589cf14fb1a24d425f7be6cf273577f9c1c50b128d72f03167451ff421bc6d9"
     },
     {
+      "path": "configs/README.md",
+      "bytes": 2278,
+      "sha256": "8a157d17a15af0bdc336fec8a5c34bd9c0c96662586fcc8845c6084143e3d7e6"
+    },
+    {
+      "path": "configs/router-binary-efficiency-tiny-experiment-v1.json",
+      "bytes": 6561,
+      "sha256": "56701a1ea6a72062e996cad33e0dfc32050af5c495a5afa40a92b07e90b5a696"
+    },
+    {
+      "path": "configs/router-binary-tool-expanded15-experiment-v1.json",
+      "bytes": 10251,
+      "sha256": "23bf3fb7a89fcd06c2a44b9ab5926f85cd8822587b790f597f5dfa786c097da0"
+    },
+    {
+      "path": "configs/router-capability-suppression-experiment-v1.json",
+      "bytes": 6326,
+      "sha256": "4e746216f331731d308408edd86e097468ea5c3f0e534de651aaec3131a3cadb"
+    },
+    {
+      "path": "configs/router-capability-suppression-full-dsv4-comparator-v1.json",
+      "bytes": 3061,
+      "sha256": "ebde4c157a9b63105f66a17e1dc1011ade617fe3657422ef95efb1a8b91e7b90"
+    },
+    {
+      "path": "configs/router-explicit-binary-tool-expanded15-experiment-v1.json",
+      "bytes": 10577,
+      "sha256": "74db33d2d62ebd6359d9d04d6e68ede8bda5372964f088887ed447780fd37696"
+    },
+    {
+      "path": "configs/router-fsm-scoped-repair-expanded15-experiment-v1.json",
+      "bytes": 9801,
+      "sha256": "414170344e76d524f57d09a789e9418a9bc1dc25bb5e020795e27a10f39d24f2"
+    },
+    {
+      "path": "configs/router-fsm-scoped-repair-qwen-router-expanded15-experiment-v1.json",
+      "bytes": 11054,
+      "sha256": "fa03dc16af2bd4bb51cdf427e726c1e4a6e887bcee3bedc36140d3e87d91d4e8"
+    },
+    {
+      "path": "configs/router-r1-r2-matched5-experiment-v1.json",
+      "bytes": 6048,
+      "sha256": "726740e0ff12b50428d826cdce201abefeaad5afd36e582aae99abec10233495"
+    },
+    {
+      "path": "configs/router-r2-fsm-expanded15-paired-experiment-v1.json",
+      "bytes": 9704,
+      "sha256": "451685106c627dc85770cb1ad23a359ea2f75350c4b316165887f159e168137b"
+    },
+    {
+      "path": "configs/router-r2-fsm-paired-experiment-v1.json",
+      "bytes": 8011,
+      "sha256": "e578524cdc811fc884a78b85d9f4fcf6516f3e7e4571c92d9547245d3394ff33"
+    },
+    {
+      "path": "configs/router-rm-expanded15-experiment-v1.json",
+      "bytes": 6700,
+      "sha256": "fc900e18b4b2c9e763624970ac5650b3a0ad190c10f747ff0f93fd965b0324d9"
+    },
+    {
+      "path": "configs/router-rm-matched5-experiment-v1.json",
+      "bytes": 5905,
+      "sha256": "4e2afc9ddc31083c6cf34706ba07beffb1eb77d60743d9d73dfd6c210b3839bb"
+    },
+    {
+      "path": "configs/router-route-flex-tiny-preliminary-v1.json",
+      "bytes": 6249,
+      "sha256": "773e09511fd11b2a14e747e9d807e363966aad0a4e03ab28463de575bd117d07"
+    },
+    {
+      "path": "configs/unified-five-group-experiment-v4.json",
+      "bytes": 5401,
+      "sha256": "4927e5d53d6e56afffaea4b9412f40d35cc7e91d34759e1c6e042b6dcfccfd1e"
+    },
+    {
       "path": "DEPENDENCIES.md",
       "bytes": 2439,
       "sha256": "e69492db683ab30b8bfcb4fb7d6ee9f41601c4adefaa63ceeda102c84e4ae03e"
@@ -826,8 +901,8 @@
     },
     {
       "path": "five-group-v4/run_campaign.ps1",
-      "bytes": 31434,
-      "sha256": "b5c7a302ef30d04792643e577ef51733d8af3c161ecce5143ad6f93d69027047"
+      "bytes": 31562,
+      "sha256": "6f5289ac8fb13368b6a5b861a7f2335a97f3c4627eb93e026ad245dc52122940"
     },
     {
       "path": "five-group-v4/start_gateway_phone_a.sh",
@@ -846,8 +921,8 @@
     },
     {
       "path": "phone_controller/campaign.py",
-      "bytes": 27025,
-      "sha256": "f883a25b25ed111bc08ec796549d8689cb6d84bfb5eaf4708e4d5edf49fcf077"
+      "bytes": 27248,
+      "sha256": "90bddbeb908b86246577a9c750cf533b7184bc3d9db2a82580ac0914746d2c07"
     },
     {
       "path": "phone_controller/common.py",
@@ -856,8 +931,8 @@
     },
     {
       "path": "phone_controller/config_plan.py",
-      "bytes": 18044,
-      "sha256": "9c32db7cf76f579b50f2c07b943bc6b52efabc8bb9ad59f32c956e5105b2d362"
+      "bytes": 18210,
+      "sha256": "7c8810c32453d784f8db644ef7779c316aff3f2686f902156a19fab660226027"
     },
     {
       "path": "phone_controller/configure_phone.py",
@@ -881,8 +956,8 @@
     },
     {
       "path": "PHONE_NATIVE_RUNBOOK.md",
-      "bytes": 7849,
-      "sha256": "f064ad74fe97c1d92a9c9c51814c3400ffb47e204135a6f99efef198a039cd94"
+      "bytes": 7881,
+      "sha256": "51e57e2202121c7c9b1eaa1f9d9b47092e00335c02830795276ea6107d34f6f7"
     },
     {
       "path": "phone/frozen-configs.json",
@@ -906,8 +981,8 @@
     },
     {
       "path": "phone/run.sh",
-      "bytes": 1243,
-      "sha256": "098c93ad20d6a743fbfd26ff8388c955c0bc5a75f75452cb948082fc02d276a7"
+      "bytes": 1251,
+      "sha256": "62c541baaa07b2ece49e49dcbf4863822ed72a8539068bda32cfc78d0d8cd3a9"
     },
     {
       "path": "phone/setup-self-adb.sh",
@@ -916,13 +991,13 @@
     },
     {
       "path": "PROJECT_GUIDE_AND_RESULTS.md",
-      "bytes": 10616,
-      "sha256": "00397352026a4b1554c5a48e5d4de0c947a792ef334ca5c0f2b34cb862ba22df"
+      "bytes": 10688,
+      "sha256": "4214f9eefa95bf8989cd90cafd4370983fca597a4654350976b8f38bec9a3879"
     },
     {
       "path": "README.md",
-      "bytes": 5465,
-      "sha256": "082663f51e2512c18610b322c94c96c68231c61e46ebab6c6a40e9e26dd37ffc"
+      "bytes": 5512,
+      "sha256": "a62fc76bafdfb9659b7c941801742e0a1ba3d5f49720bfd7a1d5aa71644374a8"
     },
     {
       "path": "RELEASE_CHECKLIST.md",
@@ -930,84 +1005,19 @@
       "sha256": "5baa1aa8095e21b1dc3d60005ae036720e03ef490f5a9bef23f3a8c913d1ba80"
     },
     {
-      "path": "router-binary-efficiency-tiny-experiment-v1.json",
-      "bytes": 6561,
-      "sha256": "56701a1ea6a72062e996cad33e0dfc32050af5c495a5afa40a92b07e90b5a696"
-    },
-    {
-      "path": "router-binary-tool-expanded15-experiment-v1.json",
-      "bytes": 10251,
-      "sha256": "23bf3fb7a89fcd06c2a44b9ab5926f85cd8822587b790f597f5dfa786c097da0"
-    },
-    {
-      "path": "router-capability-suppression-experiment-v1.json",
-      "bytes": 6326,
-      "sha256": "4e746216f331731d308408edd86e097468ea5c3f0e534de651aaec3131a3cadb"
-    },
-    {
-      "path": "router-capability-suppression-full-dsv4-comparator-v1.json",
-      "bytes": 3061,
-      "sha256": "ebde4c157a9b63105f66a17e1dc1011ade617fe3657422ef95efb1a8b91e7b90"
-    },
-    {
-      "path": "router-explicit-binary-tool-expanded15-experiment-v1.json",
-      "bytes": 10577,
-      "sha256": "74db33d2d62ebd6359d9d04d6e68ede8bda5372964f088887ed447780fd37696"
-    },
-    {
-      "path": "router-fsm-scoped-repair-expanded15-experiment-v1.json",
-      "bytes": 9801,
-      "sha256": "414170344e76d524f57d09a789e9418a9bc1dc25bb5e020795e27a10f39d24f2"
-    },
-    {
-      "path": "router-fsm-scoped-repair-qwen-router-expanded15-experiment-v1.json",
-      "bytes": 11054,
-      "sha256": "fa03dc16af2bd4bb51cdf427e726c1e4a6e887bcee3bedc36140d3e87d91d4e8"
-    },
-    {
-      "path": "router-r1-r2-matched5-experiment-v1.json",
-      "bytes": 6048,
-      "sha256": "726740e0ff12b50428d826cdce201abefeaad5afd36e582aae99abec10233495"
-    },
-    {
-      "path": "router-r2-fsm-expanded15-paired-experiment-v1.json",
-      "bytes": 9704,
-      "sha256": "451685106c627dc85770cb1ad23a359ea2f75350c4b316165887f159e168137b"
-    },
-    {
-      "path": "router-r2-fsm-paired-experiment-v1.json",
-      "bytes": 8011,
-      "sha256": "e578524cdc811fc884a78b85d9f4fcf6516f3e7e4571c92d9547245d3394ff33"
-    },
-    {
-      "path": "router-rm-expanded15-experiment-v1.json",
-      "bytes": 6700,
-      "sha256": "fc900e18b4b2c9e763624970ac5650b3a0ad190c10f747ff0f93fd965b0324d9"
-    },
-    {
-      "path": "router-rm-matched5-experiment-v1.json",
-      "bytes": 5905,
-      "sha256": "4e2afc9ddc31083c6cf34706ba07beffb1eb77d60743d9d73dfd6c210b3839bb"
-    },
-    {
-      "path": "router-route-flex-tiny-preliminary-v1.json",
-      "bytes": 6249,
-      "sha256": "773e09511fd11b2a14e747e9d807e363966aad0a4e03ab28463de575bd117d07"
-    },
-    {
       "path": "Run-RouterCampaign.ps1",
-      "bytes": 3197,
-      "sha256": "f7b4d8a3fface8020d487c011f2378b15925c27aa0f48739c3a10d72c418e308"
+      "bytes": 3243,
+      "sha256": "ccbdc509cef9a8d5da14719e66937a328fdc25aeea93d420408d6b0f68f32ea1"
     },
     {
       "path": "SOURCE_MAP.md",
-      "bytes": 3224,
-      "sha256": "d70a6f29afdbe23d7e36dcc2b0ece662b2bed34272b16e58e28274a4673dc2ec"
+      "bytes": 3297,
+      "sha256": "ce7b332574c6cfce9ff1de8f5a6d209b5d9936f147585df85c3841a62adc2038"
     },
     {
       "path": "test_router_release.ps1",
-      "bytes": 6175,
-      "sha256": "2d07f3251faffc062be561ce7c55fc8c394ee37ea9654fef6754837869c9a37b"
+      "bytes": 6217,
+      "sha256": "2d9e6d4c87a4b30feb18a94efba6591db8605f096af00e1cc93ea08048f87b10"
     },
     {
       "path": "tests/test_phone_configure.py",
@@ -1021,8 +1031,8 @@
     },
     {
       "path": "tests/test_phone_plan.py",
-      "bytes": 2485,
-      "sha256": "9554b3276a23a497004f537489f384be899fd1aa964129032eb53163ef85fe08"
+      "bytes": 2517,
+      "sha256": "cf673cac635969fe04179c8e5acdbe07a5ae2cc96c47c100124d24d98d013b77"
     },
     {
       "path": "tests/test_phone_result_summary.py",
@@ -1051,18 +1061,13 @@
     },
     {
       "path": "tools/summarize_core_ablation.py",
-      "bytes": 17298,
-      "sha256": "a4a75a49e850de5e0db6d88eae8b00333b2b6a708a307cfc4e78a723043c37a9"
-    },
-    {
-      "path": "unified-five-group-experiment-v4.json",
-      "bytes": 5401,
-      "sha256": "4927e5d53d6e56afffaea4b9412f40d35cc7e91d34759e1c6e042b6dcfccfd1e"
+      "bytes": 17310,
+      "sha256": "c5d1aaceb79c5018e5d8fa8eed2d9aedc51fee471f28eaa97924942ee8c12546"
     },
     {
       "path": "VERIFICATION.md",
-      "bytes": 8958,
-      "sha256": "080e5e17c211d93834a51e34f4ba1e1f684bdf1f1bcccd614c010d8e2da99418"
+      "bytes": 8974,
+      "sha256": "4b5d2a541233a0b16f591cf033965dc2ab4238b6abc9abeae9a5865287ab053b"
     }
   ]
 }

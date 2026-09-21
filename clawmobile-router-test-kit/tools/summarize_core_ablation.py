@@ -24,7 +24,7 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
-from phone_controller.config_plan import build_plan, load_frozen_config  # noqa: E402
+from phone_controller.config_plan import CONFIG_ROOT, build_plan, load_frozen_config  # noqa: E402
 
 
 CORE_CONFIGS = (
@@ -108,7 +108,7 @@ def _sha256(path: Path) -> str:
 def expected_rows(config_names: Iterable[str]) -> dict[tuple[str, int], dict[str, Any]]:
     result: dict[tuple[str, int], dict[str, Any]] = {}
     for name in config_names:
-        config, config_sha256 = load_frozen_config(PACKAGE_ROOT / name)
+        config, config_sha256 = load_frozen_config(CONFIG_ROOT / name)
         for row in build_plan(config, "Formal"):
             key = (str(row["group_id"]), int(row["schedule"]))
             if key in result:
