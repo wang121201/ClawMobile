@@ -203,6 +203,10 @@ Read the [status and limitations](docs/status-and-limitations.md) and
 
 ## Repository Map
 
+- `clawmobile-router-test-kit/`
+  Phone-native ClawBench Filter/Router experiments, frozen configurations,
+  evidence-aware controller, and results documentation.
+
 - `openclaw-plugin-mobile-ui/`
   Mobile runtime plugin, Android/Termux/ADB/OCR tools, recorder, trace parser,
   generated-skill pipeline, and Termux runtime batch fast path.

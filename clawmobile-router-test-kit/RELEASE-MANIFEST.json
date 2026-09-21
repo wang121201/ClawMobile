@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-21T14:50:04.8000020+00:00",
+  "generated_at": "2026-09-21T15:04:05.7305226+00:00",
   "file_count": 210,
-  "total_bytes": 1383663,
+  "total_bytes": 1352642,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -916,13 +916,13 @@
     },
     {
       "path": "PROJECT_GUIDE_AND_RESULTS.md",
-      "bytes": 34769,
-      "sha256": "c8dc3e701a624bfb79d2dcadc77297a4e38c48991775817d397b46a95cf01032"
+      "bytes": 10616,
+      "sha256": "00397352026a4b1554c5a48e5d4de0c947a792ef334ca5c0f2b34cb862ba22df"
     },
     {
       "path": "README.md",
-      "bytes": 12333,
-      "sha256": "1d655471df25ab1c96e9f607e419ac1b967bafa95b558d8f05aad2ef6263eabf"
+      "bytes": 5465,
+      "sha256": "082663f51e2512c18610b322c94c96c68231c61e46ebab6c6a40e9e26dd37ffc"
     },
     {
       "path": "RELEASE_CHECKLIST.md",
