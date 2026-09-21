@@ -2,6 +2,7 @@
   "schema_version": 1,
   "purpose": "Byte-identity allowlist for phone-native Router campaign designs",
   "configs": [
+    {"file":"unified-five-group-experiment-v4.json","design_id":"phone-a-four-group-expanded15-v4","sha256":"4927e5d53d6e56afffaea4b9412f40d35cc7e91d34759e1c6e042b6dcfccfd1e","expected_cells":{"smoke":4,"formal":240}},
     {"file":"router-binary-efficiency-tiny-experiment-v1.json","design_id":"phone-a-router-binary-efficiency-tiny-v1","sha256":"56701a1ea6a72062e996cad33e0dfc32050af5c495a5afa40a92b07e90b5a696","expected_cells":{"smoke":4,"formal":18}},
     {"file":"router-binary-tool-expanded15-experiment-v1.json","design_id":"phone-a-router-binary-tool-expanded15-v1","sha256":"23bf3fb7a89fcd06c2a44b9ab5926f85cd8822587b790f597f5dfa786c097da0","expected_cells":{"smoke":5,"formal":60}},
     {"file":"router-capability-suppression-experiment-v1.json","design_id":"phone-a-router-capability-suppression-v1","sha256":"4e746216f331731d308408edd86e097468ea5c3f0e534de651aaec3131a3cadb","expected_cells":{"smoke":1,"formal":16}},

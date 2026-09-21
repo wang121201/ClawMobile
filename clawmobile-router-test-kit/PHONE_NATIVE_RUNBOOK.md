@@ -125,7 +125,18 @@ The frozen research JSON remains byte-identical; the private site file supplies 
   --validate-only
 ```
 
-The phone-native Python plans are tested for exact row-by-row equality against the original production PowerShell plans for all 13 configs.
+The phone-native Python plans are tested for exact row-by-row equality against the original production PowerShell plans for all 14 frozen experiment configs: 13 Router configs plus the four-group Full/Filter baseline config.
+
+The baseline core plan is also available without a group selector:
+
+```bash
+./phone/run.sh run \
+  --stage Formal \
+  --config unified-five-group-experiment-v4.json \
+  --validate-only
+```
+
+After fresh Formal campaigns finish, `tools/summarize_core_ablation.py` can regenerate the core success/request table from sealed Cell evidence. Use `--campaign-root` for an uninterrupted run or repeat `--segment ROOT START END` for explicit inclusive schedule ranges after fail-fast recovery. It fails closed on missing or duplicate planned Cells, reused run IDs, unhealthy capture, incomplete provider responses, or capture hash mismatches.
 
 ## Live Smoke and Formal
 

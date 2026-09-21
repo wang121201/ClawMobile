@@ -34,8 +34,10 @@ The project asks four distinct questions:
 - **Physical Request（物理请求）**: one actual model-service call. A Router Logical Request normally produces a Router-helper call plus one selected Agent call, so Physical Requests can exceed Logical Requests.
 - **Router（路由器）**: the component that chooses Cloud or Logical-local execution for a Logical Request.
 - **Filter（过滤器）**: a helper that rewrites or filters context before a single Cloud Agent path; it does not select between Agents.
-- **FSM (Finite-State Machine, 有限状态机)**: deterministic per-Cell state derived from prior Tool Calls and Tool Results. It constrains which Local actions are currently admissible.
-- **Scoped Context（作用域上下文）**: the reduced Tool and history view supplied to the selected Agent.
+- **Tool Call（工具调用）**: one assistant-produced function invocation containing one exact Tool name and a JSON argument object. The Tool Result is the later observation returned for that invocation; neither a valid Tool Call nor a successful Tool Result alone establishes end-to-end Task SUCCESS.
+- **RouteClass（路由类别）**: a finite label for the next immediate Agent responsibility. It classifies what must happen next; it does not generate Tool arguments or classify the whole remaining Task.
+- **FSM (Finite-State Machine, 有限状态机)**: a deterministic per-Cell projection rebuilt from already-visible Tool Calls and Tool Results in the current request. It constrains which Local actions are currently admissible and never inspects a future Tool Result or verifier outcome.
+- **Scoped Context（作用域上下文）**: a Local-Agent request in which the global system affordance and visible Tool schemas are narrowed to the selected finite capability. Dynamic user, assistant, and Tool history is preserved; it is not summarized or truncated.
 - **Repair（修复）**: a bounded deterministic correction to an otherwise invalid Local Tool Call, followed by the complete validator again. Repair does not bypass Tool Schema or FSM checks.
 - **Scored SUCCESS / FAILURE（计分成功/失败）**: the ClawBench deterministic verifier accepted or rejected the final Android state. Both are valid model-performance evidence.
 - **Infrastructure failure（基础设施失败）**: ADB, service, provider transport, capture, timeout, or lifecycle failure. It is preserved as diagnostic evidence and excluded from the scored accuracy denominator.
@@ -63,6 +65,81 @@ The current migration-tested reference is:
 | Formal | 60 Expanded15 Cells, group-major and round-major |
 
 This configuration is the standard mechanism-rich reference, not a claim that it has the highest observed score. The Explicit Binary Tool configuration currently has the highest Expanded15 point estimate, but it is a different deterministic policy and has separate interpretation limits.
+
+### 3.1 Tool-call classification
+
+The RouteClass helper returns exactly `{"route_class": ..., "reason_code": ...}` under a strict JSON schema. It classifies only the next immediate responsibility. A static Proxy guard then decides whether that class has an executable finite Local contract; the helper itself neither executes a Tool nor authors arguments.
+
+| RouteClass | Exact next-step meaning | G4-RM backend | FSM/Scoped backend |
+|---|---|---|---|
+| `OBSERVE_UI_RAW` | One raw screenshot or UI-dump call with the frozen empty/default argument contract. | Local candidate | Local candidate; always admissible unless a prior failed transition forces Cloud. |
+| `QUERY_UI_GROUNDED` | One `android_ui_query` bound to the latest fresh same-Cell `dumpId`, with exactly one finite selector. | Local candidate when the dependency exists | Local only in `GROUND` with a fresh dump. |
+| `INTERACT_UI_GROUNDED` | One `android_tap` or `adb_tap` at the exact fresh, clickable, enabled selected center. | Local candidate when the dependency exists | Local only in `READY` with the exact fresh query result. |
+| `RETRIEVE_WEB_BOUNDED` | One bounded `web_search` with only approved finite fields. | Local candidate | Cloud. The current FSM family intentionally exposes only the three UI classes above to Local. |
+| `PERSIST_OR_SYSTEM_MUTATION` | File, contact, calendar, setting, or other persistent/system mutation. | Cloud | Cloud |
+| `OPEN_EXEC_OR_COMPOSITE` | Shell/exec, browser action, open-ended command, or compound/multi-Tool next step. | Cloud | Cloud |
+| `VERIFY_COMPLETE_RECOVER` | Authoritative verification, completion, recovery, or interpretation rather than one finite action. | Cloud | Cloud |
+| `NO_TOOL_OR_AMBIGUOUS` | No Tool, missing/stale dependency, unclear next action, or no uniquely supported class. | Cloud | Cloud |
+
+This separation is important: **classification** chooses a responsibility class; **generation** asks the selected Agent for one Tool Call; **validation** checks its schema, class, and dependencies; only then may **execution** occur. A rejected Local candidate falls back to the Cloud Agent before Tool execution and is counted once under Local and once under Server Agent.
+
+The eight semantic RouteClasses are distinct from the legacy argument-shape labels in `complexity.js` (`no_tool_call`, `no_arguments`, `simple_arguments`, `complex_arguments`, and `invalid_arguments`). The G4 mechanism comparison uses RouteClass/FSM contracts; argument-shape classification is not its routing target.
+
+### 3.2 Scoped Context
+
+Scoped Context is an affordance restriction, not conversation compression:
+
+```text
+original request: one global system message + complete dynamic history + all Tools
+        |
+        v
+RouteClass + static dependency guard
+        |
+        v
+Local request: finite system contract + unchanged dynamic history + whitelisted Tools
+        |
+        v
+schema/RouteClass/FSM validation -> execute one Tool or fall back to Cloud
+```
+
+The compiler requires exactly one system message, replaces that global system instruction with a finite contract, preserves every dynamic user/assistant/Tool message after JSON serialization, and exposes only the Tool schemas allowed for the current class. The finite contract carries the allowed exact Tool names and state dependency, such as a fresh `dumpId` or selected `(x, y)` center. This reduces irrelevant affordances while keeping the trajectory evidence needed for the next decision.
+
+### 3.3 FSM definition and transitions
+
+The FSM is not a learned model and not mutable global state. For each request, the Proxy deterministically replays the current Cell’s visible Tool Call/Tool Result history and projects:
+
+| Phase | Meaning | Principal Local capability |
+|---|---|---|
+| `PRECHECK` | No resolved Tool result yet. | Raw observation only. |
+| `OBSERVE` | Prior work exists, but no current grounded selector is ready. | Raw observation only. |
+| `GROUND` | A successful fresh UI dump exists at the current state version. | Raw observation or one grounded query. |
+| `READY` | A successful fresh query selected an enabled, clickable center. | Raw observation or one exact grounded interaction. |
+| `VERIFY_PENDING` | A UI mutation or unknown UI effect invalidated earlier artifacts; re-observation is required. | Raw observation only. |
+
+UI mutations and unknown effects increment `state_version`, invalidate stale dump/query artifacts, and set `pending_reobserve`. A Local query is admissible only in `GROUND`; a Local interaction is admissible only in `READY`. When a Local Tool is authorized, the Proxy records an expected transition scoped by `result.run_id` and tied to the exact `tool_call_id`. On the next request in that Cell, a mismatched Tool Result, failed typed result, or wrong target phase forces a Cloud handoff. This prevents a Local model from reusing stale coordinates or silently skipping the observe-query-interact dependency chain.
+
+### 3.4 Standard Moderate Repair
+
+Repair runs only after a Local candidate fails validation and only when there is exactly one Tool Call. It is a deterministic compiler, not another model request. It cannot change the RouteClass, Tool name, Tool Call count, or semantic target. The approved transformations are deliberately narrow:
+
+- normalize known argument aliases to the canonical schema key;
+- losslessly coerce string booleans or integers;
+- flatten one unambiguous single-query wrapper;
+- remove optional observation arguments when the frozen contract requires the default representation;
+- bind `dumpId` to the unique fresh dump or bind `(x, y)` to the unique fresh selected center.
+
+After compilation, the complete base Tool-schema validator and finite RouteClass/FSM validator run again. The repaired call executes only if both pass; otherwise it is rejected and the request falls back to Cloud. Repair therefore raises contract acceptance for some near-valid calls but cannot fix a wrong Tool, wrong semantic target, flawed plan, or incorrect final Android state.
+
+### 3.5 Mechanism ladder
+
+| Configuration | Classifier | Scoped Context | FSM admissibility and transition check | Repair |
+|---|---|---:|---:|---:|
+| G4-RM | Eight-class DSV4 RouteClass helper | No | No | No |
+| G4-RM-SC | Eight-class DSV4 RouteClass helper | Yes | No | No |
+| G4-FSM-SC | Eight-class DSV4 RouteClass helper constrained by the projected state | Yes | Yes | No |
+| G4-FSM-SC-Rep | Same FSM-constrained helper | Yes | Yes | Yes |
+
+This is a mechanism-family ladder, not a universal causal ladder. G4-RM-SC versus G4-FSM-SC is the designed fresh paired comparison that changes FSM control while holding the panel and paired order fixed. G4-RM versus G4-RM-SC also changes the Local eligibility boundary for bounded web retrieval and was collected in a different window. The Repair arm is a later follow-up rather than a fresh pair with G4-FSM-SC. No row implies that each added mechanism must monotonically improve task accuracy.
 
 ## 4. Runtime architecture
 
@@ -103,6 +180,8 @@ The deployment uses one shared Proxy. It is not necessary to deploy a different 
 | `clawbench-runtime/` | Benchmark registry, Tasks, device integration, verifier, and batch runner. |
 | `clawbench-channel/` | OpenClaw ClawBench Channel derived from the pinned upstream MIT source recorded in `THIRD_PARTY_NOTICES.md`. |
 | `router-*.json` | Frozen experiment definitions and Task/Case/Repetition mappings. |
+| `unified-five-group-experiment-v4.json` | Frozen G1/G2/G3/G5 Full/Filter baseline plan used by the core table. |
+| `tools/summarize_core_ablation.py` | Fail-closed regeneration of the core success/request table from sealed fresh Formal evidence. |
 | `PHONE_NATIVE_RUNBOOK.md` | Detailed replacement-phone installation and recovery procedure. |
 | `VERIFICATION.md` | Dated release, phone, Smoke, capture, and security validation record. |
 | `RELEASE-MANIFEST.json` and `SHA256SUMS.txt` | Publishable package inventory and file hashes. |
@@ -272,7 +351,123 @@ The post-run doctor passed self-ADB, Channel, Gateway, Proxy, Provider-concurren
 
 ## 9. Existing Expanded15 results
 
-The only cumulative “all configurations” table is `work/expanded15-configuration-results-ledger.md`. That ledger contains every completed 60-Cell configuration, exact request accounting, mechanism diagnostics, immutable evidence roots, and the revision history. It must be updated for future configurations; this overview deliberately does not create a second cumulative table.
+The only cumulative “all configurations” registry remains `work/expanded15-configuration-results-ledger.md`. That ledger contains every completed 60-Cell configuration, exact request accounting, mechanism diagnostics, immutable evidence roots, and revision history. The table below is a **frozen core ablation snapshot** reproduced here so that this repository can explain and reproduce the eight configurations requested for the main comparison. It is not a second cumulative registry and must not be extended independently of the ledger.
+
+### 9.1 Frozen core ablation snapshot
+
+| Group | Configuration | SUCCESS | Logical Requests | Filter | Router | Local Agent | Server Agent | Physical Requests |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| G1 | Full DSV4 | **45/60, 75.0%** | **703** | 0 | 0 | 0 | 703 | 703 |
+| G2 | DSV4 Filter + DSV4 Agent | 45/60, 75.0% | 579 | 579 | 0 | 0 | 579 | 1,158 |
+| G3 | Qwen Filter + DSV4 Agent | **48/60, 80.0%** | 653 | 653 | 0 | 0 | 653 | 1,306 |
+| G4-RM | Moderate RouteClass Router | 45/60, 75.0% | **902** | 0 | 902 | 460 | 668 | 2,030 |
+| G4-RM-SC | RouteClass Router + Scoped Context | 43/60, 71.7% | 1,049 | 0 | 1,049 | 573 | 700 | 2,322 |
+| G4-FSM-SC | FSM Router + Scoped Context | **48/60, 80.0%** | **963** | 0 | 963 | 564 | 607 | 2,134 |
+| G4-FSM-SC-Rep | FSM Router + Scoped Context + Repair | 45/60, 75.0% | 1,017 | 0 | 1,017 | 575 | 555 | 2,147 |
+| G5 | Full Qwen Agent | **19/60, 31.7%** | **1,513** | 0 | 0 | 1,513 | 0 | 1,513 |
+
+The display label `G4-FSM-SC-Rep` maps to the exact configuration group ID `G4-FSM-SC-Repair`. For every row:
+
+```text
+Physical Requests = Filter + Router + Local Agent + Server Agent
+```
+
+A rejected Local candidate is counted as a Local Agent call and its fallback as a Server Agent call. Therefore `Local Agent + Server Agent` can exceed Logical Requests. For Full arms, one Logical Request maps to one selected Agent call. For Filter arms, each Logical Request produces one Filter call and one DSV4 Agent call. `Local Agent` and `Server Agent` are **experiment-model roles**, not literal `call_role` strings from older captures: historical G5 records used the transport label `cloud_agent`, but the frozen Full-Qwen arm is attributed to the Local Agent column by its `group_id=G5` and `arm_id=full-qwen36` identity.
+
+### 9.2 Performance of the concepts
+
+| Step | SUCCESS change | Physical-request change | What the observation supports |
+|---|---:|---:|---|
+| G1 → G2: add DSV4 Filter | 0 Cells, 0.0 percentage points | +455 | This Filter path matched G1 accuracy but nearly doubled physical service work; it did not demonstrate an accuracy gain in this panel. |
+| G1 → G3: use Qwen Filter | +3 Cells, +5.0 points | +603 | The highest Filter point estimate in the snapshot, with two model calls per Logical Request. The result is a system observation, not proof that the Filter model alone caused the gain. |
+| G1 → G4-RM: add RouteClass hybrid routing | 0 Cells, 0.0 points | +1,327 | Hybrid execution matched the Full-DSV4 score while invoking a Router for every Logical Request and sometimes both Local and Server Agents after Local rejection. |
+| G4-RM → G4-RM-SC: mechanism-family difference, not isolated | -2 Cells, -3.3 points | +292 | This contrast changes Scoped Context, the bounded-web Local eligibility boundary, policy version, and collection window. It must not be interpreted as the causal effect of Scoped Context alone. |
+| G4-RM-SC → G4-FSM-SC: fresh paired FSM treatment | +5 Cells, +8.3 points | -188 | The paired categories were 40 both-success, 8 FSM-only, 3 RM-only, and 9 both-failure. The two-sided exact McNemar value was `p = 0.2265625`, so the favorable point estimate and lower request count are not statistically conclusive. |
+| G4-FSM-SC → G4-FSM-SC-Rep: Repair follow-up, not paired | -3 Cells, -5.0 points | +13 | Repair directly recovered 35 otherwise rejected Local candidates, but the cross-window SUCCESS delta is not attributable to Repair. Contract acceptance and end-state task accuracy are different outcomes. |
+| G4-FSM-SC versus G5 Full Qwen | +29 Cells, +48.3 points | +621 | Constraining Qwen to finite Local UI responsibilities and retaining DSV4 for Cloud work was far stronger than unrestricted Full Qwen in this system. This compares complete systems, not only model capability. |
+
+The strongest point estimate among these eight rows is 48/60, shared by G3 and G4-FSM-SC. The mechanisms differ materially: G3 keeps DSV4 as the sole Tool-call Agent after a Qwen Filter, while G4-FSM-SC routes individual responsibilities between DSV4 and Qwen under finite state constraints. Accuracy must therefore be reported together with request counts, Local acceptance/rejection, latency, and failure type.
+
+The Router mechanism diagnostics make that distinction visible:
+
+| Group | Accepted Local | Rejected Local | Accepted / Logical | Candidate acceptance |
+|---|---:|---:|---:|---:|
+| G4-RM | 234 | 226 | 25.94% | 50.87% |
+| G4-RM-SC | 349 | 224 | 33.27% | 60.91% |
+| G4-FSM-SC | 356 | 208 | 36.97% | 63.12% |
+| G4-FSM-SC-Rep | 462 | 113 | 45.43% | 80.35% |
+
+For G4-FSM-SC, 356 accepted Local transitions closed as 336 matches plus 20 safe Cloud handoffs, with no pending transition leakage. For the Repair arm, 427 calls were raw-valid, 148 repair opportunities were observed, 35 became repair-assisted valid calls, and 113 remained rejected. These are contract/mechanism measurements; they do not turn an accepted Local call into a claim of semantic usefulness.
+
+### 9.3 Exact reproduction map
+
+| Rows reproduced | Frozen config in this repository | Smoke / Formal | Selection rule |
+|---|---|---:|---|
+| G1, G2, G3, G5 | `unified-five-group-experiment-v4.json` | 4 / 240 | Multi-group frozen order; do not pass `--group-id`. Each result row is the corresponding 60-Cell group segment. |
+| G4-RM | `router-rm-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-RM`. |
+| G4-RM-SC, G4-FSM-SC | `router-r2-fsm-expanded15-paired-experiment-v1.json` | 10 / 120 | Paired design; do not pass `--group-id`. Each row is one 60-Cell group segment. |
+| G4-FSM-SC-Rep | `router-fsm-scoped-repair-expanded15-experiment-v1.json` | 5 / 60 | Pass `--group-id G4-FSM-SC-Repair`. |
+
+Validate every exact plan without starting services or sending a model request:
+
+```bash
+./phone/run.sh run --stage Smoke --config unified-five-group-experiment-v4.json --validate-only
+./phone/run.sh run --stage Formal --config unified-five-group-experiment-v4.json --validate-only
+
+./phone/run.sh run --stage Formal --config router-rm-expanded15-experiment-v1.json \
+  --group-id G4-RM --validate-only
+
+./phone/run.sh run --stage Formal \
+  --config router-r2-fsm-expanded15-paired-experiment-v1.json --validate-only
+
+./phone/run.sh run --stage Formal \
+  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --group-id G4-FSM-SC-Repair --validate-only
+```
+
+For a live reproduction, first run the matching Smoke under a fresh `--group-run-id`. Run Formal under another fresh ID only after its `smoke-gate.json` passes, and supply that file with `--smoke-gate`. The controller refuses overwrite, enforces a fresh `result.run_id` per Cell, serializes all model calls, and stops the current invocation on the first infrastructure failure.
+
+After all selected Formal plans complete, regenerate the table directly from sealed evidence. Use `--campaign-root` only for an uninterrupted campaign root. For a fail-fast/recovery run, use repeatable `--segment ROOT START END` arguments to select explicit inclusive schedule ranges and exclude the preserved failed stop Cell. Duplicate or missing planned Cells, reused run IDs, infrastructure failures, incomplete responses, identity mismatches, or capture hash mismatches make the tool fail closed:
+
+```bash
+python tools/summarize_core_ablation.py \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<baseline-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<rm-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<paired-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<repair-formal-id>" \
+  --format markdown
+```
+
+For example, the historical Repair row is selected without deleting or relabeling the preserved schedule-31 infrastructure failure:
+
+```powershell
+python tools/summarize_core_ablation.py `
+  --config router-fsm-scoped-repair-expanded15-experiment-v1.json `
+  --segment 'D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-20260820T142016Z' 1 30 `
+  --segment 'D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-recovery-20260821T0020Z' 31 60 `
+  --format markdown
+```
+
+Use one or more `--config <frozen-config.json>` options when summarizing only a subset; with no `--config`, the tool requires all four core configs and all 480 planned Cells. It derives role counts from raw `model-calls.jsonl`, not from the published table.
+
+The repository deliberately excludes the large historical raw captures. A clean clone reproduces the frozen protocol and can regenerate the table from a fresh run. Independent regeneration of the already published historical rows additionally requires the canonical external evidence roots (and, where recovery occurred, the exact segments) listed below and in the cumulative ledger.
+
+Canonical evidence for the displayed values remains outside Git:
+
+- G1/G2/G3/G5: `D:\codexdataspace\reports\clawmobile-expanded15-v4\expanded15-v4-final-20260814T050046Z`;
+- G4-RM: `D:\codexdataspace\outputs\clawmobile-router-rm-v1\g4-rm-expanded15-formal-20260817T204529Z`;
+- G4-RM-SC/G4-FSM-SC: `D:\codexdataspace\reports\clawmobile-router-r2-fsm-expanded15-paired-v1\expanded15-final-120cells-20260820\paired-summary.json`;
+- G4-FSM-SC-Rep schedules 1–30: `D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-20260820T142016Z`; schedules 31–60: `D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-recovery-20260821T0020Z`.
+
+Immutable report anchors for that historical snapshot are:
+
+| Artifact | SHA-256 |
+|---|---|
+| Baseline `campaign-metrics.json` | `338038a018dc7160161a655aba4fb62dc03f130c8b74adec305d6af02a3cfc40` |
+| Baseline `cell-index.csv` | `d481bf4e8a33d3937361e057d762097bae91525b0735aee305ca44cda32e09c8` |
+| G4-RM `g4-rm-analysis.json` | `ccfdd039fd9256840747bca110f4d43626c2ed1cddbe27100a86c566cae5e0a6` |
+| Paired RM-SC/FSM-SC `paired-summary.json` | `d48b076a7791a0f3aab82de4d13599faf38b200cbbc2ce6a9e7e7fec3f9f5875` |
+| Repair `standard-moderate-repair-data-book.xlsx` | `e868c9479e66d178465abddb27ded179dd00d8a1df5a7c334f2b3444af4beb21` |
 
 The main historical points needed to understand the current project are:
 
@@ -285,7 +480,7 @@ The main historical points needed to understand the current project are:
 
 These measurements were collected in different windows unless explicitly identified as the aligned September retest. They must not be treated as a randomized concurrent causal ranking.
 
-### 9.1 Later-window aligned retest
+### 9.4 Later-window aligned retest
 
 The September 2026 aligned retest used the same 60-Cell Expanded15 mapping for three configurations:
 
@@ -355,6 +550,7 @@ Reasonable next steps are deliberately separate decisions:
 
 | Date | Comment or change | Resolution and evidence | Status |
 |---|---|---|---|
+| 2026-09-21 | Make the eight-row core comparison reproducible and define Tool classification, Scoped Context, FSM, and Repair. | Added the exact four-group baseline config, frozen-plan parity coverage, source-truth mechanism definitions, the core result/reproduction map, and a fail-closed evidence summarizer; preserved the cumulative ledger as the sole all-configuration registry. | Resolved |
 | 2026-09-21 | Create one maintained Router project description and results overview. | Consolidated architecture, phone-native reproduction, selected Expanded15 results, interpretation boundaries, and the clean Phone 132 migration Smoke; retained the cumulative ledger as the only all-configuration table. | Resolved |
 
 Future comments should identify the section and requested correction. Resolved changes will be applied to this file and recorded in this revision log.

@@ -7,13 +7,14 @@ Scope: offline release validation, one complete phone-native live Smoke on Phone
 ## Offline checks
 
 - Every release file listed in `RELEASE-MANIFEST.json` was verified against `SHA256SUMS.txt` before phone deployment.
-- 13 frozen Router configurations passed schema validation and exact Smoke/Formal plan generation.
+- 14 frozen experiment configurations—13 Router configurations plus one four-group Full/Filter baseline—passed schema validation and exact Smoke/Formal plan generation.
 - Phone-native plan rows matched the legacy production PowerShell plans row-for-row for all frozen configurations and stages.
 - 5 PowerShell entry/module files parsed with 0 errors.
-- 72 Python files parsed with `ast.parse`; 16 phone-controller unit tests passed.
+- 74 Python files parsed with `ast.parse`; 20 phone-controller and result-summary unit tests passed.
 - 130 Node Router Proxy tests passed on Windows and again natively on Phone 62; 0 failed, skipped, or cancelled.
+- The new evidence summarizer regenerated the historical G1/G2/G3/G5 rows from the 240 canonical indexed Cells, including G5's experiment-role attribution of 1,513 Local Agent calls and zero Server Agent calls. It regenerated G4-RM directly from 60 sealed Cells as 45/60 SUCCESS, 902 Logical Requests, and 2,030 Physical Requests, then selected the two immutable Repair segments around the preserved stop Cell and reproduced 45/60 SUCCESS, 1,017 Logical Requests, and 2,147 Physical Requests. Every regenerated value exactly matches the frozen core table.
 - Release inventory contains 0 JSONL files, 0 log files, and 0 output/report/capture/result directories.
-- The documented release contains 207 manifest payload files plus `RELEASE-MANIFEST.json` and `SHA256SUMS.txt`, for 209 tracked release files total; `git diff --cached --check` passed and no symlink is staged.
+- The documented release contains 210 manifest payload files plus `RELEASE-MANIFEST.json` and `SHA256SUMS.txt`, for 212 tracked release files total; `git diff --cached --check` passed and no symlink is staged.
 - The vendored Channel was traced to OpenClaw commit `10b4342c09de5b7fb22b07a0d7c6ebe797c52001`, path `extensions/clawbench/`. Its original MIT notice is preserved in `clawbench-channel/LICENSE`, with exact adaptations recorded in `THIRD_PARTY_NOTICES.md`.
 
 ## Phone deployment and service proof
@@ -94,6 +95,6 @@ This run proves that Windows is not in the Cell execution path. It does not remo
 
 ## Security review boundary
 
-A Git-index-aware scan read all 209 tracked release blobs and found no unapproved private-key block, common-prefix provider key, literal bearer credential, or real `freeinference_api` assignment. The two reviewed allowlisted matches are the deliberate placeholder `replace-with-your-private-key` in `.env.example` and synthetic `Bearer must-not-be-recorded` in the capture-redaction test. `phone/phone.env`, `phone/phone-site.json`, captures, logs, outputs, and results are not tracked. No `gitleaks` executable was available, so this is a targeted tracked-content scan rather than a full entropy/history scanner.
+A Git-index-aware scan read all 212 tracked release blobs and found no unapproved private-key block, common-prefix provider key, literal bearer credential, or real `freeinference_api` assignment. Reviewed matches were deliberate placeholders in example files and synthetic Bearer values used by Proxy tests, including the capture-redaction sentinel; none is a live credential. `phone/phone.env`, `phone/phone-site.json`, captures, logs, outputs, and results are not tracked. No `gitleaks` executable was available, so this is a targeted tracked-content scan rather than a full entropy/history scanner.
 
 Frozen private-network/device paths remain only as research provenance inside immutable experiment JSON. Replacement-phone execution obtains live topology from the ignored private site file. The repository root MIT license covers ClawMobile-owned code; the adapted OpenClaw Channel retains its upstream MIT notice separately.

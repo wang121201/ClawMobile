@@ -26,6 +26,7 @@ foreach ($path in $powerShellFiles) {
 Import-Module (Join-Path $runnerRoot 'ExperimentCore.psm1') -Force
 
 $configFiles = @(
+    'unified-five-group-experiment-v4.json',
     'router-r1-r2-matched5-experiment-v1.json',
     'router-rm-matched5-experiment-v1.json',
     'router-rm-expanded15-experiment-v1.json',
@@ -41,13 +42,17 @@ $configFiles = @(
     'router-binary-efficiency-tiny-experiment-v1.json'
 )
 
-$observedConfigFiles = @(
+$observedRouterConfigFiles = @(
     Get-ChildItem -LiteralPath $PSScriptRoot -File -Filter 'router-*.json' |
         Sort-Object Name |
         ForEach-Object Name
 )
-if (($observedConfigFiles -join "`n") -cne (($configFiles | Sort-Object) -join "`n")) {
+$expectedRouterConfigFiles = @($configFiles | Where-Object { $_ -like 'router-*.json' })
+if (($observedRouterConfigFiles -join "`n") -cne (($expectedRouterConfigFiles | Sort-Object) -join "`n")) {
     throw 'The release does not contain exactly the frozen Router config set.'
+}
+if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'unified-five-group-experiment-v4.json') -PathType Leaf)) {
+    throw 'The release is missing the frozen four-group Full/Filter baseline config.'
 }
 
 $planSummary = [Collections.Generic.List[object]]::new()
@@ -139,7 +144,8 @@ if (-not $SkipNodeTests) {
 
 [pscustomobject][ordered]@{
     validation = 'passed'
-    router_config_count = $planSummary.Count
+    frozen_config_count = $planSummary.Count
+    router_config_count = $observedRouterConfigFiles.Count
     powershell_parse_count = $powerShellFiles.Count
     python_ast = 'passed'
     python_ast_files = $pythonFileCount

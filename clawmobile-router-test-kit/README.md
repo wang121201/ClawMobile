@@ -10,8 +10,8 @@ Start with [`PROJECT_GUIDE_AND_RESULTS.md`](PROJECT_GUIDE_AND_RESULTS.md) for th
 - **Run ID（运行标识）**: the fresh 32-character lowercase hexadecimal `result.run_id` generated for one Cell. It is the authoritative session identity.
 - **Proxy（代理）**: the shared OpenAI-compatible observation and routing service in `clawmobile-router-proxy/`.
 - **Router（路由器）**: the decision component that selects the Cloud Agent or Logical-local Agent for one logical request.
-- **FSM (Finite-State Machine, 有限状态机)**: deterministic per-Cell route state derived from current request history.
-- **Scoped Context（作用域上下文）**: the reduced tool/context view supplied to the selected Agent.
+- **FSM (Finite-State Machine, 有限状态机)**: deterministic per-Cell route state derived from already-visible Tool Calls and Tool Results in the current request.
+- **Scoped Context（作用域上下文）**: a narrowed system affordance and Tool-schema set supplied to the Local Agent while preserving the complete dynamic user/assistant/Tool history.
 - **Repair（修复）**: a bounded deterministic correction of an otherwise invalid Local Tool Call, followed by full revalidation.
 - **Scored failure（计分失败）**: model execution completed but the deterministic verifier returned `FAILURE`; it remains valid model evidence.
 - **Infrastructure failure（基础设施失败）**: SSH, ADB, service, capture, timeout, or lifecycle failure; the controller preserves evidence and stops the current invocation.
@@ -57,15 +57,17 @@ The shared Proxy is reused across Router conditions. The experimental configurat
 | `clawbench-runtime/tasks/` | Deterministic setup/check/teardown implementations for L1-L5 tasks. |
 | `clawbench-runtime/scripts/run_task_set.py` | Batch entry point used by the PowerShell controller. |
 | `router-*.json` | Frozen Router designs, task/case mappings, model roles, and output/capture contracts. |
+| `unified-five-group-experiment-v4.json` | Frozen G1/G2/G3/G5 Full/Filter baseline design on the same Expanded15 panel. |
 | `test_router_release.ps1` | Minimal offline release test: PowerShell parse, all config/plan contracts, Python AST, Proxy tests. |
+| `tools/summarize_core_ablation.py` | Regenerates the core Expanded15 success/request table from sealed Formal Cell evidence and fails on missing, duplicate, unhealthy, or hash-mismatched Cells. |
 | `RELEASE-MANIFEST.json`, `SHA256SUMS.txt` | Package inventory and content hashes; regenerate with `tools/New-ReleaseManifest.ps1`. |
 | `VERIFICATION.md` | Dated offline checks, Phone 62 live phone-native Smoke proof, and security-scan boundary. |
 
 OpenClaw remains an external runtime dependency. The exact live ClawBench Channel source is vendored copy-only; `node_modules` remains external. See `DEPENDENCIES.md`.
 
-## Frozen Router configurations
+## Frozen experiment configurations
 
-The package includes 13 configurations covering:
+The package includes 13 Router configurations plus one four-group Full/Filter baseline configuration. The Router configurations cover:
 
 - R1 evidence-only and R2 grounded-query routing;
 - RouteClass moderate routing on Matched5 and Expanded15;
@@ -75,6 +77,8 @@ The package includes 13 configurations covering:
 - route-flex tiny preliminary study;
 - capability-suppression study and Full DSV4 comparator;
 - binary efficiency tiny study.
+
+The baseline configuration `unified-five-group-experiment-v4.json` reproduces the exact four-group matrix used for G1 Full DSV4, G2 DSV4 Filter + DSV4 Agent, G3 Qwen Filter + DSV4 Agent, and G5 Full Qwen3.6. It contains a four-Cell Smoke and a 240-Cell Formal plan; omit `--group-id` because the frozen design executes all four groups in order.
 
 The JSON files are research artifacts tied to the frozen Phone A topology and output roots. Preserve them byte-for-byte when reproducing an existing comparison. Create a separately named config and campaign identity when adapting to another device or provider.
 
@@ -109,6 +113,36 @@ Validate one frozen plan without touching a phone:
 ```
 
 Multi-condition designs reject `-GroupId` and execute their frozen within-study order.
+
+Validate the four-group Full/Filter baseline plan without a group selector:
+
+```powershell
+./Run-RouterCampaign.ps1 `
+  -Stage Formal `
+  -ConfigFile unified-five-group-experiment-v4.json `
+  -ValidateOnly
+```
+
+After fresh Formal campaigns finish, regenerate the core eight-row result table from sealed evidence. Use `--campaign-root` for an uninterrupted campaign. If fail-fast recovery split a plan, select each inclusive schedule range explicitly with `--segment ROOT START END`; the tool still requires exactly one healthy scored Cell for every frozen plan row:
+
+```bash
+python tools/summarize_core_ablation.py \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<baseline-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<rm-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<paired-formal-id>" \
+  --campaign-root "$HOME/clawmobile-experiments/router-campaigns/<repair-formal-id>"
+```
+
+Example for a repair campaign split after schedule 30:
+
+```bash
+python tools/summarize_core_ablation.py \
+  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --segment "$HOME/clawmobile-experiments/router-campaigns/<repair-part-1>" 1 30 \
+  --segment "$HOME/clawmobile-experiments/router-campaigns/<repair-part-2>" 31 60
+```
+
+The summarizer requires all expected frozen Cells by default and never chooses between duplicate attempts. Use explicit `--config` options to summarize a strict subset.
 
 ## Live execution
 
@@ -149,4 +183,4 @@ Every live run must use a new output root. The source controller refuses overwri
 
 ## Source fidelity
 
-The production controller modules, startup scripts, Proxy source/tests, ClawBench core/tasks, and frozen JSON configs are copy-only exports from the active workspace. The root launcher, release test, documentation, ignore rules, and manifest generator are packaging additions. See `SOURCE_MAP.md` for the exact source locations.
+The production controller modules, startup scripts, Proxy source/tests, ClawBench core/tasks, and frozen JSON configs are copy-only exports from the active workspace. The root launcher, release tests, evidence summarizer, documentation, ignore rules, and manifest generator are packaging additions. See `SOURCE_MAP.md` for the exact source locations.

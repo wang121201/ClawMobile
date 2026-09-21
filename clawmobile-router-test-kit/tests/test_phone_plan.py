@@ -27,7 +27,9 @@ class PhonePlanTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("pwsh"), "PowerShell parity check runs on release host")
     def test_python_plans_equal_original_powershell_plans(self) -> None:
         module = PACKAGE_ROOT / "five-group-v4" / "ExperimentCore.psm1"
-        for path in sorted(PACKAGE_ROOT.glob("router-*.json")):
+        manifest = json.loads((PACKAGE_ROOT / "phone" / "frozen-configs.json").read_text())
+        for entry in manifest["configs"]:
+            path = PACKAGE_ROOT / entry["file"]
             config, _ = load_frozen_config(path)
             stages = ["Smoke"]
             if config["formal"]["matrix_cell_count"]:

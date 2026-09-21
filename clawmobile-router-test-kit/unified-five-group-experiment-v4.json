@@ -1,0 +1,146 @@
+{
+  "schema_version": 4,
+  "design_id": "phone-a-four-group-expanded15-v4",
+  "design_status": "live_candidate",
+  "design_semantics": "Single Phone A, one Gateway, one shared transparent Proxy, one controller, one active cell; G1, G2, G3, and G5 run group-major with four round-major repetitions over the same fifteen-task paired panel.",
+  "device": {
+    "device_id": "phone-a",
+    "ssh_host": "10.127.121.62",
+    "ssh_port": 8022,
+    "adb_serial": "127.0.0.1:5555"
+  },
+  "execution": {
+    "maximum_controllers": 1,
+    "maximum_active_cells": 1,
+    "maximum_request_chains": 1,
+    "group_order": ["G1", "G2", "G3", "G5"],
+    "within_group_order": "round-major_with_rotating_level_order",
+    "scored_failure_policy": "preserve_and_continue",
+    "infrastructure_failure_policy": "preserve_and_stop_current_group"
+  },
+  "models": {
+    "dsv4": {
+      "provider_id": "deepseek",
+      "model_id": "deepseek-v4-flash",
+      "physical_platform": "cloud"
+    },
+    "qwen36": {
+      "provider_id": "freeinference",
+      "model_id": "qwen3.6-35b",
+      "physical_platform": "freeinference-cloud",
+      "aliases_disallowed_in_outputs": ["qwen35N", "qwen35B", "qwen25B", "qwen3-32B"]
+    }
+  },
+  "task_panel": [
+    {"level": "L1", "task_id": "L1-02", "case_index_by_repetition": [1, 4, 2, 3]},
+    {"level": "L1", "task_id": "L1-03", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L1", "task_id": "L1-08", "case_index_by_repetition": [1, 3, 2, 4]},
+    {"level": "L2", "task_id": "L2-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L2", "task_id": "L2-05", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L2", "task_id": "L2-09", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L3", "task_id": "L3-01", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L3", "task_id": "L3-02", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L3", "task_id": "L3-05", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L4", "task_id": "L4-01", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L4", "task_id": "L4-02", "case_index_by_repetition": [1, 2, 2, 1]},
+    {"level": "L4", "task_id": "L4-03", "case_index_by_repetition": [2, 1, 1, 2]},
+    {"level": "L5", "task_id": "L5-01", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L5", "task_id": "L5-02", "case_index_by_repetition": [1, 1, 1, 1]},
+    {"level": "L5", "task_id": "L5-04", "case_index_by_repetition": [1, 1, 1, 1]}
+  ],
+  "round_level_order": {
+    "1": ["L1", "L2", "L3", "L4", "L5"],
+    "2": ["L2", "L3", "L4", "L5", "L1"],
+    "3": ["L3", "L4", "L5", "L1", "L2"],
+    "4": ["L4", "L5", "L1", "L2", "L3"]
+  },
+  "groups": [
+    {
+      "group_id": "G1",
+      "priority": 1,
+      "arm_id": "full-dsv4",
+      "tool_call_agent_model": "dsv4",
+      "filter_model": null,
+      "router_model": null,
+      "cell_count": 60,
+      "schedule_first": 1,
+      "schedule_last": 60,
+      "data_source": "new_expanded15_collection"
+    },
+    {
+      "group_id": "G2",
+      "priority": 2,
+      "arm_id": "filter-dsv4-agent-dsv4",
+      "tool_call_agent_model": "dsv4",
+      "filter_model": "dsv4",
+      "router_model": null,
+      "cell_count": 60,
+      "schedule_first": 61,
+      "schedule_last": 120,
+      "data_source": "new_expanded15_collection"
+    },
+    {
+      "group_id": "G3",
+      "priority": 3,
+      "arm_id": "filter-qwen36-agent-dsv4",
+      "tool_call_agent_model": "dsv4",
+      "filter_model": "qwen36",
+      "router_model": null,
+      "cell_count": 60,
+      "schedule_first": 121,
+      "schedule_last": 180,
+      "data_source": "new_expanded15_collection"
+    },
+    {
+      "group_id": "G5",
+      "priority": 4,
+      "arm_id": "full-qwen36",
+      "tool_call_agent_model": "qwen36",
+      "filter_model": null,
+      "router_model": null,
+      "cell_count": 60,
+      "schedule_first": 181,
+      "schedule_last": 240,
+      "data_source": "new_expanded15_collection"
+    }
+  ],
+  "smoke": {
+    "cell_count": 4,
+    "cells": [
+      {"smoke_schedule": 1, "group_id": "G1", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 2, "group_id": "G2", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 3, "group_id": "G3", "task_case": "L1-03:1", "repetition": 1},
+      {"smoke_schedule": 4, "group_id": "G5", "task_case": "L1-03:1", "repetition": 1}
+    ],
+    "pass_semantics": "SUCCESS and structurally healthy scored FAILURE both pass; the first infrastructure failure, incomplete capture, or teardown failure is preserved and stops the run."
+  },
+  "formal": {
+    "group_cell_count": 60,
+    "matrix_cell_count": 240,
+    "groups": ["G1", "G2", "G3", "G5"],
+    "repetitions_per_task": 4,
+    "task_count_per_group": 15
+  },
+  "output_policy": {
+    "data_root": "D:\\codexdataspace\\outputs\\clawmobile-expanded15-v4",
+    "new_root_required": true,
+    "overwrite_allowed": false,
+    "prior_campaigns_are_read_only": true
+  },
+  "capture_contract": {
+    "fresh_result_run_id_per_cell": true,
+    "role_provider_sessions_are_distinct": true,
+    "all_roles_bind_current_result_run_id": true,
+    "cross_cell_session_reuse_allowed": false,
+    "required_raw_evidence": [
+      "cell-status.json",
+      "result JSON",
+      "model-calls.jsonl",
+      "proxy-events.jsonl",
+      "raw request",
+      "raw response or SSE",
+      "latency",
+      "task verification"
+    ]
+  }
+}
