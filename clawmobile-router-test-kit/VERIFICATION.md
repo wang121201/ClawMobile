@@ -87,7 +87,7 @@ Final migration integrity state:
 - FreeInference maximum observed concurrency was one; current and queued counts were zero at completion.
 - A post-run `doctor` passed self-ADB, Channel, Gateway, Proxy, provider-concurrency, and capture checks.
 - The exact package-managed Proxy PID was then stopped. Proxy port 18081 closed as expected while Channel and Gateway remained HTTP 200 and self-ADB remained healthy.
-- The complete 53-file campaign evidence was mirrored copy-only to `D:\codexdataspace\remote-sync\phone-132\migration-smoke-20260920T201600Z`. Phone and local copies both contain 75,012,302 bytes; an independent per-file relative-path, size, and SHA-256 comparison found zero missing files and zero mismatches.
+- The complete 53-file campaign evidence was mirrored copy-only to an external archive identified as `migration-smoke-20260920T201600Z`. Phone and archive copies both contain 75,012,302 bytes; an independent per-file relative-path, size, and SHA-256 comparison found zero missing files and zero mismatches. Its host-specific storage path is intentionally omitted from public documentation.
 
 This migration acceptance proves clean-clone portability and complete live Router execution on the replacement phone. Its five Cells are a functional Smoke and do not replace or extend the 60-Cell Formal accuracy denominator.
 

@@ -16,7 +16,7 @@ Termux Python controller
   -> phone-local immutable Cell evidence
 ```
 
-**Cell（实验单元）** means one complete `task × case × repetition`, including setup, every model request, deterministic verification, teardown, durable Proxy flush and evidence verification. Each Cell receives a fresh 32-hex `result.run_id`; role-specific upstream sessions are distinct and no session is reused across Cells.
+**Cell** means one complete `task × case × repetition`, including setup, every model request, deterministic verification, teardown, durable Proxy flush and evidence verification. Each Cell receives a fresh 32-hex `result.run_id`; role-specific upstream sessions are distinct and no session is reused across Cells.
 
 ## One-time phone preparation
 

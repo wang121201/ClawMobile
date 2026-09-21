@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "clawmobile-router-test-kit",
-  "generated_at": "2026-09-21T14:21:19.2539219+00:00",
+  "generated_at": "2026-09-21T14:40:32.7996974+00:00",
   "file_count": 210,
-  "total_bytes": 1395247,
+  "total_bytes": 1390244,
   "exclusions": [
     "__pycache__/",
     "*.pyc",
@@ -696,8 +696,8 @@
     },
     {
       "path": "clawmobile-router-proxy/README.md",
-      "bytes": 21310,
-      "sha256": "060abad8ab82d29966e50cf018a86448ae03e507f112c7fa41e34dabbe8d8096"
+      "bytes": 16883,
+      "sha256": "32af9b9c3093f81c65874a48da5da45a99b259c876111549a4183061e496c38f"
     },
     {
       "path": "clawmobile-router-proxy/scripts/audit-parameter-schema-corpus.mjs",
@@ -806,8 +806,8 @@
     },
     {
       "path": "DEPENDENCIES.md",
-      "bytes": 2423,
-      "sha256": "ae8c9bee226ffbc61bbb48ebc3724ae3eebe5351bc1c092eb1dcd7bccbc498f1"
+      "bytes": 2444,
+      "sha256": "2dfd7cd7e11abbdefa073abcad62dffe7461ea66cf2e31529ffb94eb17b26025"
     },
     {
       "path": "five-group-v4/Evidence.psm1",
@@ -881,8 +881,8 @@
     },
     {
       "path": "PHONE_NATIVE_RUNBOOK.md",
-      "bytes": 8025,
-      "sha256": "fe40c52d0180bfc65709ff213417c508090ee0ff17267f61681ca6727c1fdf85"
+      "bytes": 8007,
+      "sha256": "4642aa3c423508a7b30fd0d85b8b48f1932a3d93e3a05ace117812145ccc8368"
     },
     {
       "path": "phone/frozen-configs.json",
@@ -916,18 +916,18 @@
     },
     {
       "path": "PROJECT_GUIDE_AND_RESULTS.md",
-      "bytes": 41143,
-      "sha256": "ea29364d42ef779a63cf915b5735d6b268ce060b83ecf6aa887b064a458c77c2"
+      "bytes": 40603,
+      "sha256": "05fe7565c92a983c076d4814424644934c4cacaea00aa4cd8022652df9f2c97e"
     },
     {
       "path": "README.md",
-      "bytes": 12572,
-      "sha256": "583c192f3f5f7ee0e28f9a2b1e8cd0d020a4c972b1a5ccc5111a4579b92b48bd"
+      "bytes": 12416,
+      "sha256": "35457c9c6aeffae06f1d73ec9d3a9284e30dc709c50fcd5524c19e7ae743fc9d"
     },
     {
       "path": "RELEASE_CHECKLIST.md",
-      "bytes": 1049,
-      "sha256": "9d59eee7abce674b2930120394626e7b650383ae44b883efbb501ea4eb97817c"
+      "bytes": 1043,
+      "sha256": "5baa1aa8095e21b1dc3d60005ae036720e03ef490f5a9bef23f3a8c913d1ba80"
     },
     {
       "path": "router-binary-efficiency-tiny-experiment-v1.json",
@@ -1001,8 +1001,8 @@
     },
     {
       "path": "SOURCE_MAP.md",
-      "bytes": 3145,
-      "sha256": "f33b20961cc393247d1080b4f6462275bc24ef5ae7982b3a92bb58c56cc771f4"
+      "bytes": 3189,
+      "sha256": "d059509537c175ed00620ff9cd6a8eeb55fa5787825d5ea3e260db8b8e996bd2"
     },
     {
       "path": "test_router_release.ps1",
@@ -1061,8 +1061,8 @@
     },
     {
       "path": "VERIFICATION.md",
-      "bytes": 9415,
-      "sha256": "c8b07e847503acb468615f01b6fda07ca35cecc4531237e8512ef21481f7150a"
+      "bytes": 9494,
+      "sha256": "d99ecba0a13b70ee24c8856e8f3ba50e0ebf5c531d5bcd959cec6ff88941ea30"
     }
   ]
 }

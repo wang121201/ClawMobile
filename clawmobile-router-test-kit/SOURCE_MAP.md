@@ -25,7 +25,7 @@ This package was assembled copy-only from the active ClawMobile workspace. Histo
 
 Excluded by design:
 
-- all files under `D:\codexdataspace`;
+- all external campaign outputs, reports, captures, and private evidence archives;
 - historical campaign outputs, reports, raw request/response/SSE captures, and logs;
 - OpenClaw private configuration and credentials;
 - old L1, Full, Filter-only, XMU-only, analysis, and recovery runners not required by the Router execution closure;

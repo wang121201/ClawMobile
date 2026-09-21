@@ -10,8 +10,8 @@ Detailed immutable evidence remains in the campaign directories and in the cumul
 
 ClawMobile is an Android Agent runtime built on OpenClaw. The Router project evaluates whether each Agent request can be assigned safely to one of two execution roles:
 
-- a stronger **Cloud Agent（云端代理）**, currently `deepseek-v4-flash`; or
-- a lower-cost **Logical-local Agent（逻辑本地代理）**, currently `qwen3.6-35b`.
+- a stronger **Cloud Agent**, currently `deepseek-v4-flash`; or
+- a lower-cost **Logical-local Agent**, currently `qwen3.6-35b`.
 
 For the current API-backed Router experiments, both models are physically served by FreeInference. “Logical-local” is an experimental role and routing target; it does not mean that Qwen3.6-35B is running on the phone or on XMU. The separate G6 experiment is the physical-local XMU result.
 
@@ -24,25 +24,25 @@ The project asks four distinct questions:
 
 ## 2. Terms and measurement boundaries
 
-- **Task（任务）**: one ClawBench benchmark definition, such as creating a contact or saving a researched address.
-- **Case（参数案例）**: one frozen parameter assignment for a Task.
-- **Repetition（重复轮次）**: an independent execution of one Task Case.
-- **Cell（实验单元）**: one complete `Task × Case × Repetition`, including setup, a fresh session, Agent and Tool execution, deterministic verification, teardown, and durable evidence flush.
-- **Run ID（运行标识）**: the fresh 32-character lowercase hexadecimal `result.run_id` generated for one Cell. It is the authoritative Cell and session identity.
+- **Task**: one ClawBench benchmark definition, such as creating a contact or saving a researched address.
+- **Case**: one frozen parameter assignment for a Task.
+- **Repetition**: an independent execution of one Task Case.
+- **Cell**: one complete `Task × Case × Repetition`, including setup, a fresh session, Agent and Tool execution, deterministic verification, teardown, and durable evidence flush.
+- **Run ID**: the fresh 32-character lowercase hexadecimal `result.run_id` generated for one Cell. It is the authoritative Cell and session identity.
 - **Expanded15**: the frozen benchmark panel containing three Tasks from each of Levels L1 through L5. Each configuration runs 15 Tasks for four Repetitions, giving 60 Cells.
-- **Logical Request（逻辑请求）**: one Agent request presented to a Full Agent, Filter, or Router policy.
-- **Physical Request（物理请求）**: one actual model-service call. A Router Logical Request normally produces a Router-helper call plus one selected Agent call, so Physical Requests can exceed Logical Requests.
-- **Router（路由器）**: the component that chooses Cloud or Logical-local execution for a Logical Request.
-- **Filter（过滤器）**: a helper that rewrites or filters context before a single Cloud Agent path; it does not select between Agents.
-- **Tool Call（工具调用）**: one assistant-produced function invocation containing one exact Tool name and a JSON argument object. The Tool Result is the later observation returned for that invocation; neither a valid Tool Call nor a successful Tool Result alone establishes end-to-end Task SUCCESS.
-- **RouteClass（路由类别）**: a finite label for the next immediate Agent responsibility. It classifies what must happen next; it does not generate Tool arguments or classify the whole remaining Task.
-- **FSM (Finite-State Machine, 有限状态机)**: a deterministic per-Cell projection rebuilt from already-visible Tool Calls and Tool Results in the current request. It constrains which Local actions are currently admissible and never inspects a future Tool Result or verifier outcome.
-- **Scoped Context（作用域上下文）**: a Local-Agent request in which the global system affordance and visible Tool schemas are narrowed to the selected finite capability. Dynamic user, assistant, and Tool history is preserved; it is not summarized or truncated.
-- **Repair（修复）**: a bounded deterministic correction to an otherwise invalid Local Tool Call, followed by the complete validator again. Repair does not bypass Tool Schema or FSM checks.
-- **Scored SUCCESS / FAILURE（计分成功/失败）**: the ClawBench deterministic verifier accepted or rejected the final Android state. Both are valid model-performance evidence.
-- **Infrastructure failure（基础设施失败）**: ADB, service, provider transport, capture, timeout, or lifecycle failure. It is preserved as diagnostic evidence and excluded from the scored accuracy denominator.
-- **Smoke（冒烟测试）**: a small live mechanism and lifecycle test. It proves wiring and evidence integrity, not population-level model accuracy.
-- **Formal（标准实验）**: the frozen 60-Cell Expanded15 collection used for configuration-level performance analysis.
+- **Logical Request**: one Agent request presented to a Full Agent, Filter, or Router policy.
+- **Physical Request**: one actual model-service call. A Router Logical Request normally produces a Router-helper call plus one selected Agent call, so Physical Requests can exceed Logical Requests.
+- **Router**: the component that chooses Cloud or Logical-local execution for a Logical Request.
+- **Filter**: a helper that rewrites or filters context before a single Cloud Agent path; it does not select between Agents.
+- **Tool Call**: one assistant-produced function invocation containing one exact Tool name and a JSON argument object. The Tool Result is the later observation returned for that invocation; neither a valid Tool Call nor a successful Tool Result alone establishes end-to-end Task SUCCESS.
+- **RouteClass**: a finite label for the next immediate Agent responsibility. It classifies what must happen next; it does not generate Tool arguments or classify the whole remaining Task.
+- **FSM (Finite-State Machine)**: a deterministic per-Cell projection rebuilt from already-visible Tool Calls and Tool Results in the current request. It constrains which Local actions are currently admissible and never inspects a future Tool Result or verifier outcome.
+- **Scoped Context**: a Local-Agent request in which the global system affordance and visible Tool schemas are narrowed to the selected finite capability. Dynamic user, assistant, and Tool history is preserved; it is not summarized or truncated.
+- **Repair**: a bounded deterministic correction to an otherwise invalid Local Tool Call, followed by the complete validator again. Repair does not bypass Tool Schema or FSM checks.
+- **Scored SUCCESS / FAILURE**: the ClawBench deterministic verifier accepted or rejected the final Android state. Both are valid model-performance evidence.
+- **Infrastructure failure**: ADB, service, provider transport, capture, timeout, or lifecycle failure. It is preserved as diagnostic evidence and excluded from the scored accuracy denominator.
+- **Smoke**: a small live mechanism and lifecycle test. It proves wiring and evidence integrity, not population-level model accuracy.
+- **Formal**: the frozen 60-Cell Expanded15 collection used for configuration-level performance analysis.
 
 An accepted Local Tool Call is evidence that a candidate satisfied the current contract. It is not automatically evidence that the call was useful, shortened the trajectory, or caused Task SUCCESS.
 
@@ -339,13 +339,7 @@ Phone evidence root:
 $HOME/clawmobile-experiments/router-campaigns/migration-smoke-20260920T201600Z
 ```
 
-Copy-only evidence mirror:
-
-```text
-D:\codexdataspace\remote-sync\phone-132\migration-smoke-20260920T201600Z
-```
-
-The phone root and local mirror each contain 53 files and 75,012,302 bytes. An independent relative-path, byte-count, and SHA-256 comparison found zero missing files and zero mismatches.
+The phone evidence was copied to a host-independent external archive. The phone root and archive each contain 53 files and 75,012,302 bytes. An independent relative-path, byte-count, and SHA-256 comparison found zero missing files and zero mismatches. The archive storage location is intentionally not part of the public repository contract.
 
 The post-run doctor passed self-ADB, Channel, Gateway, Proxy, Provider-concurrency, and capture checks. The package-managed Proxy was then stopped exactly; Channel and Gateway remained healthy. This establishes reproducible deployment, end-to-end functionality, and evidence integrity on the replacement phone. Five successful Cells do not establish a 100% expected Formal success rate.
 
@@ -440,11 +434,11 @@ python tools/summarize_core_ablation.py \
 
 For example, the historical Repair row is selected without deleting or relabeling the preserved schedule-31 infrastructure failure:
 
-```powershell
-python tools/summarize_core_ablation.py `
-  --config router-fsm-scoped-repair-expanded15-experiment-v1.json `
-  --segment 'D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-20260820T142016Z' 1 30 `
-  --segment 'D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-recovery-20260821T0020Z' 31 60 `
+```bash
+python tools/summarize_core_ablation.py \
+  --config router-fsm-scoped-repair-expanded15-experiment-v1.json \
+  --segment "/path/to/repair-part-1-root" 1 30 \
+  --segment "/path/to/repair-part-2-root" 31 60 \
   --format markdown
 ```
 
@@ -452,12 +446,12 @@ Use one or more `--config <frozen-config.json>` options when summarizing only a 
 
 The repository deliberately excludes the large historical raw captures. A clean clone reproduces the frozen protocol and can regenerate the table from a fresh run. Independent regeneration of the already published historical rows additionally requires the canonical external evidence roots (and, where recovery occurred, the exact segments) listed below and in the cumulative ledger.
 
-Canonical evidence for the displayed values remains outside Git:
+Canonical evidence for the displayed values remains outside Git in the private research archive. The stable archive identifiers are:
 
-- G1/G2/G3/G5: `D:\codexdataspace\reports\clawmobile-expanded15-v4\expanded15-v4-final-20260814T050046Z`;
-- G4-RM: `D:\codexdataspace\outputs\clawmobile-router-rm-v1\g4-rm-expanded15-formal-20260817T204529Z`;
-- G4-RM-SC/G4-FSM-SC: `D:\codexdataspace\reports\clawmobile-router-r2-fsm-expanded15-paired-v1\expanded15-final-120cells-20260820\paired-summary.json`;
-- G4-FSM-SC-Rep schedules 1–30: `D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-20260820T142016Z`; schedules 31–60: `D:\codexdataspace\outputs\clawmobile-router-fsm-scoped-repair-expanded15-v1\formal-recovery-20260821T0020Z`.
+- G1/G2/G3/G5: `expanded15-v4-final-20260814T050046Z`;
+- G4-RM: `g4-rm-expanded15-formal-20260817T204529Z`;
+- G4-RM-SC/G4-FSM-SC: `expanded15-final-120cells-20260820` with `paired-summary.json`;
+- G4-FSM-SC-Rep: `formal-20260820T142016Z` for schedules 1–30 and `formal-recovery-20260821T0020Z` for schedules 31–60.
 
 Immutable report anchors for that historical snapshot are:
 
@@ -517,13 +511,13 @@ The canonical 60-Cell datasets mostly contain scored model failures rather than 
 
 ## 12. Evidence and provenance
 
-Canonical local references outside the publishable repository:
+Canonical references outside the publishable repository:
 
-- cumulative configuration ledger: `C:\Users\82412\Documents\Codex\2026-08-05\to\work\expanded15-configuration-results-ledger.md`;
-- current handoff and experiment registry: `C:\Users\82412\Documents\Codex\2026-08-05\to\work\main-session-current-data-analysis-handoff.md`;
-- latest unified G-series report: `D:\codexdataspace\reports\clawmobile-expanded15-g-series\g-series-20260920T114000Z`;
-- latest three-group aligned report: `D:\codexdataspace\reports\clawmobile-three-group-expanded15\three-group-20260920T112229Z`;
-- replacement-phone Smoke mirror: `D:\codexdataspace\remote-sync\phone-132\migration-smoke-20260920T201600Z` (53 files, 75,012,302 bytes, zero SHA-256 mismatch);
+- cumulative configuration ledger: `expanded15-configuration-results-ledger.md` in the private research archive;
+- current handoff and experiment registry: `main-session-current-data-analysis-handoff.md` in the private research archive;
+- latest unified G-series report: archive ID `g-series-20260920T114000Z`;
+- latest three-group aligned report: archive ID `three-group-20260920T112229Z`;
+- replacement-phone Smoke archive: archive ID `migration-smoke-20260920T201600Z` (53 files, 75,012,302 bytes, zero SHA-256 mismatch);
 - raw campaign roots and their exact canonical segments are registered in the cumulative ledger rather than duplicated in this repository.
 
 The Git repository intentionally excludes API keys, private site files, raw model captures, SSE, Android state, campaign outputs, and large reports. A result is considered authoritative only when its Cell plan, unique run/session identity, verifier result, capture, and evidence hashes can be joined without ambiguity.
@@ -550,6 +544,7 @@ Reasonable next steps are deliberately separate decisions:
 
 | Date | Comment or change | Resolution and evidence | Status |
 |---|---|---|---|
+| 2026-09-21 | Make public documentation English-only and remove host-specific filesystem paths. | Replaced local storage paths with stable archive identifiers or portable placeholders, removed the replacement-phone mirror path, and translated the Proxy reference into English without changing runtime code or frozen experiment data. | Resolved |
 | 2026-09-21 | Make the eight-row core comparison reproducible and define Tool classification, Scoped Context, FSM, and Repair. | Added the exact four-group baseline config, frozen-plan parity coverage, source-truth mechanism definitions, the core result/reproduction map, and a fail-closed evidence summarizer; preserved the cumulative ledger as the sole all-configuration registry. | Resolved |
 | 2026-09-21 | Create one maintained Router project description and results overview. | Consolidated architecture, phone-native reproduction, selected Expanded15 results, interpretation boundaries, and the clean Phone 132 migration Smoke; retained the cumulative ledger as the only all-configuration table. | Resolved |
 

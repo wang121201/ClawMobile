@@ -6,15 +6,15 @@ Start with [`PROJECT_GUIDE_AND_RESULTS.md`](PROJECT_GUIDE_AND_RESULTS.md) for th
 
 ## Terms and boundaries
 
-- **Cell（实验单元）**: one complete `task × case × repetition` run, including setup, model interaction, deterministic verification, teardown, and evidence flush.
-- **Run ID（运行标识）**: the fresh 32-character lowercase hexadecimal `result.run_id` generated for one Cell. It is the authoritative session identity.
-- **Proxy（代理）**: the shared OpenAI-compatible observation and routing service in `clawmobile-router-proxy/`.
-- **Router（路由器）**: the decision component that selects the Cloud Agent or Logical-local Agent for one logical request.
-- **FSM (Finite-State Machine, 有限状态机)**: deterministic per-Cell route state derived from already-visible Tool Calls and Tool Results in the current request.
-- **Scoped Context（作用域上下文）**: a narrowed system affordance and Tool-schema set supplied to the Local Agent while preserving the complete dynamic user/assistant/Tool history.
-- **Repair（修复）**: a bounded deterministic correction of an otherwise invalid Local Tool Call, followed by full revalidation.
-- **Scored failure（计分失败）**: model execution completed but the deterministic verifier returned `FAILURE`; it remains valid model evidence.
-- **Infrastructure failure（基础设施失败）**: SSH, ADB, service, capture, timeout, or lifecycle failure; the controller preserves evidence and stops the current invocation.
+- **Cell**: one complete `task × case × repetition` run, including setup, model interaction, deterministic verification, teardown, and evidence flush.
+- **Run ID**: the fresh 32-character lowercase hexadecimal `result.run_id` generated for one Cell. It is the authoritative session identity.
+- **Proxy**: the shared OpenAI-compatible observation and routing service in `clawmobile-router-proxy/`.
+- **Router**: the decision component that selects the Cloud Agent or Logical-local Agent for one logical request.
+- **FSM (Finite-State Machine)**: deterministic per-Cell route state derived from already-visible Tool Calls and Tool Results in the current request.
+- **Scoped Context**: a narrowed system affordance and Tool-schema set supplied to the Local Agent while preserving the complete dynamic user/assistant/Tool history.
+- **Repair**: a bounded deterministic correction of an otherwise invalid Local Tool Call, followed by full revalidation.
+- **Scored failure**: model execution completed but the deterministic verifier returned `FAILURE`; it remains valid model evidence.
+- **Infrastructure failure**: SSH, ADB, service, capture, timeout, or lifecycle failure; the controller preserves evidence and stops the current invocation.
 
 The Qwen3.6 Local Agent in these configurations is a **logical-local role** served by FreeInference. It is not a physical XMU-local model.
 
@@ -174,7 +174,7 @@ Every live run must use a new output root. The source controller refuses overwri
 ## Secrets, evidence, and publication
 
 - Keep `freeinference_api` and all other credentials outside Git. `.env.example` contains only a placeholder.
-- Do not commit `.bashrc`, OpenClaw private config, phone captures, raw SSE, result JSONL, logs, or `D:\codexdataspace` outputs.
+- Do not commit `.bashrc`, OpenClaw private config, phone captures, raw SSE, result JSONL, logs, or host-local experiment outputs.
 - `clawmobile-router-proxy/parameter-schema-corpus-manifest.json` is ignored because it names a private local corpus root. Regenerate an aggregate manifest against a publishable corpus if needed.
 - The two test strings that resemble authorization/session values are synthetic redaction tests, not credentials.
 - `RELEASE-MANIFEST.json` excludes ignored Python bytecode and its own generated outputs.

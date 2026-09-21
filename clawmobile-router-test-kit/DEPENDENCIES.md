@@ -32,4 +32,4 @@ The Channel package uses workspace development dependencies, so a replacement ph
 - Bash, curl, procps, util-linux, coreutils and Termux:API;
 - required Android applications and verifier permissions for the selected task panel.
 
-The frozen configs retain their original Phone A and Windows values solely as byte-identical research provenance. The phone-native controller never uses those deployment fields; it reads the ignored private `phone/phone-site.json`. No SSH, SCP, Windows PowerShell, D: drive, or port forward is required for execution.
+The frozen configs retain their original device and host topology values solely as byte-identical research provenance. The phone-native controller never uses those deployment fields; it reads the ignored private `phone/phone-site.json`. No external controller, file-transfer session, host drive, or port forward is required for execution.
